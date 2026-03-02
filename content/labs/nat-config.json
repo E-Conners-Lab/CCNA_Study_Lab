@@ -1,26 +1,27 @@
 {
   "slug": "nat-config",
-  "title": "NAT Configuration",
-  "description": "Configure Port Address Translation (PAT/NAT overload) on a Cisco router to allow an internal network to access the internet using a single public IP address.",
+  "title": "NAT and PAT Configuration",
+  "description": "Configure static NAT, dynamic NAT, and PAT (NAT overload) on a Cisco router to translate private addresses to public addresses.",
   "domain": "IP Services",
   "domainSlug": "ip-services",
   "objectiveCode": "4.1",
   "difficulty": "medium",
-  "estimatedMinutes": 20,
+  "estimatedMinutes": 25,
   "type": "ios-cli",
-  "tags": ["nat", "pat", "overload", "access-list", "inside-outside"],
-  "instructions": "## NAT (PAT/Overload) Configuration Lab\n\nIn this lab you will configure PAT (Port Address Translation), also known as NAT overload, to allow multiple internal hosts to share a single public IP address.\n\n### Topology\n\n- **Router1**:\n  - Gi0/0: 192.168.1.1/24 (Inside - connected to LAN)\n  - Gi0/1: 203.0.113.10/30 (Outside - connected to ISP)\n\n- Internal hosts on the 192.168.1.0/24 network need internet access.\n- The router's Gi0/1 IP address (203.0.113.10) will be used as the translated public address.\n\n### Requirements\n\n1. **Define Inside and Outside Interfaces**\n   - Gi0/0 is the NAT inside interface.\n   - Gi0/1 is the NAT outside interface.\n\n2. **Create an Access List**\n   - Standard access list 1 should permit the 192.168.1.0/24 network.\n\n3. **Configure NAT Overload**\n   - Map the access list to the outside interface using overload.\n\n### Steps\n\n1. Enter global configuration mode.\n2. Configure Gi0/0 as the NAT inside interface using `ip nat inside`.\n3. Configure Gi0/1 as the NAT outside interface using `ip nat outside`.\n4. Create standard access list 1 to permit 192.168.1.0 with wildcard mask 0.0.0.255.\n5. Configure NAT overload: `ip nat inside source list 1 interface GigabitEthernet0/1 overload`.\n6. Verify with `show ip nat translations` and `show ip nat statistics`.\n\n### Key Concepts\n\n- **PAT (NAT Overload)** translates multiple private IP addresses to a single public IP using unique port numbers.\n- The **inside** interface faces the private LAN, and the **outside** interface faces the public network.\n- The **overload** keyword enables PAT, allowing many-to-one translation.",
-  "starterCode": "! Enter your IOS commands below\nenable\nconfigure terminal\n!\n! Step 1: Configure inside interface\n!\n!\n! Step 2: Configure outside interface\n!\n!\n! Step 3: Create access list\n!\n!\n! Step 4: Configure NAT overload\n!\n!\nend",
-  "solutionCode": "enable\nconfigure terminal\n!\ninterface GigabitEthernet0/0\n ip address 192.168.1.1 255.255.255.0\n ip nat inside\n no shutdown\n exit\n!\ninterface GigabitEthernet0/1\n ip address 203.0.113.10 255.255.255.252\n ip nat outside\n no shutdown\n exit\n!\naccess-list 1 permit 192.168.1.0 0.0.0.255\n!\nip nat inside source list 1 interface GigabitEthernet0/1 overload\n!\nend",
-  "expectedOutput": "Router1# show ip nat statistics\nTotal active translations: 0 (0 static, 0 dynamic; 0 extended)\nOutside interfaces:\n  GigabitEthernet0/1\nInside interfaces:\n  GigabitEthernet0/0\nHits: 0  Misses: 0\nDynamic mappings:\n-- Inside Source\n[Id: 1] access-list 1 interface GigabitEthernet0/1 refcount 0",
+  "tags": ["nat", "pat", "overload", "static-nat", "inside", "outside", "access-list"],
+  "instructions": "## NAT and PAT Configuration Lab\n\nConfigure NAT on a border router to allow internal hosts with private IP addresses to reach the Internet.\n\n### Topology\n\n```\n[Internal LAN]          [R1]          [ISP]\n10.0.0.0/24 --- Gi0/0        Gi0/1 --- 203.0.113.0/30\n                10.0.0.1      203.0.113.1\n```\n\n### Requirements\n\n#### Part 1: Static NAT\n1. Configure a static NAT entry to translate the internal web server (10.0.0.100) to public IP 203.0.113.10\n\n#### Part 2: PAT (NAT Overload)\n2. Create an access list (ACL 1) to identify the internal LAN (10.0.0.0/24)\n3. Configure PAT to translate all internal hosts to the router's outside interface IP (203.0.113.1)\n\n#### Part 3: Interface Designation\n4. Designate Gi0/0 as the NAT inside interface\n5. Designate Gi0/1 as the NAT outside interface\n\n#### Verification:\n6. What commands show active NAT translations and NAT statistics?",
+  "starterCode": "enable\nconfigure terminal\n!\n! Part 1: Static NAT\n!\n!\n! Part 2: PAT (NAT Overload)\n!\n!\n! Part 3: Interface designation\n!\n!\nend\n!\n! Part 4: Verification\n!",
+  "solutionCode": "enable\nconfigure terminal\n!\n! Part 1: Static NAT for web server\nip nat inside source static 10.0.0.100 203.0.113.10\n!\n! Part 2: PAT (NAT Overload)\naccess-list 1 permit 10.0.0.0 0.0.0.255\nip nat inside source list 1 interface GigabitEthernet0/1 overload\n!\n! Part 3: Interface designation\ninterface GigabitEthernet0/0\n ip nat inside\n!\ninterface GigabitEthernet0/1\n ip nat outside\n!\nend\n!\n! Verification:\nshow ip nat translations\nshow ip nat statistics\ndebug ip nat",
+  "expectedOutput": "R1#show ip nat translations\nPro Inside global    Inside local     Outside local    Outside global\n--- 203.0.113.10     10.0.0.100       ---              ---\ntcp 203.0.113.1:1024 10.0.0.10:1024  198.51.100.1:80  198.51.100.1:80\ntcp 203.0.113.1:1025 10.0.0.11:1025  198.51.100.1:80  198.51.100.1:80\n\nR1#show ip nat statistics\nTotal active translations: 3 (1 static, 2 dynamic)\nOutside interfaces: GigabitEthernet0/1\nInside interfaces: GigabitEthernet0/0\nHits: 150  Misses: 2",
   "hints": [
-    "The 'ip nat inside' and 'ip nat outside' commands are configured under the interface configuration mode for each respective interface, not in global configuration.",
-    "Standard access list 1 uses wildcard masks (not subnet masks). To permit 192.168.1.0/24, use: access-list 1 permit 192.168.1.0 0.0.0.255.",
-    "The full NAT overload command ties everything together: 'ip nat inside source list 1 interface GigabitEthernet0/1 overload'. The 'overload' keyword at the end is what enables PAT (many-to-one translation)."
+    "Static NAT maps one private IP to one public IP permanently: 'ip nat inside source static <local-ip> <global-ip>'",
+    "PAT uses 'overload' to allow many internal hosts to share one public IP. The keyword 'interface' tells NAT to use the outside interface's IP: 'ip nat inside source list 1 interface Gi0/1 overload'",
+    "Both inside and outside interfaces must be designated with 'ip nat inside' and 'ip nat outside'. NAT will not work if these are missing or reversed."
   ],
   "learningObjectives": [
-    "Identify and configure NAT inside and outside interfaces on a Cisco router",
-    "Create a standard access list to define the source network eligible for translation",
-    "Configure PAT (NAT overload) to translate multiple internal addresses to a single public address"
+    "Configure static NAT for one-to-one address translation",
+    "Configure PAT (NAT overload) to translate many private addresses to a single public address",
+    "Properly designate NAT inside and outside interfaces",
+    "Verify NAT operation with show commands"
   ]
 }

@@ -3,7 +3,7 @@
   "slug": "security-fundamentals",
   "name": "Security Fundamentals",
   "weight": 15,
-  "overview": "Security Fundamentals is one of the most heavily weighted domains on the CCNA exam, covering threat mitigation, access control, VPNs, wireless security, and Layer 2 protection mechanisms. This domain requires understanding both theoretical security concepts and practical configuration of ACLs, port security, DHCP snooping, and wireless security on Cisco devices. Success in this domain demands knowledge of how security controls work together to create a defense-in-depth strategy.",
+  "overview": "Security Fundamentals is a critical domain covering threat mitigation, access control, VPNs, wireless security, and Layer 2 protection mechanisms. This domain requires understanding both theoretical security concepts and practical configuration of ACLs, port security, DHCP snooping, and wireless security on Cisco devices. Success in this domain demands knowledge of how security controls work together to create a defense-in-depth strategy.",
   "keyTopics": [
     {
       "objectiveCode": "5.1",
@@ -68,8 +68,8 @@
       ],
       "resources": [
         {
-          "title": "Cisco Password Configuration Best Practices",
-          "url": "https://www.cisco.com/c/en/us/support/docs/security-vpn/remote-authentication-dial-user-service-radius/107614-64.html"
+          "title": "Cisco RADIUS Configuration Guide",
+          "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_usr_rad/configuration/xe-16/sec-usr-rad-xe-16-book/sec-cfg-radius.html"
         }
       ]
     },
@@ -113,7 +113,7 @@
       "resources": [
         {
           "title": "Cisco IPsec VPN Overview",
-          "url": "https://www.cisco.com/c/en/us/support/docs/security-vpn/ipsec-negotiation-ike-protocols/17706-ipsec-overview.html"
+          "url": "https://www.cisco.com/c/en/us/td/docs/net_mgmt/vpn_solutions_center/2-0/ip_security/provisioning/guide/IPsecPG1.html"
         },
         {
           "title": "Cisco VPN Solutions",
@@ -165,11 +165,11 @@
       "resources": [
         {
           "title": "Cisco DHCP Snooping Configuration",
-          "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-3/configuration_guide/sec/b-173-sec-9300-cg/configuring-dhcp-snooping.html"
+          "url": "https://www.cisco.com/c/en/us/support/docs/ip/dynamic-host-configuration-protocol-dhcp-dhcpv6/217055-operate-and-troubleshoot-dhcp-snooping.html"
         },
         {
           "title": "Cisco Port Security Configuration",
-          "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-3/configuration_guide/sec/b-173-sec-9300-cg/configuring-port-security.html"
+          "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-9/configuration_guide/sec/b_179_sec_9300_cg/port_security.html"
         }
       ]
     },
@@ -213,14 +213,14 @@
       "resources": [
         {
           "title": "Cisco Wireless Security Overview",
-          "url": "https://www.cisco.com/c/en/us/products/wireless/what-is-wifi-security.html"
+          "url": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/8-10/config-guide/b_cg810/wlan_security.html"
         }
       ]
     },
     {
       "objectiveCode": "5.10",
       "title": "Configure and verify WLAN within the GUI using WPA2 PSK",
-      "summary": "Configuring a WLAN with WPA2-PSK through a wireless LAN controller (WLC) GUI is a practical skill tested on the CCNA exam. This involves creating a WLAN profile, selecting the appropriate security settings, and mapping it to an interface and VLAN.",
+      "summary": "Configuring a WLAN with WPA2-PSK through a wireless LAN controller (WLC) GUI is an essential practical skill. This involves creating a WLAN profile, selecting the appropriate security settings, and mapping it to an interface and VLAN.",
       "keyPoints": [
         "In the WLC GUI, WLANs are created under the WLANs menu by specifying a Profile Name and SSID, then assigning a WLAN ID",
         "Security settings are configured under the WLAN Security tab: set Layer 2 Security to WPA+WPA2, enable WPA2 Policy, select AES encryption, and set Auth Key Mgmt to PSK",
@@ -229,8 +229,8 @@
         "The WLAN must be enabled (Status: Enabled) for clients to see and connect to the SSID"
       ],
       "examTips": [
-        "The exam may show WLC GUI screenshots; know where each setting is found: WLAN creation under WLANs tab, security under the Security tab of the WLAN, and interface mapping under the General tab",
-        "Remember to enable the WLAN after configuration; a common exam trap is a correctly configured but disabled WLAN",
+        "Know where each setting is found in the WLC GUI: WLAN creation under the WLANs tab, security under the Security tab of the WLAN, and interface mapping under the General tab",
+        "Remember to enable the WLAN after configuration; a common mistake is a correctly configured but disabled WLAN",
         "Know that WPA2-PSK uses AES encryption by default and that the PSK is configured on the WLC, not on individual access points in a centralized deployment"
       ],
       "resources": [

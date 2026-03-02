@@ -8,7 +8,7 @@
       "question": "What are the main components of an entry in a routing table?",
       "answer": "Route source (protocol/type), destination network/prefix, administrative distance, metric, next-hop address, outgoing interface, and timestamp.",
       "explanation": "A routing table entry contains: (1) Route source code (C=Connected, S=Static, O=OSPF, D=EIGRP, R=RIP, B=BGP, etc.). (2) Destination network and subnet mask/prefix length. (3) Administrative distance (AD) and metric in brackets [AD/metric]. (4) Next-hop IP address (via x.x.x.x). (5) Outgoing interface. (6) Time since last update. Connected routes (C) have AD=0 and appear when an interface is up/up with an IP address. Use 'show ip route' to display the full routing table.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/17101-ip-routing.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/m_iri-iprouting.html",
       "difficulty": "medium",
       "tags": ["routing-table", "components", "administrative-distance", "metric"]
     },
@@ -18,7 +18,7 @@
       "question": "What Cisco IOS command displays the routing table?",
       "answer": "show ip route",
       "explanation": "The 'show ip route' command displays all routes in the routing table including the route source code, destination network, AD/metric, next-hop, interface, and age. Filter options include: 'show ip route static' (static routes only), 'show ip route ospf' (OSPF routes), 'show ip route connected' (connected routes), 'show ip route <network>' (specific route lookup). The output begins with a legend explaining route source codes (C, L, S, O, D, B, etc.).",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/command/irp-cr-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/command/iri-cr-book/iri-cr-s1.html",
       "difficulty": "easy",
       "tags": ["routing-table", "show-commands", "IOS-command"]
     },
@@ -28,7 +28,7 @@
       "question": "What is a 'local' route (L) in the Cisco IOS routing table?",
       "answer": "A local route is a /32 host route representing the exact IP address configured on a router's interface.",
       "explanation": "When an IP address is configured on an interface, two entries appear in the routing table: a Connected (C) route for the network/subnet and a Local (L) route that is a /32 host route for the specific IP address assigned to the interface. For example, configuring 192.168.1.1/24 on Gi0/0 creates: C 192.168.1.0/24 and L 192.168.1.1/32. The local route ensures that traffic destined for the router's own interface IP is processed locally rather than being routed further.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/17101-ip-routing.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/m_iri-iprouting.html",
       "difficulty": "easy",
       "tags": ["local-route", "routing-table", "connected-route", "host-route"]
     },
@@ -58,7 +58,7 @@
       "question": "What is the administrative distance of a floating static route and when is it used?",
       "answer": "A floating static route has a manually configured AD higher than the dynamic routing protocol's AD (e.g., AD 210 for OSPF backup). It serves as a backup route that is only used when the primary route is lost.",
       "explanation": "Normally, a static route has AD=1 and would always be preferred over dynamic routes. A floating static route is configured with a higher AD so it acts as a backup. For example, if OSPF (AD=110) provides the primary route, you can create a static backup with AD=200: 'ip route 10.0.0.0 255.255.255.0 192.168.2.1 200'. The floating static only enters the routing table if the OSPF route disappears. This provides a simple backup path without running a second routing protocol.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/17101-ip-routing.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/m_iri-iprouting.html",
       "difficulty": "hard",
       "tags": ["floating-static", "administrative-distance", "backup-route", "static-route"]
     },
@@ -68,7 +68,7 @@
       "question": "What is the longest prefix match rule in IP routing?",
       "answer": "When multiple routes match a destination IP, the router selects the route with the longest (most specific) prefix -- the route with the most network bits in the subnet mask.",
       "explanation": "The longest prefix match is the most fundamental routing lookup rule. For example, if the routing table has 10.0.0.0/8, 10.1.0.0/16, and 10.1.1.0/24, a packet destined for 10.1.1.50 matches all three. The router selects 10.1.1.0/24 because /24 is the most specific (longest) match. This rule is applied BEFORE administrative distance or metric comparisons. AD and metric are only compared when multiple routes have the same prefix length. The longest prefix match ensures the most precise route is always used.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/17101-ip-routing.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/m_iri-iprouting.html",
       "difficulty": "medium",
       "tags": ["longest-prefix-match", "routing", "route-lookup", "forwarding"]
     },
@@ -78,7 +78,7 @@
       "question": "A router has routes 10.0.0.0/8 via Gi0/0, 10.1.0.0/16 via Gi0/1, and 10.1.1.0/24 via Gi0/2. A packet arrives destined for 10.1.1.100. Which interface does the router use?",
       "answer": "Gi0/2, because 10.1.1.0/24 is the longest prefix match for destination 10.1.1.100.",
       "explanation": "The destination 10.1.1.100 matches all three routes: 10.0.0.0/8 (matches first 8 bits), 10.1.0.0/16 (matches first 16 bits), and 10.1.1.0/24 (matches first 24 bits). The longest prefix match rule selects 10.1.1.0/24 because it has the most matching bits (24). The packet exits via Gi0/2. If no specific route matched, the router would try the default route (0.0.0.0/0, prefix length 0). If no default route exists, the packet is dropped and an ICMP Destination Unreachable message may be sent.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/17101-ip-routing.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/m_iri-iprouting.html",
       "difficulty": "medium",
       "tags": ["longest-prefix-match", "route-lookup", "routing-example"]
     },
@@ -88,7 +88,7 @@
       "question": "What is the syntax for configuring a static route in Cisco IOS?",
       "answer": "ip route <destination-network> <subnet-mask> <next-hop-ip | exit-interface> [AD]",
       "explanation": "Examples: 'ip route 10.0.0.0 255.255.255.0 192.168.1.2' (next-hop IP), 'ip route 10.0.0.0 255.255.255.0 GigabitEthernet0/1' (exit interface), 'ip route 10.0.0.0 255.255.255.0 GigabitEthernet0/1 192.168.1.2' (fully specified with both). Best practice is to use the next-hop IP or fully specified form. Using only exit interface works on point-to-point links but causes ARP issues on multi-access networks. The optional AD value at the end creates a floating static route.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/irp-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/iri-xe-16-12-book.html",
       "difficulty": "easy",
       "tags": ["static-route", "ip-route", "IOS-command", "configuration"]
     },
@@ -98,7 +98,7 @@
       "question": "What is a default static route and how is it configured?",
       "answer": "A default route matches all destinations not found in the routing table. It is configured as: ip route 0.0.0.0 0.0.0.0 <next-hop-ip>",
       "explanation": "The default route (0.0.0.0/0) is the 'route of last resort.' It has a prefix length of 0, meaning it matches everything but is the least specific match. It is used when no other, more specific route exists for a destination. Common use: stub networks with a single exit point to the Internet. The router will show 'Gateway of last resort is x.x.x.x' in the 'show ip route' output. A default route can also be learned dynamically (e.g., via OSPF default-information originate).",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/irp-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/iri-xe-16-12-book.html",
       "difficulty": "easy",
       "tags": ["default-route", "gateway-of-last-resort", "static-route", "IOS-command"]
     },
@@ -108,7 +108,7 @@
       "question": "How do you configure a static IPv6 route?",
       "answer": "ipv6 route <destination-prefix/length> <next-hop-ipv6 | exit-interface>",
       "explanation": "Example: 'ipv6 route 2001:DB8:1::/48 2001:DB8:2::1' routes the /48 prefix via the specified next-hop. For link-local next-hops, you must also specify the exit interface: 'ipv6 route 2001:DB8:1::/48 GigabitEthernet0/1 FE80::1' because link-local addresses are not unique across interfaces. The IPv6 default route is: 'ipv6 route ::/0 <next-hop>'. Ensure 'ipv6 unicast-routing' is enabled globally for the router to forward IPv6 packets.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/irp-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/iri-xe-16-12-book/ip6-route-static-xe.html",
       "difficulty": "medium",
       "tags": ["IPv6", "static-route", "ipv6-route", "IOS-command"]
     },
@@ -118,7 +118,7 @@
       "question": "What command verifies that a static route has been installed in the routing table?",
       "answer": "show ip route static",
       "explanation": "The 'show ip route static' command filters the routing table to display only static routes (marked with 'S' code). Each entry shows the destination network, AD/metric [1/0], next-hop, outgoing interface, and age. If a configured static route doesn't appear, common causes include: the next-hop IP is unreachable, the exit interface is down, or a route with a lower AD already exists for the same destination. Use 'show running-config | include ip route' to see all configured static routes regardless of whether they are active.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/command/irp-cr-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/command/iri-cr-book/iri-cr-s1.html",
       "difficulty": "easy",
       "tags": ["static-route", "verification", "show-commands", "IOS-command"]
     },
@@ -128,7 +128,7 @@
       "question": "What is the difference between a next-hop static route and an exit-interface static route?",
       "answer": "A next-hop static route specifies the IP address of the next router. An exit-interface static route specifies the local outgoing interface.",
       "explanation": "Next-hop route (e.g., 'ip route 10.0.0.0 255.255.0.0 192.168.1.2'): The router performs a recursive lookup to find the outgoing interface for the next-hop IP. This is the preferred method on multi-access networks. Exit-interface route (e.g., 'ip route 10.0.0.0 255.255.0.0 Gi0/1'): The router sends traffic directly out the specified interface. On point-to-point links (serial), this works fine. On multi-access networks (Ethernet), the router ARPs for every destination on that interface, which is inefficient. Fully specified routes use both: 'ip route 10.0.0.0 255.255.0.0 Gi0/1 192.168.1.2'.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/irp-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/iri-xe-16-12-book.html",
       "difficulty": "hard",
       "tags": ["static-route", "next-hop", "exit-interface", "route-types"]
     },
@@ -138,7 +138,7 @@
       "question": "What is OSPF and what type of routing protocol is it?",
       "answer": "OSPF (Open Shortest Path First) is an open-standard link-state Interior Gateway Protocol (IGP) that uses Dijkstra's SPF algorithm to calculate the shortest path to each destination.",
       "explanation": "OSPF (RFC 2328 for OSPFv2, RFC 5340 for OSPFv3) is the most widely used IGP in enterprise networks. As a link-state protocol, each router builds a complete topology map of the network (Link-State Database / LSDB). OSPF uses cost (based on interface bandwidth) as its metric. It supports VLSM, CIDR, and provides fast convergence. OSPF uses multicast addresses 224.0.0.5 (AllSPFRouters) and 224.0.0.6 (AllDRouters). It runs directly over IP (protocol number 89), not TCP or UDP.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_ospf/configuration/xe-16/iro-xe-16-book/iro-cfg.html",
       "difficulty": "easy",
       "tags": ["OSPF", "link-state", "IGP", "SPF-algorithm"]
     },
@@ -148,7 +148,7 @@
       "question": "What is an OSPF area and what is the purpose of Area 0?",
       "answer": "An OSPF area is a logical grouping of routers and networks. Area 0 (backbone area) is mandatory and all other areas must connect to it either directly or via virtual links.",
       "explanation": "OSPF uses areas to reduce the size of the link-state database and limit the scope of SPF calculations. All areas must connect to Area 0 (backbone). Routers within the same area share the same LSDB. Area Border Routers (ABRs) connect different areas and summarize routes between them. Benefits of multi-area OSPF: smaller LSDBs per area, faster SPF calculations, containment of topology changes within an area, and route summarization at area boundaries.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_ospf/configuration/xe-16/iro-xe-16-book/iro-cfg.html",
       "difficulty": "medium",
       "tags": ["OSPF", "area", "backbone", "Area-0", "ABR"]
     },
@@ -158,7 +158,7 @@
       "question": "What are the OSPF router types: Internal, Backbone, ABR, and ASBR?",
       "answer": "Internal: all interfaces in one area. Backbone: has an interface in Area 0. ABR: connects two or more areas. ASBR: redistributes routes from another protocol into OSPF.",
       "explanation": "Internal routers have all interfaces in a single OSPF area and maintain one LSDB. Backbone routers have at least one interface in Area 0. Area Border Routers (ABRs) connect two or more areas and maintain a separate LSDB for each area; they generate Type 3 LSAs to advertise inter-area routes. Autonomous System Boundary Routers (ASBRs) inject external routes into OSPF via redistribution and generate Type 5 LSAs. A router can be multiple types simultaneously (e.g., both ABR and backbone router).",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_ospf/configuration/xe-16/iro-xe-16-book/iro-cfg.html",
       "difficulty": "medium",
       "tags": ["OSPF", "router-types", "ABR", "ASBR", "internal-router"]
     },
@@ -168,7 +168,7 @@
       "question": "What are the OSPF Hello and Dead timer defaults for broadcast networks?",
       "answer": "Hello timer: 10 seconds. Dead timer: 40 seconds (4x the Hello interval).",
       "explanation": "OSPF routers send Hello packets at the Hello interval to discover and maintain neighbor relationships. If no Hello is received from a neighbor within the Dead interval, the neighbor is declared dead and routes through it are removed. For broadcast and point-to-point networks: Hello=10s, Dead=40s. For NBMA networks: Hello=30s, Dead=120s. Hello and Dead timers MUST match between neighbors for an adjacency to form. Configure with 'ip ospf hello-interval <seconds>' and 'ip ospf dead-interval <seconds>' on the interface.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13689-17.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13699-29.html",
       "difficulty": "medium",
       "tags": ["OSPF", "hello-timer", "dead-timer", "neighbor"]
     },
@@ -178,7 +178,7 @@
       "question": "What conditions must match for two OSPF routers to form a neighbor adjacency?",
       "answer": "Hello/Dead timers, area ID, subnet and mask, authentication, stub area flag, and MTU must match. Router IDs must be unique.",
       "explanation": "OSPF neighbors must agree on these parameters to form an adjacency: (1) Hello and Dead intervals must match. (2) Area ID must match. (3) The interface must be on the same subnet with the same mask. (4) Authentication type and credentials must match (if configured). (5) Stub area flag must match. (6) MTU should match (mismatched MTU prevents Full state on some platforms). (7) Router IDs must be unique. If any of these mismatch, the adjacency will not form or will be stuck in a partial state (Init, 2-Way, or ExStart).",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13689-17.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13699-29.html",
       "difficulty": "hard",
       "tags": ["OSPF", "neighbor-adjacency", "requirements", "troubleshooting"]
     },
@@ -188,7 +188,7 @@
       "question": "What are the OSPF neighbor states in order?",
       "answer": "Down, Init, 2-Way, ExStart, Exchange, Loading, Full.",
       "explanation": "Down: No Hellos received. Init: Hello received but local router ID not seen in neighbor's Hello. 2-Way: Bidirectional communication confirmed (each router sees its own RID in the other's Hello); DR/BDR election occurs here. ExStart: Master/slave relationship established for DBD exchange (higher RID is master). Exchange: Database Description (DBD) packets are exchanged to compare LSDBs. Loading: Link-State Request (LSR) packets request missing LSAs, fulfilled by Link-State Update (LSU). Full: LSDBs are synchronized; adjacency is complete. On broadcast networks, non-DR/BDR routers remain in 2-Way with each other.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13689-17.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13685-13.html",
       "difficulty": "hard",
       "tags": ["OSPF", "neighbor-states", "adjacency", "FSM"]
     },
@@ -198,7 +198,7 @@
       "question": "What is the role of the DR (Designated Router) and BDR (Backup Designated Router) in OSPF?",
       "answer": "The DR reduces OSPF traffic on multi-access networks by collecting and distributing LSAs. The BDR is a standby that takes over if the DR fails.",
       "explanation": "On broadcast/multi-access segments with multiple OSPF routers, without a DR, each router would need a full adjacency with every other router (n*(n-1)/2 adjacencies). The DR acts as a central point: all routers form full adjacencies only with the DR and BDR, and send LSA updates to the DR (224.0.0.6). The DR then floods updates to all routers (224.0.0.5). DR election is based on highest OSPF priority (default 1), then highest Router ID. Priority 0 means the router cannot become DR. DR/BDR election is non-preemptive.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_ospf/configuration/xe-16/iro-xe-16-book/iro-cfg.html",
       "difficulty": "medium",
       "tags": ["OSPF", "DR", "BDR", "multi-access", "election"]
     },
@@ -208,7 +208,7 @@
       "question": "How is the OSPF Router ID (RID) determined?",
       "answer": "1) Manually configured with 'router-id' command. 2) Highest IP of any loopback interface. 3) Highest IP of any active physical interface.",
       "explanation": "The Router ID is a 32-bit number in dotted-decimal format that uniquely identifies each OSPF router. Selection priority: (1) Manual configuration under 'router ospf': 'router-id 1.1.1.1' (preferred method). (2) Highest IPv4 address on an active loopback interface (loopbacks are preferred because they never go down). (3) Highest IPv4 address on any active physical interface. The RID is set when OSPF starts and does not change until OSPF is restarted ('clear ip ospf process'). Duplicate RIDs prevent adjacency formation.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_ospf/configuration/xe-16/iro-xe-16-book/iro-cfg.html",
       "difficulty": "easy",
       "tags": ["OSPF", "router-ID", "loopback", "configuration"]
     },
@@ -228,7 +228,7 @@
       "question": "What is the OSPF cost metric and how is it calculated?",
       "answer": "OSPF cost = Reference Bandwidth / Interface Bandwidth. Default reference bandwidth is 100 Mbps.",
       "explanation": "The default OSPF cost formula is: Cost = 100,000,000 (100 Mbps) / Interface Bandwidth in bps. Examples: FastEthernet (100 Mbps) = cost 1, Ethernet (10 Mbps) = cost 10, T1 (1.544 Mbps) = cost 64. Problem: GigabitEthernet and 10GigE both compute to cost 1 with the default reference bandwidth. Solution: increase reference bandwidth with 'auto-cost reference-bandwidth <Mbps>' (e.g., 10000 for 10 Gbps). This must be configured consistently on all OSPF routers. Cost can also be manually set per-interface with 'ip ospf cost <value>'.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_ospf/configuration/xe-16/iro-xe-16-book/iro-cfg.html",
       "difficulty": "medium",
       "tags": ["OSPF", "cost", "metric", "reference-bandwidth"]
     },
@@ -238,7 +238,7 @@
       "question": "What command shows OSPF neighbor relationships and their states?",
       "answer": "show ip ospf neighbor",
       "explanation": "The 'show ip ospf neighbor' command displays the Neighbor ID (Router ID), priority, state (Full, 2-Way, Init, etc.), Dead timer countdown, neighbor's IP address, and the local interface. The state column shows the adjacency status: 'FULL/DR' means full adjacency with the DR, 'FULL/BDR' with the BDR, '2WAY/DROTHER' means the neighbor is neither DR nor BDR (normal on broadcast segments). If no neighbors appear, check: interface status, area/subnet match, Hello/Dead timers, and authentication.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_ospf/command/ospf-cr-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_ospf/command/iro-cr-book/ospf-s1.html",
       "difficulty": "easy",
       "tags": ["OSPF", "neighbor", "show-commands", "IOS-command", "troubleshooting"]
     },
@@ -258,7 +258,7 @@
       "question": "What are the common OSPF LSA types you should know for the CCNA?",
       "answer": "Type 1 (Router LSA): originated by every router, stays within an area. Type 2 (Network LSA): generated by DR on multi-access segments. Type 3 (Summary LSA): generated by ABRs for inter-area routes. Type 5 (External LSA): generated by ASBRs for external routes.",
       "explanation": "Type 1 Router LSAs describe a router's directly connected links and are flooded within the originating area. Type 2 Network LSAs describe the multi-access network and its attached routers; generated by the DR. Type 3 Summary LSAs are created by ABRs to advertise routes from one area to another. Type 5 AS External LSAs are created by ASBRs to advertise routes redistributed into OSPF from other protocols (BGP, EIGRP, static). Type 4 ASBR Summary LSAs describe the path to an ASBR. Understanding LSA types helps troubleshoot OSPF routing issues.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_ospf/configuration/xe-16/iro-xe-16-book/iro-cfg.html",
       "difficulty": "hard",
       "tags": ["OSPF", "LSA", "LSA-types", "link-state"]
     },
@@ -288,7 +288,7 @@
       "question": "What Cisco IOS command displays OSPF interface details including cost, timer values, and DR/BDR information?",
       "answer": "show ip ospf interface <interface-type/number>",
       "explanation": "The 'show ip ospf interface' command displays per-interface OSPF details: process ID, area, cost, network type (broadcast/point-to-point), state (DR/BDR/DROTHER), Hello/Dead intervals, neighbor count, adjacency count, and authentication settings. Use 'show ip ospf interface brief' for a concise summary of all OSPF-enabled interfaces. This is essential for verifying OSPF is enabled on the correct interfaces, checking timers, confirming area assignments, and identifying DR/BDR roles.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_ospf/command/ospf-cr-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_ospf/command/iro-cr-book/ospf-s1.html",
       "difficulty": "easy",
       "tags": ["OSPF", "show-commands", "interface", "IOS-command", "verification"]
     },
@@ -298,7 +298,7 @@
       "question": "What is the difference between OSPF point-to-point and broadcast network types?",
       "answer": "Point-to-point: No DR/BDR election, used on links with exactly two routers (e.g., serial links). Broadcast: DR/BDR election occurs, used on multi-access segments (e.g., Ethernet).",
       "explanation": "OSPF network type affects whether DR/BDR election occurs and how neighbors are discovered. Broadcast (default on Ethernet): multicast Hellos, DR/BDR elected to reduce adjacencies. Point-to-point (default on serial): no DR/BDR needed (only two routers), faster adjacency formation. You can change the network type with 'ip ospf network point-to-point' on an interface. A common optimization is setting Ethernet interfaces to point-to-point when only two OSPF routers share a subnet, avoiding unnecessary DR/BDR election.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_ospf/configuration/xe-16/iro-xe-16-book/iro-cfg.html",
       "difficulty": "medium",
       "tags": ["OSPF", "network-type", "point-to-point", "broadcast", "DR-BDR"]
     },

@@ -113,13 +113,13 @@
         "Setting a severity level includes all messages at that level and above (lower numbers are more severe)"
       ],
       "examTips": [
-        "Memorize all eight syslog severity levels and their numbers; the exam frequently tests your ability to identify which level number corresponds to which name",
+        "Memorize all eight syslog severity levels and their numbers; you should be able to identify which level number corresponds to which name",
         "Remember that syslog uses UDP port 514 by default and that setting 'logging trap 4' captures levels 0 through 4 (Emergency through Warning)"
       ],
       "resources": [
         {
           "title": "Cisco Syslog Configuration Guide",
-          "url": "https://www.cisco.com/c/en/us/td/docs/routers/access/wireless/software/guide/SysslogExternalServers.html"
+          "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-17/configuration_guide/sys_mgmt/b_1717_sys_mgmt_9300_cg/configuring_system_message_logs.html"
         },
         {
           "title": "Cisco System Message Logging",
@@ -167,7 +167,7 @@
       "resources": [
         {
           "title": "Cisco QoS Overview",
-          "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/qos/configuration/xe-16/qos-xe-16-book.html"
+          "url": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/qos/b-quality-of-service.html"
         },
         {
           "title": "QoS Classification and Marking - Cisco",

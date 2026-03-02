@@ -27,6 +27,8 @@ export default defineConfig({
     timeout: 120_000,
     env: {
       SKIP_AUTH: "true",
+      AUTH_SECRET: "e2e-test-secret-do-not-use-in-production",
+      DATABASE_URL: "",
     },
   },
 });

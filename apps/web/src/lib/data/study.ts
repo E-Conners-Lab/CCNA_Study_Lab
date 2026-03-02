@@ -29,6 +29,17 @@ export interface KeyTopic {
   resources: Resource[];
 }
 
+export interface PracticeScenario {
+  scenario: string;
+  question: string;
+  answer: string;
+}
+
+export interface CommonMistake {
+  mistake: string;
+  correction: string;
+}
+
 export interface StudyGuide {
   domain: number;
   slug: string;
@@ -36,8 +47,8 @@ export interface StudyGuide {
   weight: number;
   overview: string;
   keyTopics: KeyTopic[];
-  practiceScenarios: string[];
-  commonMistakes: string[];
+  practiceScenarios: PracticeScenario[];
+  commonMistakes: CommonMistake[];
 }
 
 // ---------------------------------------------------------------------------

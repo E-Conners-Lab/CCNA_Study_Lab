@@ -118,7 +118,7 @@
       "question": "How does LLDP differ from CDP?",
       "answer": "LLDP (Link Layer Discovery Protocol) is an IEEE standard (802.1AB) that works with multi-vendor equipment, while CDP is Cisco proprietary.",
       "explanation": "LLDP is vendor-neutral and defined by IEEE 802.1AB. Like CDP, it operates at Layer 2 and discovers directly connected devices. LLDP sends advertisements every 30 seconds (default) with a 120-second hold time. LLDP must be explicitly enabled on Cisco devices with 'lldp run'. Key differences from CDP: LLDP is standards-based (works with non-Cisco devices), LLDP can be enabled for transmit only ('lldp transmit'), receive only ('lldp receive'), or both per interface. Commands: 'show lldp neighbors' and 'show lldp neighbors detail'.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/cdp/configuration/xe-16/cdp-xe-16-book/nm-cdp-lldp-overview.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/nmgmt/b_176_nmgmt_9300_cg/configuring_lldp__lldp_med__and_wired_location_service.html",
       "difficulty": "medium",
       "tags": ["LLDP", "IEEE-802.1AB", "discovery-protocol", "multi-vendor"]
     },
@@ -208,7 +208,7 @@
       "question": "What is PortFast and when should it be used?",
       "answer": "PortFast allows a switch port to skip STP listening and learning states and immediately enter forwarding. It should only be used on access ports connected to end devices.",
       "explanation": "Without PortFast, a port takes 30 seconds (listening + learning) to start forwarding after a link comes up, which delays DHCP and PXE boot. PortFast skips these states, going directly to forwarding. Configure per-port with 'spanning-tree portfast' or globally for all access ports with 'spanning-tree portfast default'. NEVER enable PortFast on ports connected to other switches -- this could cause temporary loops. Pair PortFast with BPDU Guard for security.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_spanning_tree_protocol.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_optional_spanning_tree_features.html",
       "difficulty": "easy",
       "tags": ["PortFast", "STP", "access-port", "convergence"]
     },
@@ -218,7 +218,7 @@
       "question": "What is BPDU Guard and why is it used with PortFast?",
       "answer": "BPDU Guard shuts down (err-disables) a PortFast-enabled port if it receives a BPDU, preventing loops from unauthorized switch connections.",
       "explanation": "BPDU Guard protects the network from loops that could occur if someone connects a switch to a PortFast-enabled port. If a BPDU is received, the port is immediately placed in err-disabled state. Configure per-interface with 'spanning-tree bpduguard enable' or globally with 'spanning-tree portfast bpduguard default'. To recover an err-disabled port: 'shutdown' then 'no shutdown', or configure automatic recovery with 'errdisable recovery cause bpduguard' and 'errdisable recovery interval <seconds>'.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_spanning_tree_protocol.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_optional_spanning_tree_features.html",
       "difficulty": "medium",
       "tags": ["BPDU-Guard", "PortFast", "STP", "security"]
     },
@@ -278,7 +278,7 @@
       "question": "What physical infrastructure components are needed for wireless AP deployment?",
       "answer": "Ethernet switch with PoE, Cat 5e/6 cabling, ceiling/wall mounts, and optionally a WLC for lightweight APs.",
       "explanation": "Wireless APs typically require: (1) A PoE-capable switch port (802.3af provides 15.4W, 802.3at provides 25.5W, 802.3bt provides up to 90W for advanced APs). (2) Cat 5e or Cat 6 Ethernet cabling (max 100m). (3) Proper physical mounting hardware for ceiling, wall, or outdoor installation. (4) For lightweight deployments: a WLC (physical appliance, virtual, or cloud-based). Site surveys determine optimal AP placement based on coverage, capacity, and interference. Consider RF factors like building materials, interference sources, and user density.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/technotes/8-6/b_RFDesignGuide.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/wireless/5500-series-wireless-controllers/116057-site-survey-guidelines-wlan-00.html",
       "difficulty": "easy",
       "tags": ["wireless", "PoE", "infrastructure", "AP-deployment"]
     },
@@ -288,7 +288,7 @@
       "question": "What is the difference between 802.3af and 802.3at PoE standards?",
       "answer": "802.3af (PoE) provides up to 15.4W per port. 802.3at (PoE+) provides up to 25.5W per port.",
       "explanation": "Power over Ethernet delivers DC power over the same Cat 5e/6 cable used for data. 802.3af (2003) provides 15.4W (12.95W at the device after cable loss), sufficient for basic APs and IP phones. 802.3at (2009) provides 25.5W (21.9W at device), needed for more advanced APs, pan-tilt-zoom cameras, and video phones. 802.3bt (2018) provides up to 60W (Type 3) or 90W (Type 4) for high-power devices. The switch detects whether a device needs power using a signature detection process before delivering power.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/hardware/install/b_c9300_hig/b_c9300_hig_chapter_01.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/hardware/install/b_c9300_hig/Product-overview.html",
       "difficulty": "medium",
       "tags": ["PoE", "802.3af", "802.3at", "power", "wireless"]
     },
@@ -307,7 +307,7 @@
       "objectiveCode": "2.9",
       "question": "How do you access the WLC GUI for management?",
       "answer": "Connect via HTTPS to the WLC's management interface IP address using a web browser.",
-      "explanation": "The WLC provides a web-based GUI accessible via HTTPS (e.g., https://192.168.1.100). Initial setup can be done through the console port using a wizard that configures the management interface IP, SSID, and admin credentials. The GUI provides tabs for monitoring, WLANs, controller settings, wireless configuration, security, and management. CLI access is available via SSH or console. The Cisco 9800 series WLC also supports configuration via Cisco DNA Center and programmable APIs (RESTCONF/NETCONF).",
+      "explanation": "The WLC provides a web-based GUI accessible via HTTPS (e.g., https://192.168.1.100). Initial setup can be done through the console port using a wizard that configures the management interface IP, SSID, and admin credentials. The GUI provides tabs for monitoring, WLANs, controller settings, wireless configuration, security, and management. CLI access is available via SSH or console. The Cisco 9800 series WLC also supports configuration via Cisco Catalyst Center and programmable APIs (RESTCONF/NETCONF).",
       "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-6/config-guide/b_wl_17_6_cg.html",
       "difficulty": "easy",
       "tags": ["WLC", "GUI", "management", "HTTPS"]

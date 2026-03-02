@@ -82,23 +82,23 @@
     },
     {
       "objectiveCode": "6.4",
-      "title": "Compare traditional campus device management with Cisco DNA Center enabled device management",
-      "summary": "Traditional campus management relies on device-by-device CLI configuration, while Cisco DNA Center provides intent-based networking with centralized automation, assurance, and policy management. DNA Center transforms how campuses are designed, deployed, and operated by abstracting complexity behind a graphical interface.",
+      "title": "Compare traditional campus device management with Cisco Catalyst Center enabled device management",
+      "summary": "Traditional campus management relies on device-by-device CLI configuration, while Cisco Catalyst Center provides intent-based networking with centralized automation, assurance, and policy management. Catalyst Center transforms how campuses are designed, deployed, and operated by abstracting complexity behind a graphical interface.",
       "keyPoints": [
         "Traditional management requires CLI access to each device individually for configuration, monitoring, and troubleshooting, which is time-consuming and error-prone at scale",
-        "Cisco DNA Center is an intent-based networking controller that translates business intent into network configuration and policy automatically",
-        "DNA Center provides network assurance through AI/ML-driven analytics, proactive issue detection, and guided remediation for identified problems",
-        "Software image management (SWIM) in DNA Center automates IOS upgrades across the network, ensuring compliance with golden image standards",
-        "DNA Center uses Cisco SD-Access to create a campus fabric with automated segmentation, eliminating the need for manual VLAN and ACL configuration"
+        "Cisco Catalyst Center is an intent-based networking controller that translates business intent into network configuration and policy automatically",
+        "Catalyst Center provides network assurance through AI/ML-driven analytics, proactive issue detection, and guided remediation for identified problems",
+        "Software image management (SWIM) in Catalyst Center automates IOS upgrades across the network, ensuring compliance with golden image standards",
+        "Catalyst Center uses Cisco SD-Access to create a campus fabric with automated segmentation, eliminating the need for manual VLAN and ACL configuration"
       ],
       "examTips": [
-        "Understand that DNA Center is Cisco's intent-based networking platform; intent-based means you declare WHAT you want (policy) and the controller determines HOW to implement it",
-        "Know that DNA Center provides four main workflows: Design (network hierarchy), Policy (access control/QoS), Provision (deploy configurations), and Assurance (monitoring/analytics)"
+        "Understand that Catalyst Center is Cisco's intent-based networking platform; intent-based means you declare WHAT you want (policy) and the controller determines HOW to implement it",
+        "Know that Catalyst Center provides four main workflows: Design (network hierarchy), Policy (access control/QoS), Provision (deploy configurations), and Assurance (monitoring/analytics)"
       ],
       "resources": [
         {
-          "title": "Cisco DNA Center Overview",
-          "url": "https://www.cisco.com/c/en/us/products/cloud-systems-management/dna-center/index.html"
+          "title": "Cisco Catalyst Center Overview",
+          "url": "https://www.cisco.com/site/us/en/products/networking/catalyst-center/index.html"
         }
       ]
     },
@@ -151,7 +151,7 @@
         },
         {
           "title": "Ansible Network Automation",
-          "url": "https://www.ansible.com/integrations/networks/cisco"
+          "url": "https://developer.cisco.com/automation-ansible/"
         }
       ]
     },
@@ -184,7 +184,7 @@
   ],
   "practiceScenarios": [
     {
-      "scenario": "A network engineer receives the following JSON response from a REST API call to a Cisco DNA Center controller:\n\n{\"response\": [{\"hostname\": \"SW-Floor1\", \"managementIpAddress\": \"10.1.1.10\", \"platformId\": \"C9300-48P\", \"reachabilityStatus\": \"Reachable\"}, {\"hostname\": \"SW-Floor2\", \"managementIpAddress\": \"10.1.1.11\", \"platformId\": \"C9300-24T\", \"reachabilityStatus\": \"Unreachable\"}], \"version\": \"1.0\"}",
+      "scenario": "A network engineer receives the following JSON response from a REST API call to a Cisco Catalyst Center controller:\n\n{\"response\": [{\"hostname\": \"SW-Floor1\", \"managementIpAddress\": \"10.1.1.10\", \"platformId\": \"C9300-48P\", \"reachabilityStatus\": \"Reachable\"}, {\"hostname\": \"SW-Floor2\", \"managementIpAddress\": \"10.1.1.11\", \"platformId\": \"C9300-24T\", \"reachabilityStatus\": \"Unreachable\"}], \"version\": \"1.0\"}",
       "question": "Identify the JSON components in this response: How many objects are in the response array? What data type is the 'response' key's value? What HTTP verb was most likely used to retrieve this data?",
       "answer": "The 'response' key contains a JSON array (indicated by square brackets []) with two JSON objects (indicated by curly braces {}). The first object represents SW-Floor1 and the second represents SW-Floor2. Each object contains four key-value pairs where all values are strings. The 'version' key has a string value '1.0'. The HTTP verb used was most likely GET, since this is a read operation retrieving device information (CRUD: Read = GET). The outer structure is a JSON object with two keys: 'response' (array) and 'version' (string)."
     },
@@ -194,9 +194,9 @@
       "answer": "Ansible is the recommended choice for several key reasons: (1) Agentless architecture: Ansible connects via SSH, which is already available on all Cisco IOS devices. Puppet requires an agent installed on managed devices, which is not feasible on standard Cisco IOS routers and switches. (2) Simpler learning curve: Ansible uses YAML-based playbooks which are human-readable and easier to learn than Puppet's custom DSL, making it more accessible for teams with limited programming experience. (3) Push-based model: Ansible pushes configurations on demand, giving operators explicit control over when changes are applied. Puppet's pull-based model requires devices to periodically check in with the master. (4) Minimal infrastructure: Ansible only requires a control node (any Linux machine with Python), while Puppet requires a dedicated Puppet master server. (5) Strong Cisco support: Ansible has extensive built-in Cisco IOS modules maintained by both Red Hat and Cisco."
     },
     {
-      "scenario": "A network architect is designing a new campus network and must decide between a traditional network design with individual device management and a Cisco DNA Center-based SD-Access fabric. The campus will have 15 buildings, 300 switches, and requires strict segmentation between departments.",
-      "question": "What are three specific advantages of the DNA Center-based approach over traditional management for this deployment?",
-      "answer": "Three specific advantages: (1) Automated segmentation: DNA Center with SD-Access uses virtual networks (macro-segmentation) and scalable group tags (SGTs) for micro-segmentation, eliminating the need to manually configure VLANs, ACLs, and spanning tree across 300 switches. In a traditional design, maintaining consistent segmentation policies across 15 buildings requires extensive manual ACL management prone to errors. (2) Centralized provisioning: DNA Center can provision all 300 switches through templates and fabric onboarding workflows, reducing deployment time from weeks to days. Traditional management would require CLI access to each switch individually. (3) Network assurance and analytics: DNA Center provides AI-driven health monitoring, client experience scoring, and proactive issue detection across the entire campus from a single dashboard. In a traditional network, troubleshooting requires logging into individual devices and manually correlating data from multiple sources, which is impractical at this scale."
+      "scenario": "A network architect is designing a new campus network and must decide between a traditional network design with individual device management and a Cisco Catalyst Center-based SD-Access fabric. The campus will have 15 buildings, 300 switches, and requires strict segmentation between departments.",
+      "question": "What are three specific advantages of the Catalyst Center-based approach over traditional management for this deployment?",
+      "answer": "Three specific advantages: (1) Automated segmentation: Catalyst Center with SD-Access uses virtual networks (macro-segmentation) and scalable group tags (SGTs) for micro-segmentation, eliminating the need to manually configure VLANs, ACLs, and spanning tree across 300 switches. In a traditional design, maintaining consistent segmentation policies across 15 buildings requires extensive manual ACL management prone to errors. (2) Centralized provisioning: Catalyst Center can provision all 300 switches through templates and fabric onboarding workflows, reducing deployment time from weeks to days. Traditional management would require CLI access to each switch individually. (3) Network assurance and analytics: Catalyst Center provides AI-driven health monitoring, client experience scoring, and proactive issue detection across the entire campus from a single dashboard. In a traditional network, troubleshooting requires logging into individual devices and manually correlating data from multiple sources, which is impractical at this scale."
     }
   ],
   "commonMistakes": [

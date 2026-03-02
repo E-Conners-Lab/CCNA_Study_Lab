@@ -1,26 +1,27 @@
 {
   "slug": "ssh-config",
-  "title": "SSH Remote Access Configuration",
-  "description": "Configure secure SSH remote access on a Cisco router, including hostname, domain name, RSA key generation, local user authentication, and VTY line settings.",
+  "title": "Secure Device Management with SSH",
+  "description": "Configure SSH version 2 for secure remote access, disable Telnet, set up local authentication, and configure login security features.",
   "domain": "IP Services",
   "domainSlug": "ip-services",
   "objectiveCode": "4.8",
   "difficulty": "easy",
   "estimatedMinutes": 15,
   "type": "ios-cli",
-  "tags": ["ssh", "remote-access", "vty", "rsa", "security"],
-  "instructions": "## SSH Remote Access Configuration Lab\n\nIn this lab you will configure a Cisco router for secure remote management using SSH.\n\n### Background\n\nSSH (Secure Shell) provides encrypted remote access to network devices, replacing the insecure Telnet protocol. To enable SSH on a Cisco device, several prerequisites must be met: a hostname (other than the default), a domain name, RSA keys, and a local user account.\n\n### Requirements\n\n1. **Set Hostname and Domain Name**\n   - Hostname: `R1`\n   - Domain name: `ccna.lab`\n\n2. **Generate RSA Keys**\n   - Generate RSA keys with a modulus of 2048 bits.\n\n3. **Create a Local User Account**\n   - Username: `admin`\n   - Secret (encrypted password): `Cisco123`\n\n4. **Configure VTY Lines**\n   - Configure VTY lines 0 through 4.\n   - Set transport input to SSH only (disable Telnet).\n   - Use local authentication (username/password database on the router).\n\n### Steps\n\n1. Enter global configuration mode.\n2. Set the hostname to `R1`.\n3. Set the domain name to `ccna.lab` using the `ip domain-name` command.\n4. Generate RSA keys with `crypto key generate rsa general-keys modulus 2048`.\n5. Create the local user with `username admin secret Cisco123`.\n6. Enter VTY line configuration for lines 0-4.\n7. Set `transport input ssh` to allow only SSH connections.\n8. Set `login local` to authenticate against the local user database.\n9. Verify with `show ip ssh`.",
-  "starterCode": "! Enter your IOS commands below\nenable\nconfigure terminal\n!\n! Step 1: Set hostname and domain name\n!\n!\n! Step 2: Generate RSA keys\n!\n!\n! Step 3: Create local user\n!\n!\n! Step 4: Configure VTY lines for SSH\n!\n!\nend",
-  "solutionCode": "enable\nconfigure terminal\n!\nhostname R1\nip domain-name ccna.lab\n!\ncrypto key generate rsa general-keys modulus 2048\n!\nusername admin secret Cisco123\n!\nline vty 0 4\n transport input ssh\n login local\n exit\n!\nend",
-  "expectedOutput": "R1# show ip ssh\nSSH Enabled - version 2.0\nAuthentication timeout: 120 secs; Authentication retries: 3\nMinimum expected Diffie Hellman key size : 2048 bits\nIOS Keys in SECSH format(ssh-rsa, base64 encoded):\nssh-rsa <key data>\n\nR1# show running-config | section line vty\nline vty 0 4\n login local\n transport input ssh",
+  "tags": ["ssh", "sshv2", "vty", "security", "remote-access", "rsa", "login-local"],
+  "instructions": "## Secure Device Management with SSH Lab\n\nConfigure a Cisco router for secure remote management using SSH version 2 and disable insecure Telnet access.\n\n### Topology\n\n```\n[Admin PC] --- 192.168.1.0/24 --- Gi0/0 [R1]\n192.168.1.10                      192.168.1.1\n```\n\n### Requirements\n\n1. **Set the hostname** to `R1` and the **domain name** to `ccnastudy.lab`\n2. **Generate RSA keys** with a modulus of 2048 bits\n3. **Enable SSH version 2**\n4. **Create a local user** `admin` with secret `Cisco123!` and privilege level 15\n5. **Configure VTY lines 0-4:**\n   - Use local authentication\n   - Allow only SSH as the transport input (disable Telnet)\n   - Set an exec timeout of 10 minutes\n6. **Set console security:**\n   - Configure a console password `ConPass1!`\n   - Enable login on the console line\n7. **Enable the enable secret** `EnablePass1!`\n8. **Enable password encryption** for all plaintext passwords in the config",
+  "starterCode": "enable\nconfigure terminal\n!\n! Step 1: Hostname and domain\n!\n!\n! Step 2: Generate RSA keys\n!\n!\n! Step 3: SSH version 2\n!\n!\n! Step 4: Local user\n!\n!\n! Step 5: VTY line configuration\n!\n!\n! Step 6: Console security\n!\n!\n! Step 7: Enable secret\n!\n!\n! Step 8: Password encryption\n!\n!\nend",
+  "solutionCode": "enable\nconfigure terminal\n!\nhostname R1\nip domain-name ccnastudy.lab\n!\ncrypto key generate rsa modulus 2048\n!\nip ssh version 2\n!\nusername admin privilege 15 secret Cisco123!\n!\nline vty 0 4\n login local\n transport input ssh\n exec-timeout 10 0\n exit\n!\nline console 0\n password ConPass1!\n login\n exit\n!\nenable secret EnablePass1!\n!\nservice password-encryption\n!\nend",
+  "expectedOutput": "R1#show ip ssh\nSSH Enabled - version 2.0\nAuthentication timeout: 120 secs; Authentication retries: 3\nMinimum expected Diffie Hellman key size : 2048 bits\nIOS Keys in SECSH format(ssh-rsa, base64 encoded):\nssh-rsa AAAA...\n\nR1#show running-config | section line vty\nline vty 0 4\n exec-timeout 10 0\n login local\n transport input ssh",
   "hints": [
-    "The hostname and domain name must be set before generating RSA keys, because the key label is derived from the combination of hostname.domain-name (e.g., R1.ccna.lab).",
-    "Use 'crypto key generate rsa general-keys modulus 2048' to create a 2048-bit RSA key pair. A minimum of 768 bits is required for SSH version 2, but 2048 is recommended for security.",
-    "On the VTY lines, 'login local' tells the router to authenticate using the local username database. Without this command, the router will not prompt for credentials or may deny access."
+    "The hostname and domain name must be configured before generating RSA keys. SSH requires both to create the key pair (key name = hostname.domain).",
+    "Use 'transport input ssh' on the VTY lines to allow ONLY SSH connections. This implicitly denies Telnet access without needing to explicitly block it.",
+    "Use 'secret' instead of 'password' when creating users. The 'secret' keyword uses a stronger hash (type 9 scrypt) while 'password' uses weaker encryption even with service password-encryption."
   ],
   "learningObjectives": [
-    "Configure the prerequisites for SSH access on a Cisco router including hostname, domain name, and RSA keys",
-    "Create local user accounts with encrypted passwords for device authentication",
-    "Secure VTY lines to accept only SSH connections and use local authentication"
+    "Configure SSH version 2 with RSA key generation on a Cisco device",
+    "Create local user accounts with appropriate privilege levels",
+    "Secure VTY and console lines with proper authentication and transport restrictions",
+    "Apply password encryption and enable secrets for device hardening"
   ]
 }

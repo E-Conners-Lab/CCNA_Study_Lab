@@ -8,7 +8,7 @@
       "question": "What are three key benefits of network automation?",
       "answer": "Reduced human error, faster deployment and configuration changes, and improved consistency across the network.",
       "explanation": "Network automation replaces manual CLI-based configuration with programmatic tools and scripts. Additional benefits include better scalability (configure thousands of devices simultaneously), improved compliance (enforced standard configurations), lower operational costs, and faster troubleshooting through automated data collection and analysis.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/automation/network-automation.html",
+      "sourceUrl": "https://www.cisco.com/site/us/en/learn/topics/networking/what-is-network-automation.html",
       "difficulty": "easy",
       "tags": ["automation", "benefits", "network management"]
     },
@@ -18,7 +18,7 @@
       "question": "How does network automation improve network consistency compared to manual configuration?",
       "answer": "Automation uses templates and scripts to ensure every device receives the same standardized configuration, eliminating variations caused by human error or different administrators.",
       "explanation": "When administrators manually configure devices, inconsistencies arise from typos, different interpretations of policies, or forgotten steps. Automation tools apply the same configuration template to all devices, enforce naming conventions, and validate configurations before deployment. This is especially critical in large networks with hundreds or thousands of devices.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/automation/network-automation.html",
+      "sourceUrl": "https://www.cisco.com/site/us/en/learn/topics/networking/what-is-network-automation.html",
       "difficulty": "easy",
       "tags": ["automation", "consistency", "templates"]
     },
@@ -55,22 +55,22 @@
     {
       "id": "d6-fc-006",
       "objectiveCode": "6.3",
-      "question": "What is Cisco DNA Center and what role does it play in a network?",
-      "answer": "Cisco DNA Center is a centralized network management and automation platform that serves as the SDN controller for Cisco intent-based networking (IBN).",
-      "explanation": "DNA Center provides a dashboard for network design, policy-based automation, assurance (monitoring and troubleshooting), and device provisioning. It uses intent-based networking to translate business intent into network configurations. Key features include network plug-and-play (PnP), software image management (SWIM), path trace, and AI-driven analytics.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/products/cloud-systems-management/dna-center/index.html",
+      "question": "What is Cisco Catalyst Center and what role does it play in a network?",
+      "answer": "Cisco Catalyst Center is a centralized network management and automation platform that serves as the SDN controller for Cisco intent-based networking (IBN).",
+      "explanation": "Catalyst Center provides a dashboard for network design, policy-based automation, assurance (monitoring and troubleshooting), and device provisioning. It uses intent-based networking to translate business intent into network configurations. Key features include network plug-and-play (PnP), software image management (SWIM), path trace, and AI-driven analytics.",
+      "sourceUrl": "https://www.cisco.com/site/us/en/products/networking/catalyst-center/index.html",
       "difficulty": "easy",
-      "tags": ["DNA Center", "SDN", "intent-based networking", "Cisco"]
+      "tags": ["Catalyst Center", "SDN", "intent-based networking", "Cisco"]
     },
     {
       "id": "d6-fc-007",
       "objectiveCode": "6.3",
-      "question": "What southbound protocols does Cisco DNA Center use to communicate with network devices?",
+      "question": "What southbound protocols does Cisco Catalyst Center use to communicate with network devices?",
       "answer": "NETCONF, RESTCONF, CLI (SSH/Telnet), and SNMP.",
-      "explanation": "DNA Center supports multiple southbound interfaces to manage diverse device types. NETCONF (using YANG models over SSH) and RESTCONF (using YANG models over HTTPS) are the preferred modern protocols. CLI over SSH is used for legacy devices. SNMP is used for monitoring. The controller abstracts these differences, presenting a unified northbound REST API to applications.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/products/cloud-systems-management/dna-center/index.html",
+      "explanation": "Catalyst Center supports multiple southbound interfaces to manage diverse device types. NETCONF (using YANG models over SSH) and RESTCONF (using YANG models over HTTPS) are the preferred modern protocols. CLI over SSH is used for legacy devices. SNMP is used for monitoring. The controller abstracts these differences, presenting a unified northbound REST API to applications.",
+      "sourceUrl": "https://www.cisco.com/site/us/en/products/networking/catalyst-center/index.html",
       "difficulty": "medium",
-      "tags": ["DNA Center", "NETCONF", "RESTCONF", "southbound"]
+      "tags": ["Catalyst Center", "NETCONF", "RESTCONF", "southbound"]
     },
     {
       "id": "d6-fc-008",
@@ -195,12 +195,12 @@
     {
       "id": "d6-fc-020",
       "objectiveCode": "6.3",
-      "question": "What is intent-based networking (IBN) as implemented by Cisco DNA Center?",
+      "question": "What is intent-based networking (IBN) as implemented by Cisco Catalyst Center?",
       "answer": "IBN translates high-level business intent (what you want the network to do) into network configurations, and continuously validates that the network is operating as intended.",
-      "explanation": "With IBN, administrators express desired outcomes (e.g., 'sales team needs access to CRM on VLAN 100') rather than device-by-device CLI commands. DNA Center translates this intent into device configurations, deploys them, and uses assurance features to continuously monitor and verify the network matches the intent. If deviations are detected, the system alerts administrators or auto-remediates.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/products/cloud-systems-management/dna-center/index.html",
+      "explanation": "With IBN, administrators express desired outcomes (e.g., 'sales team needs access to CRM on VLAN 100') rather than device-by-device CLI commands. Catalyst Center translates this intent into device configurations, deploys them, and uses assurance features to continuously monitor and verify the network matches the intent. If deviations are detected, the system alerts administrators or auto-remediates.",
+      "sourceUrl": "https://www.cisco.com/site/us/en/products/networking/catalyst-center/index.html",
       "difficulty": "medium",
-      "tags": ["IBN", "intent-based networking", "DNA Center", "Cisco"]
+      "tags": ["IBN", "intent-based networking", "Catalyst Center", "Cisco"]
     },
     {
       "id": "d6-fc-021",
@@ -238,7 +238,7 @@
       "question": "What is Infrastructure as Code (IaC) and how does it relate to network automation?",
       "answer": "IaC manages and provisions network infrastructure through machine-readable definition files (code) rather than manual CLI configuration.",
       "explanation": "IaC applies software development practices to infrastructure management. Network configurations are stored as code in version control systems (Git), enabling change tracking, peer review, rollback, and collaboration. Tools like Ansible playbooks, Terraform configurations, and Python scripts implement IaC for networks. Benefits include reproducibility, auditability, and the ability to test configurations before deployment.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/automation/network-automation.html",
+      "sourceUrl": "https://www.cisco.com/site/us/en/learn/topics/networking/what-is-network-automation.html",
       "difficulty": "medium",
       "tags": ["IaC", "infrastructure as code", "automation", "version control"]
     },

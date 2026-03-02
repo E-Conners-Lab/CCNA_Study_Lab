@@ -11,159 +11,32 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   Play,
   Clock,
   CheckCircle2,
   Circle,
   RotateCw,
-  Code2,
-  Globe,
-  GitBranch,
-  Container,
   Terminal as TerminalIcon,
-  Server,
-  Zap,
+  Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getDifficultyClasses } from "@/lib/ui-constants";
 
 type LabStatus = "not_started" | "in_progress" | "completed";
-type LabDifficulty = "beginner" | "intermediate" | "advanced";
-type LabCategory =
-  | "all"
-  | "python"
-  | "api"
-  | "git"
-  | "docker"
-  | "bash"
-  | "ansible"
-  | "netconf";
 
-interface Lab {
-  id: string;
+interface LabFromAPI {
+  slug: string;
   title: string;
   description: string;
   domain: string;
-  domainNumber: number;
-  category: LabCategory;
-  difficulty: LabDifficulty;
-  estimatedTime: string;
-  status: LabStatus;
-  icon: typeof Code2;
+  domainSlug: string;
+  objectiveCode: string;
+  difficulty: string;
+  estimatedMinutes: number;
+  type: string;
+  tags: string[];
 }
-
-const labs: Lab[] = [
-  {
-    id: "python-data-parsing",
-    title: "Python Data Parsing with JSON, XML & YAML",
-    description:
-      "Parse and manipulate data formats commonly used in network automation. Build parsers for API responses and configuration files.",
-    domain: "Software Development & Design",
-    domainNumber: 1,
-    category: "python",
-    difficulty: "beginner",
-    estimatedTime: "45 min",
-    status: "completed",
-    icon: Code2,
-  },
-  {
-    id: "rest-api-client",
-    title: "Build a REST API Client with Python Requests",
-    description:
-      "Interact with REST APIs using Python. Make GET, POST, PUT, DELETE requests and handle authentication, pagination, and error responses.",
-    domain: "Understanding & Using APIs",
-    domainNumber: 2,
-    category: "api",
-    difficulty: "intermediate",
-    estimatedTime: "60 min",
-    status: "in_progress",
-    icon: Globe,
-  },
-  {
-    id: "netconf-basics",
-    title: "NETCONF/RESTCONF Device Configuration",
-    description:
-      "Use NETCONF and RESTCONF to programmatically configure network devices. Work with YANG models and ncclient.",
-    domain: "Cisco Platforms & Development",
-    domainNumber: 3,
-    category: "netconf",
-    difficulty: "advanced",
-    estimatedTime: "90 min",
-    status: "not_started",
-    icon: Server,
-  },
-  {
-    id: "docker-basics",
-    title: "Docker Containers for Network Apps",
-    description:
-      "Build, run, and manage Docker containers. Create Dockerfiles, work with images, and deploy a network monitoring application.",
-    domain: "Application Deployment & Security",
-    domainNumber: 4,
-    category: "docker",
-    difficulty: "intermediate",
-    estimatedTime: "75 min",
-    status: "not_started",
-    icon: Container,
-  },
-  {
-    id: "ansible-network",
-    title: "Ansible Network Automation Playbooks",
-    description:
-      "Write Ansible playbooks to automate network device configuration. Use Cisco IOS modules and Jinja2 templates.",
-    domain: "Infrastructure & Automation",
-    domainNumber: 5,
-    category: "ansible",
-    difficulty: "advanced",
-    estimatedTime: "90 min",
-    status: "not_started",
-    icon: TerminalIcon,
-  },
-  {
-    id: "bash-scripting",
-    title: "Bash Scripting for Network Operations",
-    description:
-      "Write bash scripts to automate common network operations: health checks, log parsing, backup configurations, and monitoring.",
-    domain: "Network Fundamentals",
-    domainNumber: 6,
-    category: "bash",
-    difficulty: "beginner",
-    estimatedTime: "30 min",
-    status: "completed",
-    icon: TerminalIcon,
-  },
-  {
-    id: "git-basics",
-    title: "Git Version Control for NetDevOps",
-    description:
-      "Master Git workflows for network configuration management. Branching, merging, pull requests, and CI/CD integration.",
-    domain: "Software Development & Design",
-    domainNumber: 1,
-    category: "git",
-    difficulty: "beginner",
-    estimatedTime: "40 min",
-    status: "completed",
-    icon: GitBranch,
-  },
-];
-
-const categories: { value: LabCategory; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "python", label: "Python" },
-  { value: "api", label: "API" },
-  { value: "git", label: "Git" },
-  { value: "docker", label: "Docker" },
-  { value: "bash", label: "Bash" },
-  { value: "ansible", label: "Ansible" },
-  { value: "netconf", label: "NETCONF" },
-];
-
-const difficultyColors: Record<LabDifficulty, string> = {
-  beginner: getDifficultyClasses("beginner"),
-  intermediate: getDifficultyClasses("intermediate"),
-  advanced: getDifficultyClasses("advanced"),
-};
 
 const statusConfig: Record<
   LabStatus,
@@ -188,9 +61,25 @@ const statusConfig: Record<
 
 export default function LabsPage() {
   const router = useRouter();
+  const [labs, setLabs] = useState<LabFromAPI[]>([]);
   const [labStatuses, setLabStatuses] = useState<Record<string, LabStatus>>({});
+  const [loading, setLoading] = useState(true);
+  const [activeType, setActiveType] = useState<string>("all");
 
-  // Fetch lab completion statuses from API (DB overrides hardcoded defaults)
+  // Fetch labs from API
+  useEffect(() => {
+    fetch("/api/labs")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.labs) {
+          setLabs(data.labs);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  // Fetch lab attempt statuses
   useEffect(() => {
     fetch("/api/labs/attempts")
       .then((res) => (res.ok ? res.json() : null))
@@ -199,7 +88,6 @@ export default function LabsPage() {
           const statusMap: Record<string, LabStatus> = {};
           for (const [slug, attempt] of Object.entries(data.attempts)) {
             const a = attempt as { status: string };
-            // Map DB status to UI status
             if (a.status === "completed") statusMap[slug] = "completed";
             else if (a.status === "started") statusMap[slug] = "in_progress";
             else if (a.status === "failed") statusMap[slug] = "in_progress";
@@ -207,19 +95,32 @@ export default function LabsPage() {
           setLabStatuses(statusMap);
         }
       })
-      .catch(() => {
-        // API unavailable — keep hardcoded defaults
-      });
+      .catch(() => {});
   }, []);
 
-  // Merge fetched statuses with hardcoded defaults
-  const labsWithStatus = labs.map((lab) => ({
-    ...lab,
-    status: labStatuses[lab.id] ?? lab.status,
-  }));
+  const getStatus = (slug: string): LabStatus =>
+    labStatuses[slug] ?? "not_started";
 
-  const completedCount = labsWithStatus.filter((l) => l.status === "completed").length;
-  const inProgressCount = labsWithStatus.filter((l) => l.status === "in_progress").length;
+  // Build unique lab types for filter tabs
+  const labTypes = ["all", ...Array.from(new Set(labs.map((l) => l.type)))];
+
+  const filteredLabs =
+    activeType === "all" ? labs : labs.filter((l) => l.type === activeType);
+
+  const completedCount = labs.filter(
+    (l) => getStatus(l.slug) === "completed"
+  ).length;
+  const inProgressCount = labs.filter(
+    (l) => getStatus(l.slug) === "in_progress"
+  ).length;
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-6 w-6 animate-spin text-zinc-500" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
@@ -230,7 +131,8 @@ export default function LabsPage() {
             Hands-on Labs
           </h1>
           <p className="text-sm text-zinc-500 mt-1">
-            Practice with interactive coding labs aligned to exam objectives
+            Practice with interactive IOS CLI labs aligned to CCNA exam
+            objectives
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -250,119 +152,121 @@ export default function LabsPage() {
       </div>
 
       {/* Filter Tabs */}
-      <Tabs
-        defaultValue="all"
-      >
-        <TabsList className="bg-zinc-900 border border-zinc-800 flex-wrap h-auto gap-1 p-1">
-          {categories.map((cat) => (
-            <TabsTrigger
-              key={cat.value}
-              value={cat.value}
-              className="data-[state=active]:bg-blue-500/10 data-[state=active]:text-blue-400 text-xs"
-            >
-              {cat.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
-        {/* We render the same content for all tabs but filter the data */}
-        {categories.map((cat) => (
-          <TabsContent key={cat.value} value={cat.value}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              {(cat.value === "all"
-                ? labsWithStatus
-                : labsWithStatus.filter((l) => l.category === cat.value)
-              ).map((lab) => {
-                const StatusIcon = statusConfig[lab.status].icon;
-                return (
-                  <Card
-                    key={lab.id}
-                    className="border-zinc-800 bg-zinc-900/50 hover:bg-zinc-900 hover:border-zinc-700 transition-all"
-                  >
-                    <CardHeader>
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-800 shrink-0">
-                            <lab.icon className="h-5 w-5 text-zinc-400" />
-                          </div>
-                          <div>
-                            <CardTitle className="text-sm font-semibold text-zinc-200 leading-tight">
-                              {lab.title}
-                            </CardTitle>
-                            <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                              <Badge
-                                variant="secondary"
-                                className="bg-zinc-800 text-zinc-400 text-[10px]"
-                              >
-                                Domain {lab.domainNumber}
-                              </Badge>
-                              <Badge
-                                variant="secondary"
-                                className={cn(
-                                  "text-[10px] capitalize",
-                                  difficultyColors[lab.difficulty]
-                                )}
-                              >
-                                {lab.difficulty}
-                              </Badge>
-                              <Badge
-                                variant="secondary"
-                                className="bg-blue-500/10 text-blue-400 border-blue-500/20 text-[10px]"
-                              >
-                                <Zap className="h-2.5 w-2.5 mr-0.5" />
-                                Runnable
-                              </Badge>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <CardDescription className="text-xs text-zinc-500 leading-relaxed">
-                        {lab.description}
-                      </CardDescription>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-1.5 text-xs text-zinc-500">
-                            <Clock className="h-3 w-3" />
-                            <span>{lab.estimatedTime}</span>
-                          </div>
-                          <div
-                            className={cn(
-                              "flex items-center gap-1.5 text-xs",
-                              statusConfig[lab.status].color
-                            )}
-                          >
-                            <StatusIcon className="h-3 w-3" />
-                            <span>{statusConfig[lab.status].label}</span>
-                          </div>
-                        </div>
-                        <Button
-                          size="sm"
-                          className={cn(
-                            "text-xs",
-                            lab.status === "completed"
-                              ? "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
-                              : "bg-blue-600 text-white hover:bg-blue-500"
-                          )}
-                          onClick={() => router.push(`/dashboard/labs/${lab.id}`)}
-                        >
-                          <Play className="h-3 w-3 mr-1" />
-                          {lab.status === "completed"
-                            ? "Redo"
-                            : lab.status === "in_progress"
-                            ? "Continue"
-                            : "Start"}
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          </TabsContent>
+      <div className="flex flex-wrap gap-1 bg-zinc-900 border border-zinc-800 rounded-lg p-1">
+        {labTypes.map((type) => (
+          <button
+            key={type}
+            onClick={() => setActiveType(type)}
+            className={cn(
+              "px-3 py-1.5 rounded-md text-xs font-medium transition-colors capitalize",
+              activeType === type
+                ? "bg-blue-500/10 text-blue-400"
+                : "text-zinc-500 hover:text-zinc-300"
+            )}
+          >
+            {type === "all" ? "All" : type.replace("-", " ")}
+          </button>
         ))}
-      </Tabs>
+      </div>
+
+      {/* Lab Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {filteredLabs.map((lab) => {
+          const status = getStatus(lab.slug);
+          const StatusIcon = statusConfig[status].icon;
+          return (
+            <Card
+              key={lab.slug}
+              className="border-zinc-800 bg-zinc-900/50 hover:bg-zinc-900 hover:border-zinc-700 transition-all"
+            >
+              <CardHeader>
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-800 shrink-0">
+                      <TerminalIcon className="h-5 w-5 text-zinc-400" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-sm font-semibold text-zinc-200 leading-tight">
+                        {lab.title}
+                      </CardTitle>
+                      <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                        <Badge
+                          variant="secondary"
+                          className="bg-zinc-800 text-zinc-400 text-[10px]"
+                        >
+                          {lab.objectiveCode}
+                        </Badge>
+                        <Badge
+                          variant="secondary"
+                          className={cn(
+                            "text-[10px] capitalize",
+                            getDifficultyClasses(lab.difficulty)
+                          )}
+                        >
+                          {lab.difficulty}
+                        </Badge>
+                        <Badge
+                          variant="secondary"
+                          className="bg-zinc-800 text-zinc-400 text-[10px] capitalize"
+                        >
+                          {lab.type.replace("-", " ")}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <CardDescription className="text-xs text-zinc-500 leading-relaxed">
+                  {lab.description}
+                </CardDescription>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1.5 text-xs text-zinc-500">
+                      <Clock className="h-3 w-3" />
+                      <span>{lab.estimatedMinutes} min</span>
+                    </div>
+                    <div
+                      className={cn(
+                        "flex items-center gap-1.5 text-xs",
+                        statusConfig[status].color
+                      )}
+                    >
+                      <StatusIcon className="h-3 w-3" />
+                      <span>{statusConfig[status].label}</span>
+                    </div>
+                  </div>
+                  <Button
+                    size="sm"
+                    className={cn(
+                      "text-xs",
+                      status === "completed"
+                        ? "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                        : "bg-blue-600 text-white hover:bg-blue-500"
+                    )}
+                    onClick={() =>
+                      router.push(`/dashboard/labs/${lab.slug}`)
+                    }
+                  >
+                    <Play className="h-3 w-3 mr-1" />
+                    {status === "completed"
+                      ? "Redo"
+                      : status === "in_progress"
+                        ? "Continue"
+                        : "Start"}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
+      {filteredLabs.length === 0 && (
+        <div className="text-center py-12 text-zinc-500 text-sm">
+          No labs found for this filter.
+        </div>
+      )}
     </div>
   );
 }

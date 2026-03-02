@@ -628,15 +628,15 @@
       "question": "In the Cisco SD-Access architecture, which component serves as the SDN controller?",
       "options": [
         "A) Cisco ISE",
-        "B) Cisco DNA Center",
+        "B) Cisco Catalyst Center",
         "C) Cisco vManage",
         "D) Cisco ACI"
       ],
       "correctAnswer": "B",
-      "explanation": "Cisco DNA Center serves as the SDN controller for Cisco SD-Access, providing centralized management, automation, and assurance for the campus network fabric. Cisco ISE provides identity services. Cisco vManage is the controller for SD-WAN. Cisco ACI is for data center networking.",
+      "explanation": "Cisco Catalyst Center serves as the SDN controller for Cisco SD-Access, providing centralized management, automation, and assurance for the campus network fabric. Cisco ISE provides identity services. Cisco vManage is the controller for SD-WAN. Cisco ACI is for data center networking.",
       "sourceUrl": "https://www.cisco.com/c/en/us/solutions/enterprise-networks/software-defined-access/index.html",
       "difficulty": "medium",
-      "tags": ["SD-Access", "DNA Center", "SDN"]
+      "tags": ["SD-Access", "Catalyst Center", "SDN"]
     },
     {
       "id": "se2-q38",
@@ -651,7 +651,7 @@
       ],
       "correctAnswer": "B",
       "explanation": "HTTP 201 (Created) indicates that the request was successful and a new resource was created as a result. HTTP 200 means general success. HTTP 401 means unauthorized. HTTP 404 means not found. Status codes in the 2xx range indicate success.",
-      "sourceUrl": "https://developer.cisco.com/docs/dna-center/",
+      "sourceUrl": "https://developer.cisco.com/docs/catalyst-center/",
       "difficulty": "easy",
       "tags": ["REST API", "HTTP status codes", "automation"]
     },
@@ -685,7 +685,7 @@
         "DELETE": "Delete - Remove an existing resource"
       },
       "explanation": "REST APIs use standard HTTP methods that map to CRUD operations: GET reads data, POST creates new resources, PUT updates (replaces) existing resources, and DELETE removes resources. PATCH is another method that partially updates a resource.",
-      "sourceUrl": "https://developer.cisco.com/docs/dna-center/",
+      "sourceUrl": "https://developer.cisco.com/docs/catalyst-center/",
       "difficulty": "easy",
       "tags": ["REST API", "CRUD", "HTTP methods"]
     }

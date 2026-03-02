@@ -5,7 +5,7 @@
     {
       "id": "d5-fc-001",
       "objectiveCode": "5.1",
-      "question": "What are the three categories of malware threats commonly tested on the CCNA?",
+      "question": "What are the three main categories of malware threats?",
       "answer": "Viruses, worms, and Trojan horses.",
       "explanation": "A virus attaches to a host file and requires user action to spread. A worm self-replicates across networks without user intervention. A Trojan horse disguises itself as legitimate software but performs malicious actions. Other malware types include ransomware, spyware, and adware.",
       "sourceUrl": "https://www.cisco.com/c/en/us/products/security/common-cyberattacks.html",
@@ -148,7 +148,7 @@
       "question": "What is DHCP snooping and what security threat does it mitigate?",
       "answer": "DHCP snooping is a Layer 2 security feature that filters untrusted DHCP messages and builds a binding table of legitimate IP-to-MAC-to-port mappings. It mitigates rogue DHCP server attacks.",
       "explanation": "DHCP snooping classifies ports as trusted (connected to legitimate DHCP servers/uplinks) or untrusted (connected to clients). DHCP server messages (Offer, Ack) received on untrusted ports are dropped. The snooping binding table records client MAC, IP, lease time, VLAN, and port, and is used by other features like Dynamic ARP Inspection (DAI) and IP Source Guard.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/dhcp_snooping.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/ip/b_1612_ip_9300_cg/configuring_dhcp.html",
       "difficulty": "medium",
       "tags": ["DHCP snooping", "Layer 2 security", "rogue DHCP"]
     },
@@ -158,7 +158,7 @@
       "question": "Which IOS commands enable DHCP snooping on VLAN 10 and trust the uplink port Gi0/1?",
       "answer": "ip dhcp snooping -> ip dhcp snooping vlan 10 -> interface Gi0/1 -> ip dhcp snooping trust",
       "explanation": "DHCP snooping is enabled globally with 'ip dhcp snooping' and then per VLAN. By default, all ports are untrusted. Trusted ports (uplinks to DHCP servers or other switches) must be explicitly configured with 'ip dhcp snooping trust'. Untrusted ports only allow DHCP client messages (Discover, Request).",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/dhcp_snooping.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/ip/b_1612_ip_9300_cg/configuring_dhcp.html",
       "difficulty": "medium",
       "tags": ["DHCP snooping", "IOS commands", "trusted port"]
     },
@@ -168,7 +168,7 @@
       "question": "What is Dynamic ARP Inspection (DAI) and how does it relate to DHCP snooping?",
       "answer": "DAI validates ARP packets using the DHCP snooping binding table. It drops ARP packets with IP-to-MAC mappings that do not match the binding table, preventing ARP spoofing attacks.",
       "explanation": "DAI intercepts all ARP requests and replies on untrusted ports. It checks the sender MAC and IP against the DHCP snooping binding table. If no match exists, the ARP packet is dropped. DAI requires DHCP snooping to be enabled to populate the binding table. For statically addressed hosts, ARP ACLs can be configured manually.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/dynamic_arp_inspection.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/configuring_dynamic_arp_inspection.html",
       "difficulty": "hard",
       "tags": ["DAI", "ARP inspection", "DHCP snooping", "Layer 2 security"]
     },
@@ -198,7 +198,7 @@
       "question": "What are the two modes of IPsec VPN operation?",
       "answer": "Tunnel mode and Transport mode.",
       "explanation": "Tunnel mode encrypts the entire original IP packet and adds a new IP header, commonly used for site-to-site VPNs between gateways. Transport mode only encrypts the payload (not the original IP header), commonly used for host-to-host communication or with GRE tunnels. Tunnel mode is the default for IPsec.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_ike/configuration/xe-16/sec-ike-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_vpnips/configuration/xe-16-12/sec-for-vpns-w-ipsec-xe-16-12-book/sec-cfg-vpn-ipsec.html",
       "difficulty": "medium",
       "tags": ["IPsec", "VPN", "tunnel mode", "transport mode"]
     },
@@ -208,7 +208,7 @@
       "question": "What are the two main protocols used within the IPsec framework?",
       "answer": "AH (Authentication Header) and ESP (Encapsulating Security Payload).",
       "explanation": "AH (IP protocol 51) provides data integrity and authentication but not encryption. ESP (IP protocol 50) provides data integrity, authentication, and encryption. ESP is far more commonly used because it provides confidentiality. Both can operate in tunnel or transport mode. IKE (Internet Key Exchange) is used to negotiate the IPsec security associations.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_ike/configuration/xe-16/sec-ike-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_vpnips/configuration/xe-16-12/sec-for-vpns-w-ipsec-xe-16-12-book/sec-cfg-vpn-ipsec.html",
       "difficulty": "hard",
       "tags": ["IPsec", "AH", "ESP", "VPN"]
     },
@@ -278,7 +278,7 @@
       "question": "What is 802.1X and what role do the supplicant, authenticator, and authentication server play?",
       "answer": "802.1X is a port-based network access control standard. The supplicant is the client device, the authenticator is the switch/AP, and the authentication server is typically a RADIUS server.",
       "explanation": "The supplicant (client software) provides credentials. The authenticator (network switch or wireless AP) acts as a gatekeeper, blocking all traffic except 802.1X (EAPoL) until authentication succeeds. The authentication server (RADIUS) validates the credentials and signals the authenticator to grant or deny access. EAP (Extensible Authentication Protocol) carries the authentication exchange.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/ieee_802_1x_port_based_authentication.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/configuring_ieee_802_1x_port_based_authentication.html",
       "difficulty": "medium",
       "tags": ["802.1X", "NAC", "RADIUS", "supplicant", "authenticator"]
     },
@@ -288,7 +288,7 @@
       "question": "What is a site-to-site VPN and when is it used?",
       "answer": "A site-to-site VPN creates an encrypted tunnel between two network gateways (routers or firewalls), connecting entire networks over the internet.",
       "explanation": "Site-to-site VPNs are used to securely connect branch offices, data centers, or partner networks. Traffic between the sites is encrypted by the VPN gateways, transparent to end users. Common implementations include IPsec VPN and GRE over IPsec. Unlike remote-access VPNs, no client software is needed on individual devices.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_ike/configuration/xe-16/sec-ike-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_vpnips/configuration/xe-16-12/sec-for-vpns-w-ipsec-xe-16-12-book/sec-cfg-vpn-ipsec.html",
       "difficulty": "easy",
       "tags": ["VPN", "site-to-site", "IPsec"]
     },
@@ -298,7 +298,7 @@
       "question": "What is a remote-access VPN and how does it differ from a site-to-site VPN?",
       "answer": "A remote-access VPN allows individual users to connect securely to a corporate network from remote locations using VPN client software, whereas a site-to-site VPN connects entire networks via gateway devices.",
       "explanation": "Remote-access VPNs are designed for mobile workers or telecommuters. The user runs VPN client software (e.g., Cisco AnyConnect) that creates an encrypted tunnel to a VPN concentrator. Common protocols include SSL/TLS VPN (port 443) and IPsec with IKEv2. Site-to-site VPNs are always-on connections between fixed locations.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_ike/configuration/xe-16/sec-ike-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_vpnips/configuration/xe-16-12/sec-for-vpns-w-ipsec-xe-16-12-book/sec-cfg-vpn-ipsec.html",
       "difficulty": "easy",
       "tags": ["VPN", "remote access", "AnyConnect"]
     },
@@ -318,7 +318,7 @@
       "question": "What are the two phases of IKE (Internet Key Exchange) in IPsec?",
       "answer": "IKE Phase 1 establishes a secure, authenticated channel (IKE SA) between peers. IKE Phase 2 negotiates the IPsec SA parameters for encrypting actual data traffic.",
       "explanation": "Phase 1 can operate in Main Mode (6 messages, more secure) or Aggressive Mode (3 messages, faster). It authenticates peers using pre-shared keys or certificates and establishes a secure tunnel for Phase 2 negotiation. Phase 2 uses Quick Mode to negotiate the IPsec transform set (encryption algorithm, hash, etc.) and creates the IPsec SAs for data encryption.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_ike/configuration/xe-16/sec-ike-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_vpnips/configuration/xe-16-12/sec-for-vpns-w-ipsec-xe-16-12-book/sec-cfg-vpn-ipsec.html",
       "difficulty": "hard",
       "tags": ["IKE", "IPsec", "Phase 1", "Phase 2", "VPN"]
     },
@@ -328,7 +328,7 @@
       "question": "Which IOS command enables Dynamic ARP Inspection on VLAN 10?",
       "answer": "ip arp inspection vlan 10",
       "explanation": "DAI is enabled per VLAN in global configuration mode. By default, all ports are untrusted for DAI. Uplink and trunk ports connected to other trusted switches should be configured with 'ip arp inspection trust' under the interface. DAI relies on the DHCP snooping binding table, so DHCP snooping must be enabled on the same VLANs.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/dynamic_arp_inspection.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/configuring_dynamic_arp_inspection.html",
       "difficulty": "medium",
       "tags": ["DAI", "ARP inspection", "IOS commands", "VLAN security"]
     },
@@ -348,7 +348,7 @@
       "question": "What is the difference between an EAP method used in 802.1X and the EAPoL protocol?",
       "answer": "EAPoL (EAP over LAN) is the Layer 2 encapsulation protocol that carries EAP frames between the supplicant and authenticator. EAP methods (e.g., EAP-TLS, PEAP) define how authentication credentials are actually verified.",
       "explanation": "EAPoL operates between the client and the switch/AP at Layer 2. The switch then re-encapsulates the EAP data inside RADIUS packets to communicate with the authentication server. EAP methods include EAP-TLS (mutual certificate authentication, most secure), PEAP (server certificate + client password inside a TLS tunnel), and EAP-FAST (Cisco proprietary, uses PAC credentials).",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/ieee_802_1x_port_based_authentication.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/configuring_ieee_802_1x_port_based_authentication.html",
       "difficulty": "hard",
       "tags": ["802.1X", "EAP", "EAPoL", "PEAP", "EAP-TLS"]
     }

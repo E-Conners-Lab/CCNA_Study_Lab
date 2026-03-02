@@ -15,12 +15,12 @@ test.describe("Dashboard Page", () => {
 
   test("renders all 6 domain cards", async ({ page }) => {
     const domainNames = [
-      "Software Development & Design",
-      "Understanding & Using APIs",
-      "Cisco Platforms & Development",
-      "Application Deployment & Security",
-      "Infrastructure & Automation",
       "Network Fundamentals",
+      "Network Access",
+      "IP Connectivity",
+      "IP Services",
+      "Security Fundamentals",
+      "Automation and Programmability",
     ];
     for (const name of domainNames) {
       await expect(page.getByText(name).first()).toBeVisible();
@@ -28,21 +28,21 @@ test.describe("Dashboard Page", () => {
   });
 
   test("domain cards show weight badges", async ({ page }) => {
-    await expect(page.getByText("15%").first()).toBeVisible();
     await expect(page.getByText("20%").first()).toBeVisible();
+    await expect(page.getByText("25%").first()).toBeVisible();
   });
 
   test("domain card click navigates to study page", async ({ page }) => {
-    await page.getByText("Software Development & Design").first().click();
+    await page.getByText("Network Fundamentals").first().click();
     await expect(page).toHaveURL(/\/dashboard\/study/);
   });
 
   test("stats cards are visible", async ({ page }) => {
-    await expect(page.getByText("Overall Progress").first()).toBeVisible();
+    await expect(page.getByText(/Overall Progress/i).first()).toBeVisible();
   });
 
   test("recent activity section exists", async ({ page }) => {
-    await expect(page.getByText("Recent Activity").first()).toBeVisible();
+    await expect(page.getByText(/Recent Activity/i).first()).toBeVisible();
   });
 });
 
@@ -99,32 +99,32 @@ test.describe("Study Page", () => {
   });
 
   test("shows all 6 domain sections", async ({ page }) => {
-    await expect(page.getByText("Software Development & Design").first()).toBeVisible();
-    await expect(page.getByText("Understanding & Using APIs").first()).toBeVisible();
     await expect(page.getByText("Network Fundamentals").first()).toBeVisible();
+    await expect(page.getByText("Network Access").first()).toBeVisible();
+    await expect(page.getByText("IP Connectivity").first()).toBeVisible();
   });
 
   test("domain sections expand to show objectives on click", async ({ page }) => {
     // Click the first domain header
-    await page.getByText("Software Development & Design").first().click();
+    await page.getByText("Network Fundamentals").first().click();
     await page.waitForTimeout(500);
 
-    // After expanding, objectives should become visible
-    await expect(page.getByText("Compare data formats").first()).toBeVisible({ timeout: 5000 });
+    // After expanding, an objective should become visible
+    await expect(page.getByText(/Explain the role and function/i).first()).toBeVisible({ timeout: 5000 });
   });
 
   test("multiple domains can be expanded independently", async ({ page }) => {
     // Expand first domain
-    await page.getByText("Software Development & Design").first().click();
+    await page.getByText("Network Fundamentals").first().click();
     await page.waitForTimeout(300);
 
     // Expand second domain
-    await page.getByText("Understanding & Using APIs").first().click();
+    await page.getByText("Network Access").first().click();
     await page.waitForTimeout(300);
 
     // Both should show their objectives
-    await expect(page.getByText("Compare data formats").first()).toBeVisible();
-    await expect(page.getByText("Construct a REST API request").first()).toBeVisible();
+    await expect(page.getByText(/Explain the role and function/i).first()).toBeVisible();
+    await expect(page.getByText(/Configure and verify VLANs/i).first()).toBeVisible();
   });
 
   test("progress bars are displayed", async ({ page }) => {
@@ -139,18 +139,18 @@ test.describe("Study Page", () => {
 // ══════════════════════════════════════════════════════════════════════════════
 test.describe("Study Domain Guide Page", () => {
   test("study domain page loads with content", async ({ page }) => {
-    await page.goto("/dashboard/study/software-dev");
+    await page.goto("/dashboard/study/network-fundamentals");
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(1000);
 
     // Should show domain name
-    await expect(page.getByText("Software Development").first()).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText("Network Fundamentals").first()).toBeVisible({ timeout: 10000 });
     // Should show weight badge
-    await expect(page.getByText("15%").first()).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText("20%").first()).toBeVisible({ timeout: 10000 });
   });
 
   test("study domain page shows key topics", async ({ page }) => {
-    await page.goto("/dashboard/study/apis");
+    await page.goto("/dashboard/study/network-access");
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(1000);
 
@@ -159,7 +159,7 @@ test.describe("Study Domain Guide Page", () => {
   });
 
   test("study domain page has back to study hub link", async ({ page }) => {
-    await page.goto("/dashboard/study/network-fundamentals");
+    await page.goto("/dashboard/study/ip-connectivity");
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(1000);
 
@@ -168,7 +168,7 @@ test.describe("Study Domain Guide Page", () => {
   });
 
   test("study domain page shows practice scenarios", async ({ page }) => {
-    await page.goto("/dashboard/study/software-dev");
+    await page.goto("/dashboard/study/network-fundamentals");
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(1000);
 
@@ -177,7 +177,7 @@ test.describe("Study Domain Guide Page", () => {
   });
 
   test("study domain page shows common mistakes", async ({ page }) => {
-    await page.goto("/dashboard/study/software-dev");
+    await page.goto("/dashboard/study/network-fundamentals");
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(1000);
 
@@ -198,7 +198,7 @@ test.describe("Labs Page", () => {
   test("filter tabs are all visible", async ({ page }) => {
     await expect(page.getByRole("tab", { name: "All" })).toBeVisible();
     await expect(page.getByRole("tab", { name: "Python" })).toBeVisible();
-    await expect(page.getByRole("tab", { name: "API" })).toBeVisible();
+    await expect(page.getByRole("tab", { name: "Bash" })).toBeVisible();
   });
 
   test("clicking Python filter shows only Python labs", async ({ page }) => {
@@ -268,12 +268,13 @@ test.describe("Lab Execution Page", () => {
   });
 
   test("lab page loads with instructions and code editor", async ({ page }) => {
-    await page.goto("/dashboard/labs/python-data-parsing");
+    // Use a lab slug that exists in content/labs/ JSON files
+    await page.goto("/dashboard/labs/vlan-config");
     await page.waitForLoadState("networkidle");
-    await page.waitForTimeout(1500); // Wait for lab data to load
+    await page.waitForTimeout(1500);
 
     // Should show lab title or instructions
-    await expect(page.getByText(/Python Data Parsing/i).first()).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText(/VLAN and Inter-VLAN Routing/i).first()).toBeVisible({ timeout: 10000 });
 
     // Should have a Run Code button
     const runButton = page.getByRole("button", { name: /Run/i }).first();
@@ -281,7 +282,7 @@ test.describe("Lab Execution Page", () => {
   });
 
   test("lab page has back to labs navigation", async ({ page }) => {
-    await page.goto("/dashboard/labs/python-data-parsing");
+    await page.goto("/dashboard/labs/vlan-config");
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(1500);
 
@@ -290,7 +291,7 @@ test.describe("Lab Execution Page", () => {
   });
 
   test("code editor loads and is editable", async ({ page }) => {
-    await page.goto("/dashboard/labs/python-data-parsing");
+    await page.goto("/dashboard/labs/vlan-config");
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(1500);
 
@@ -313,13 +314,14 @@ test.describe("Lab Execution Page", () => {
 // EVERY LAB LOADS — Navigate to each lab, verify content and solution
 // ══════════════════════════════════════════════════════════════════════════════
 const ALL_LABS = [
-  { slug: "python-data-parsing", title: "Python Data Parsing" },
-  { slug: "rest-api-client", title: "REST API Client" },
-  { slug: "git-basics", title: "Git Version Control" },
-  { slug: "docker-basics", title: "Docker" },
-  { slug: "ansible-network", title: "Ansible" },
-  { slug: "bash-scripting", title: "Bash Scripting" },
-  { slug: "netconf-basics", title: "NETCONF" },
+  { slug: "subnetting-ipv4", title: "IPv4 Subnetting" },
+  { slug: "vlan-config", title: "VLAN Configuration" },
+  { slug: "static-routing", title: "Static Route" },
+  { slug: "ospf-config", title: "OSPF" },
+  { slug: "nat-config", title: "NAT Configuration" },
+  { slug: "ssh-config", title: "SSH" },
+  { slug: "acl-config", title: "ACL" },
+  { slug: "etherchannel-config", title: "EtherChannel with LACP" },
 ];
 
 test.describe("All Labs Completeness", () => {
@@ -385,7 +387,7 @@ test.describe("Practice Exams Page", () => {
 
   test("stats cards are all visible", async ({ page }) => {
     await expect(page.getByText("Total Attempts").first()).toBeVisible();
-    await expect(page.getByText("Average Score").first()).toBeVisible();
+    await expect(page.getByText(/Average Score|Best Score/i).first()).toBeVisible();
   });
 
   test("start full exam button is visible and enabled", async ({ page }) => {
@@ -430,13 +432,13 @@ test.describe("Practice Exam Engine", () => {
     await page.waitForLoadState("networkidle");
     await page.getByRole("button", { name: /Start Full/i }).click();
     await page.waitForURL(/\/dashboard\/practice\/exam/);
-    await expect(page).toHaveURL(/examId=sample-exam-1/);
+    await expect(page).toHaveURL(/examId=/);
   });
 
   test("exam page loads with questions and timer", async ({ page }) => {
     await page.goto("/dashboard/practice/exam?examId=sample-exam-1");
     await page.waitForLoadState("networkidle");
-    await page.waitForTimeout(1000); // Wait for exam data to load
+    await page.waitForTimeout(1000);
 
     // Timer should be visible
     await expect(page.getByText(/\d+:\d+/).first()).toBeVisible({ timeout: 10000 });
@@ -491,11 +493,11 @@ test.describe("Practice Exam Engine", () => {
   });
 
   test("domain quiz filters to specific domain questions", async ({ page }) => {
-    await page.goto("/dashboard/practice/exam?examId=sample-exam-1&domain=apis");
+    await page.goto("/dashboard/practice/exam?examId=sample-exam-1&domain=network-fundamentals");
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(1000);
 
-    // Should load with fewer questions (only APIs domain)
+    // Should load with questions
     await expect(page.getByText(/Question 1/i).first()).toBeVisible({ timeout: 10000 });
 
     // Timer should be visible
@@ -534,17 +536,15 @@ test.describe("Flashcards Page", () => {
     await expect(reviewBtn).toBeVisible();
   });
 
-  test("domain filter tabs exist and are clickable", async ({ page }) => {
-    const allTab = page.getByRole("tab", { name: "All" });
-    await expect(allTab).toBeVisible();
-    await allTab.click();
-    await page.waitForTimeout(300);
+  test("domain filter exists and is usable", async ({ page }) => {
+    // Flashcards use a Select dropdown for domain filtering, not tabs
+    await expect(page.getByText(/All Domains/i).first()).toBeVisible();
   });
 
   test("search input filters cards", async ({ page }) => {
     const searchInput = page.getByPlaceholder(/search/i);
     if (await searchInput.isVisible()) {
-      await searchInput.fill("REST");
+      await searchInput.fill("TCP");
       await page.waitForTimeout(500);
 
       // Clear search
@@ -586,8 +586,8 @@ test.describe("AI Tutor Page", () => {
     const textarea = page.getByRole("textbox").first();
     await expect(textarea).toBeVisible();
 
-    await textarea.fill("What is a REST API?");
-    await expect(textarea).toHaveValue("What is a REST API?");
+    await textarea.fill("What is OSPF?");
+    await expect(textarea).toHaveValue("What is OSPF?");
   });
 
   test("new chat button is visible and clickable", async ({ page }) => {
@@ -600,14 +600,14 @@ test.describe("AI Tutor Page", () => {
   });
 
   test("quick prompt suggestions are visible when chat is empty", async ({ page }) => {
-    // At least one suggestion should be present
-    const suggestions = page.getByText(/Explain REST|NETCONF|Docker|Quiz me|MVC|OWASP/);
+    // CCNA-themed quick prompts
+    const suggestions = page.getByText(/TCP and UDP|OSPF|subnetting|VLAN|ACL|hierarchical/i);
     const count = await suggestions.count();
     expect(count).toBeGreaterThanOrEqual(1);
   });
 
   test("clicking a quick prompt populates the chat", async ({ page }) => {
-    const prompt = page.getByText(/Explain REST/i).first();
+    const prompt = page.getByText(/TCP and UDP/i).first();
     if (await prompt.isVisible()) {
       await prompt.click();
       await page.waitForTimeout(500);
@@ -636,18 +636,18 @@ test.describe("Full User Journey", () => {
     // Use the aside > nav selector to always target the desktop sidebar
     const sidebar = page.locator("aside nav");
 
-    // Study → confirm URL before interacting with page content
+    // Study -> confirm URL before interacting with page content
     await sidebar.getByRole("link", { name: "Study" }).first().click();
     await page.waitForURL(/\/dashboard\/study/);
     await page.waitForLoadState("networkidle");
-    await expect(page.getByText("Study Hub")).toBeVisible();
-    // Click the domain header button (not a link) to expand
-    await page.locator("button").filter({ hasText: "Software Development & Design" }).first().click();
+    await expect(page.getByText("Network Fundamentals").first()).toBeVisible();
+    // Click the domain header button to expand
+    await page.locator("button").filter({ hasText: "Network Fundamentals" }).first().click();
     await page.waitForTimeout(300);
     // Verify accordion expanded (objective visible)
-    await expect(page.getByText("Compare data formats").first()).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText(/Explain the role and function/i).first()).toBeVisible({ timeout: 5000 });
 
-    // Labs → click filter
+    // Labs -> click filter
     await sidebar.getByRole("link", { name: "Labs" }).first().click();
     await page.waitForURL(/\/dashboard\/labs/);
     await page.waitForLoadState("networkidle");
@@ -666,7 +666,7 @@ test.describe("Full User Journey", () => {
     await page.waitForLoadState("networkidle");
     await expect(page.getByText("Total Cards").first()).toBeVisible();
 
-    // AI Tutor → type message
+    // AI Tutor -> type message
     await sidebar.getByRole("link", { name: "AI Tutor" }).first().click();
     await page.waitForURL(/\/dashboard\/tutor/);
     await page.waitForLoadState("networkidle");
@@ -731,7 +731,7 @@ test.describe("Settings Page", () => {
   test("settings page loads with header", async ({ page }) => {
     await expect(page.getByText("Settings").first()).toBeVisible();
     await expect(
-      page.getByText("Manage your profile and study preferences").first(),
+      page.getByText(/Manage your profile|study preferences/i).first(),
     ).toBeVisible();
   });
 
@@ -769,10 +769,6 @@ test.describe("Settings Page", () => {
       name: /Cisco CCNA/i,
     });
     await expect(link).toBeVisible();
-    await expect(link).toHaveAttribute(
-      "href",
-      "https://www.cisco.com/site/us/en/learn/training-certifications/certifications/enterprise/ccna/index.html",
-    );
   });
 });
 

@@ -12,10 +12,16 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Environment
+# Environment variables & secrets
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+service-account*.json
 
 # IDE
 .idea/

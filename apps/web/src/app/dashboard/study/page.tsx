@@ -98,10 +98,10 @@ const DOMAIN_OBJECTIVES: Record<number, Objective[]> = {
     { id: "6.1", title: "Explain how automation impacts network management" },
     { id: "6.2", title: "Compare traditional networks with controller-based networking" },
     { id: "6.3", title: "Describe controller-based, software defined architecture (overlay, underlay, fabric)" },
-    { id: "6.4", title: "Compare traditional campus device management with Cisco DNA Center enabled device management" },
+    { id: "6.4", title: "Compare traditional campus device management with Cisco Catalyst Center enabled device management" },
     { id: "6.5", title: "Describe characteristics of REST-based APIs (CRUD, HTTP verbs, and data encoding)" },
     { id: "6.6", title: "Recognize the capabilities of configuration management mechanisms Puppet, Chef, and Ansible" },
-    { id: "6.7", title: "Recognize components of JSON-encoded data", labSlug: "json-parsing" },
+    { id: "6.7", title: "Recognize components of JSON-encoded data" },
   ],
 };
 

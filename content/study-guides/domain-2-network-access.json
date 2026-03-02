@@ -23,7 +23,7 @@
       ],
       "resources": [
         {"title": "Cisco VLAN Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-3/configuration_guide/vlan/b_173_vlan_9300_cg/configuring_vlans.html"},
-        {"title": "Configuring Inter-VLAN Routing", "url": "https://www.cisco.com/c/en/us/support/docs/lan-switching/inter-vlan-routing/41860-howto-L3-intervlanrouting.html"}
+        {"title": "Configuring Inter-VLAN Routing", "url": "https://www.cisco.com/c/en/us/support/docs/lan-switching/inter-vlan-routing/14976-50.html"}
       ]
     },
     {
@@ -39,12 +39,12 @@
       ],
       "examTips": [
         "A native VLAN mismatch between trunk endpoints is a common troubleshooting scenario. CDP will report this mismatch. Always verify native VLANs match using 'show interfaces trunk'.",
-        "Remember that ISL (Inter-Switch Link) is Cisco proprietary and deprecated. 802.1Q is the standard trunking protocol used on the exam.",
+        "Remember that ISL (Inter-Switch Link) is Cisco proprietary and deprecated. 802.1Q is the industry standard trunking protocol.",
         "Know how to add or remove VLANs from a trunk: 'switchport trunk allowed vlan add/remove <id>'. Using 'switchport trunk allowed vlan <list>' without 'add' replaces the entire allowed list."
       ],
       "resources": [
-        {"title": "Cisco 802.1Q Trunking Configuration", "url": "https://www.cisco.com/c/en/us/support/docs/switches/catalyst-6500-series-switches/10681-90.html"},
-        {"title": "Understanding VLAN Trunking", "url": "https://www.cisco.com/c/en/us/support/docs/lan-switching/vlan-trunking-protocol-vtp/10558-21.html"}
+        {"title": "Cisco 802.1Q Trunking Configuration", "url": "https://www.cisco.com/c/en/us/support/docs/switches/catalyst-6000-series-switches/10599-88.html"},
+        {"title": "Understanding VLAN Trunking", "url": "https://www.cisco.com/c/en/us/tech/lan-switching/virtual-lans-vlan-trunking-protocol-vlans-vtp/index.html"}
       ]
     },
     {
@@ -65,7 +65,7 @@
       ],
       "resources": [
         {"title": "Cisco CDP Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/cdp/configuration/xe-16/cdp-xe-16-book.html"},
-        {"title": "Cisco LLDP Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/cdp/configuration/xe-16/cdp-xe-16-book/lldp.html"}
+        {"title": "Cisco LLDP Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-9/configuration_guide/int_hw/b_179_int_and_hw_9300_cg/configuring_lldp__lldp_med__and_wired_location_service.html"}
       ]
     },
     {
@@ -82,11 +82,11 @@
       "examTips": [
         "Remember the valid mode combinations: LACP active-active or active-passive (not passive-passive). PAgP desirable-desirable or desirable-auto (not auto-auto). On mode forces without negotiation and must match on both sides.",
         "If an EtherChannel is misconfigured and ports have inconsistent settings, the switch may put ports into a suspended or error-disabled state. Always verify with 'show etherchannel summary'.",
-        "The exam favors LACP over PAgP since LACP is the open standard. Focus your study on LACP modes and configuration."
+        "LACP is preferred over PAgP since it is the open standard. Focus your study on LACP modes and configuration."
       ],
       "resources": [
-        {"title": "Cisco EtherChannel Configuration Guide", "url": "https://www.cisco.com/c/en/us/support/docs/lan-switching/etherchannel/12023-4.html"},
-        {"title": "Understanding LACP EtherChannel", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-3/configuration_guide/lag/b_173_lag_9300_cg/configuring_etherchannel.html"}
+        {"title": "Cisco EtherChannel Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9600/software/release/17-3/configuration_guide/lyr2/b_173_lyr2_9600_cg/configuring_etherchannels.html"},
+        {"title": "Understanding LACP EtherChannel", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst3750x_3560x/software/release/12-2_55_se/configuration/guide/3750xscg/swethchl.html"}
       ]
     },
     {
@@ -102,18 +102,18 @@
       ],
       "examTips": [
         "Know the STP root bridge election process: lowest priority wins; if tied, lowest MAC address wins. 'spanning-tree vlan <id> root primary' sets the priority to 24576 (or lower to beat the current root).",
-        "Understand the difference between port roles (root, designated, alternate, backup) and port states (discarding, learning, forwarding). The exam may show a topology and ask you to identify each.",
+        "Understand the difference between port roles (root, designated, alternate, backup) and port states (discarding, learning, forwarding). Be able to identify each in a given topology.",
         "PortFast should only be configured on ports connected to end devices (PCs, servers, printers), never on switch-to-switch links. BPDU Guard should accompany PortFast to error-disable the port if a BPDU is received."
       ],
       "resources": [
-        {"title": "Cisco Rapid PVST+ Configuration", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-3/configuration_guide/stp/b_173_stp_9300_cg/configuring_rapid_pvst.html"},
-        {"title": "Understanding Spanning Tree Protocol", "url": "https://www.cisco.com/c/en/us/support/docs/lan-switching/spanning-tree-protocol/5234-5.html"}
+        {"title": "Cisco Rapid PVST+ Configuration", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-3/configuration_guide/lyr2/b_173_lyr2_9300_cg/configuring_spanning_tree_protocol.html"},
+        {"title": "Understanding Spanning Tree Protocol", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/lanswitch/configuration/xe-16/lanswitch-xe-16-book/lsw-span-tree-prot.html"}
       ]
     },
     {
       "objectiveCode": "2.6",
       "title": "Describe Cisco Wireless Architectures and AP modes",
-      "summary": "Cisco wireless deployments range from standalone (autonomous) access points to centralized controller-based architectures managed by a Wireless LAN Controller (WLC). Modern deployments may also use cloud-managed solutions like Cisco Meraki or Cisco Catalyst Center (DNA Center) with Cisco Embedded Wireless Controllers. Each AP mode serves a different purpose in the wireless infrastructure.",
+      "summary": "Cisco wireless deployments range from standalone (autonomous) access points to centralized controller-based architectures managed by a Wireless LAN Controller (WLC). Modern deployments may also use cloud-managed solutions like Cisco Meraki or Cisco Catalyst Center (Catalyst Center) with Cisco Embedded Wireless Controllers. Each AP mode serves a different purpose in the wireless infrastructure.",
       "keyPoints": [
         "Autonomous APs operate independently with local configuration, handling all wireless functions (authentication, encryption, bridging) themselves. They are suitable for very small deployments but do not scale well.",
         "Lightweight APs (LAPs) work with a Wireless LAN Controller (WLC) using CAPWAP (Control and Provisioning of Wireless Access Points) protocol. The WLC handles centralized management, configuration, and control-plane functions.",
@@ -123,11 +123,11 @@
       ],
       "examTips": [
         "Know the difference between split-MAC (lightweight with WLC) and autonomous architectures. In split-MAC, real-time functions stay at the AP while management functions move to the WLC.",
-        "FlexConnect mode is tested frequently. It allows remote branch APs to locally switch traffic and authenticate clients even if the CAPWAP connection to the WLC is lost."
+        "FlexConnect mode is an important concept. It allows remote branch APs to locally switch traffic and authenticate clients even if the CAPWAP connection to the WLC is lost."
       ],
       "resources": [
-        {"title": "Cisco Wireless Architectures Overview", "url": "https://www.cisco.com/c/en/us/products/wireless/buyers-guide.html"},
-        {"title": "Understanding CAPWAP and AP Modes", "url": "https://www.cisco.com/c/en/us/support/docs/wireless/aironet-1240ag-series/70278-lap-faq.html"}
+        {"title": "Cisco Wireless Solution Overview", "url": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/8-5/config-guide/b_cg85/cisco_wireless_solution_overview.html"},
+        {"title": "Understanding CAPWAP and AP Modes", "url": "https://www.cisco.com/c/en/us/support/docs/wireless/aironet-1200-series/70278-lap-faq.html"}
       ]
     },
     {
@@ -146,7 +146,7 @@
       ],
       "resources": [
         {"title": "Cisco WLC Deployment Guide", "url": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/config-guide/b_wl_16_10_cg.html"},
-        {"title": "Cisco AP Physical Connectivity Guide", "url": "https://www.cisco.com/c/en/us/products/wireless/access-points/index.html"}
+        {"title": "Cisco AP Deployment Guide", "url": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/technotes/8-3/b_cisco_aironet_series_2800_3800_access_point_deployment_guide.html"}
       ]
     },
     {
@@ -162,18 +162,18 @@
       ],
       "examTips": [
         "Know the key differences between TACACS+ and RADIUS: TACACS+ uses TCP, encrypts entire payload, and separates AAA functions. RADIUS uses UDP, encrypts only the password, and combines authentication with authorization.",
-        "The exam may present scenarios where you need to select the most secure management protocol. Always prefer SSH over Telnet and HTTPS over HTTP.",
+        "Always select the most secure management protocol available. Prefer SSH over Telnet and HTTPS over HTTP.",
         "RADIUS is typically used for network access (802.1X, VPN), while TACACS+ is preferred for device administration because it provides per-command authorization."
       ],
       "resources": [
         {"title": "Cisco TACACS+ and RADIUS Comparison", "url": "https://www.cisco.com/c/en/us/support/docs/security-vpn/remote-authentication-dial-user-service-radius/13838-10.html"},
-        {"title": "Cisco WLC Management Access Configuration", "url": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/config-guide/b_wl_16_10_cg/managing-the-system.html"}
+        {"title": "Cisco WLC Management Interface Configuration", "url": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-3/config-guide/b_wl_17_3_cg/m_config-wmi.html"}
       ]
     },
     {
       "objectiveCode": "2.9",
       "title": "Interpret the wireless LAN GUI configuration for client connectivity",
-      "summary": "The WLC GUI provides a web-based interface for configuring WLANs, security policies, and client connectivity settings. Administrators use the GUI to create SSIDs, assign VLANs, set security modes (WPA2/WPA3), configure QoS policies, and monitor connected clients. Understanding how to interpret these settings is important for the exam.",
+      "summary": "The WLC GUI provides a web-based interface for configuring WLANs, security policies, and client connectivity settings. Administrators use the GUI to create SSIDs, assign VLANs, set security modes (WPA2/WPA3), configure QoS policies, and monitor connected clients. Understanding how to interpret these settings is important for managing wireless networks.",
       "keyPoints": [
         "Creating a WLAN in the WLC GUI involves specifying the SSID name, WLAN ID, profile name, and mapping it to a VLAN interface for client traffic placement.",
         "Security settings in the WLC GUI include Layer 2 security (WPA2-PSK, WPA2-Enterprise with 802.1X), Layer 3 security (web authentication, captive portal), and AAA server assignment for enterprise authentication.",
@@ -182,12 +182,12 @@
         "WLAN policies can control the maximum number of clients, enable client exclusion (blocking), configure DHCP assignment, and set session timeouts and idle timeouts."
       ],
       "examTips": [
-        "The exam may show WLC GUI screenshots and ask you to identify the correct VLAN mapping, security mode, or troubleshoot a client connectivity issue based on the displayed settings.",
+        "Be able to identify the correct VLAN mapping, security mode, or troubleshoot a client connectivity issue based on WLC GUI settings.",
         "Remember that each WLAN/SSID is mapped to a dynamic interface (VLAN) on the WLC. If the VLAN mapping is incorrect, clients connect but cannot reach the correct network resources."
       ],
       "resources": [
-        {"title": "Cisco WLC GUI Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/config-guide/b_wl_16_10_cg/wlan-configuration.html"},
-        {"title": "Cisco WLAN Security Best Practices", "url": "https://www.cisco.com/c/en/us/products/wireless/what-is-wireless-security.html"}
+        {"title": "Cisco WLC WLAN Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-9/config-guide/b_wl_17_9_cg/m_wlan_9800.html"},
+        {"title": "Cisco WPA3 and WLAN Security Guide", "url": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/16-12/config-guide/b_wl_16_12_cg/wpa3.html"}
       ]
     }
   ],

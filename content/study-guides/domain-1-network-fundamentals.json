@@ -3,27 +3,27 @@
   "slug": "network-fundamentals",
   "name": "Network Fundamentals",
   "weight": 20,
-  "overview": "Network Fundamentals covers the foundational concepts required for the CCNA 200-301 exam, including network component roles, topology architectures, cabling types, IP addressing for both IPv4 and IPv6, and core protocols like TCP and UDP. This domain also introduces wireless principles, virtualization fundamentals, and Layer 2 switching concepts. Mastering these fundamentals is critical as they underpin every other domain on the exam.",
+  "overview": "Network Fundamentals covers foundational networking concepts including network component roles, topology architectures, cabling types, IP addressing for both IPv4 and IPv6, and core protocols like TCP and UDP. This domain also introduces wireless principles, virtualization fundamentals, and Layer 2 switching concepts. Mastering these fundamentals is critical as they underpin every other networking domain.",
   "keyTopics": [
     {
       "objectiveCode": "1.1",
       "title": "Explain the role and function of network components",
-      "summary": "Network infrastructure relies on a variety of components, each serving a distinct role. Routers operate at Layer 3 to forward packets between networks, while Layer 2 switches forward frames within a LAN using MAC addresses and Layer 3 switches add routing capabilities. Other key components include next-generation firewalls, IPS, wireless access points, controllers like Cisco DNA Center and WLC, endpoints, servers, and PoE-capable devices.",
+      "summary": "Network infrastructure relies on a variety of components, each serving a distinct role. Routers operate at Layer 3 to forward packets between networks, while Layer 2 switches forward frames within a LAN using MAC addresses and Layer 3 switches add routing capabilities. Other key components include next-generation firewalls, IPS, wireless access points, controllers like Cisco Catalyst Center and WLC, endpoints, servers, and PoE-capable devices.",
       "keyPoints": [
         "Routers make forwarding decisions based on destination IP addresses and maintain routing tables to determine the best path for packets across networks.",
         "Layer 2 switches use MAC address tables to forward Ethernet frames within a broadcast domain, while Layer 3 switches combine switching and routing functionality in a single device.",
         "Next-generation firewalls (NGFW) provide stateful inspection, application-level awareness, intrusion prevention, and threat intelligence beyond traditional packet filtering.",
-        "Cisco DNA Center serves as the centralized management and automation platform for intent-based networking, while Wireless LAN Controllers (WLC) manage and configure multiple access points.",
+        "Cisco Catalyst Center serves as the centralized management and automation platform for intent-based networking, while Wireless LAN Controllers (WLC) manage and configure multiple access points.",
         "Power over Ethernet (PoE) delivers electrical power alongside data over standard Ethernet cabling, following IEEE 802.3af (15.4W), 802.3at (PoE+ at 30W), and 802.3bt (PoE++ up to 90W) standards."
       ],
       "examTips": [
-        "Know the difference between a Layer 2 switch, Layer 3 switch, and router -- the exam frequently tests whether you understand which device makes forwarding decisions based on MAC addresses versus IP addresses.",
-        "Understand the distinction between Cisco DNA Center (network management/automation platform) and a WLC (specifically manages wireless APs). DNA Center is broader in scope.",
+        "Know the difference between a Layer 2 switch, Layer 3 switch, and router -- understand which device makes forwarding decisions based on MAC addresses versus IP addresses.",
+        "Understand the distinction between Cisco Catalyst Center (network management/automation platform) and a WLC (specifically manages wireless APs). Catalyst Center is broader in scope.",
         "Remember PoE power standards and their wattage limits: 802.3af = 15.4W, 802.3at = 30W, 802.3bt = up to 90W."
       ],
       "resources": [
-        {"title": "Cisco DNA Center Overview", "url": "https://www.cisco.com/c/en/us/products/cloud-systems-management/dna-center/index.html"},
-        {"title": "Cisco Network Component Roles - Study Guide", "url": "https://learningnetwork.cisco.com/s/article/ccna-exam-topics"}
+        {"title": "Cisco Catalyst Center Overview", "url": "https://www.cisco.com/site/us/en/products/networking/catalyst-center/index.html"},
+        {"title": "Cisco CCNA 200-301 Exam Topics", "url": "https://www.cisco.com/site/us/en/learn/training-certifications/exams/ccna.html"}
       ]
     },
     {
@@ -42,8 +42,8 @@
         "Understand that spine-leaf provides consistent latency because every path between leaf switches traverses exactly one spine switch, making it ideal for east-west traffic in data centers."
       ],
       "resources": [
-        {"title": "Cisco Campus Network Design Guide", "url": "https://www.cisco.com/c/en/us/solutions/enterprise-networks/index.html"},
-        {"title": "Cisco Data Center Spine-Leaf Architecture", "url": "https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/white-paper-c11-737022.html"}
+        {"title": "Cisco Campus LAN and Wireless LAN Design Guide", "url": "https://www.cisco.com/c/en/us/td/docs/solutions/CVD/Campus/cisco-campus-lan-wlan-design-guide.html"},
+        {"title": "Cisco Data Center Spine-Leaf Architecture", "url": "https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/white-paper-c11-743245.html"}
       ]
     },
     {
@@ -58,11 +58,11 @@
       ],
       "examTips": [
         "Remember the maximum distance for copper UTP is 100 meters (328 feet). Single-mode fiber goes much farther than multimode.",
-        "Know that single-mode fiber uses a laser and has a smaller core, while multimode uses LED/VCSEL and has a larger core. The exam may test these distinctions with specific scenarios."
+        "Know that single-mode fiber uses a laser and has a smaller core, while multimode uses LED/VCSEL and has a larger core."
       ],
       "resources": [
-        {"title": "Cisco Cabling and Interface Guide", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/hardware/install/b_c9300_hig/b_c9300_hig_chapter_01.html"},
-        {"title": "Fiber Optic Cable Types Explained", "url": "https://www.cisco.com/c/en/us/products/switches/what-is-a-lan-local-area-network.html"}
+        {"title": "Cisco Cabling and Interface Guide", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst6500/hardware/Chassis_Installation/Cat6500/6500_ins/0bcabcon.html"},
+        {"title": "Fiber Optic Cable Types Explained", "url": "https://blogs.cisco.com/sp/fiberopticspt2singlemultifiber"}
       ]
     },
     {
@@ -76,7 +76,7 @@
         "CRC errors, runts, giants, and input/output errors in 'show interfaces' output indicate physical layer problems such as damaged cables, electromagnetic interference, or failing hardware."
       ],
       "examTips": [
-        "A duplex mismatch is one of the most commonly tested troubleshooting scenarios. If you see late collisions and poor performance, suspect a duplex mismatch first.",
+        "A duplex mismatch is one of the most important troubleshooting scenarios to understand. If you see late collisions and poor performance, suspect a duplex mismatch first.",
         "Know the difference between runts (frames smaller than 64 bytes) and giants (frames larger than 1518 bytes) as they point to different underlying issues.",
         "Use 'show interfaces' to identify error counters. CRC errors suggest physical layer problems, while late collisions suggest duplex mismatch."
       ],
@@ -96,18 +96,18 @@
         "DNS uses UDP by default for queries but falls back to TCP for zone transfers or when response data exceeds 512 bytes."
       ],
       "examTips": [
-        "Memorize key port numbers and which protocol they use. The exam frequently tests whether a given application uses TCP or UDP.",
-        "Remember that DNS uses both TCP and UDP -- UDP for standard queries, TCP for zone transfers and large responses. This is a common exam question."
+        "Memorize key port numbers and which protocol they use. You should know whether a given application uses TCP or UDP.",
+        "Remember that DNS uses both TCP and UDP -- UDP for standard queries, TCP for zone transfers and large responses."
       ],
       "resources": [
         {"title": "Cisco TCP/IP Overview", "url": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13769-5.html"},
-        {"title": "Common TCP and UDP Port Numbers", "url": "https://learningnetwork.cisco.com/s/article/common-ports-x"}
+        {"title": "IANA Service Name and Port Number Registry", "url": "https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml"}
       ]
     },
     {
       "objectiveCode": "1.6",
       "title": "Configure and verify IPv4 addressing and subnetting",
-      "summary": "IPv4 addressing and subnetting are among the most heavily tested topics on the CCNA exam. You must be able to determine network addresses, broadcast addresses, valid host ranges, and subnet masks using both dotted-decimal and CIDR notation. Subnetting skills are foundational to nearly every other networking concept.",
+      "summary": "IPv4 addressing and subnetting are among the most foundational topics in networking. You must be able to determine network addresses, broadcast addresses, valid host ranges, and subnet masks using both dotted-decimal and CIDR notation. Subnetting skills are foundational to nearly every other networking concept.",
       "keyPoints": [
         "IPv4 addresses are 32 bits divided into four octets, classified into network and host portions determined by the subnet mask. CIDR notation (e.g., /24) specifies the number of network bits.",
         "Subnetting divides a larger network into smaller subnets by borrowing host bits. Each additional borrowed bit doubles the number of subnets but halves the available hosts per subnet.",
@@ -122,7 +122,7 @@
       ],
       "resources": [
         {"title": "Cisco IPv4 Subnetting Guide", "url": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13788-3.html"},
-        {"title": "Subnetting Practice - Cisco Learning Network", "url": "https://learningnetwork.cisco.com/s/article/subnetting-practice"}
+        {"title": "Cisco IP Subnetting Tutorial", "url": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13788-3.html"}
       ]
     },
     {
@@ -157,11 +157,11 @@
       ],
       "examTips": [
         "Remember that 'ipv6 unicast-routing' must be enabled globally before a router will forward IPv6 packets. Without it, the router only acts as an IPv6 host.",
-        "Practice compressing and expanding IPv6 addresses. The exam may present the same address in different formats and ask you to identify the correct or equivalent representation."
+        "Practice compressing and expanding IPv6 addresses. You should be able to identify the correct or equivalent representation when the same address is shown in different formats."
       ],
       "resources": [
         {"title": "Cisco IPv6 Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/xe-16/ip6b-xe-16-book.html"},
-        {"title": "IPv6 Addressing at a Glance - Cisco", "url": "https://www.cisco.com/c/dam/en/us/solutions/collateral/enterprise/design-zone-ipv6/ipv6-at-a-glance.pdf"}
+        {"title": "Cisco IPv6 Deployment Guide", "url": "https://www.cisco.com/c/en/us/td/docs/voice_ip_comm/uc_system/IPv6/vtgs_b_ipv6-deployment-guide-for-cisco/vtgs_b_ipv6-deployment-guide-for-cisco_chapter_01.html"}
       ]
     },
     {
@@ -181,14 +181,14 @@
         "Link-local addresses are always present on IPv6 interfaces and are used as next-hop addresses in IPv6 routing tables."
       ],
       "resources": [
-        {"title": "IPv6 Address Types - Cisco", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/xe-16/ip6b-xe-16-book/ip6-uni-add.html"},
-        {"title": "Understanding IPv6 EUI-64", "url": "https://learningnetwork.cisco.com/s/article/understanding-ipv6-eui-64-bit-address-x"}
+        {"title": "IPv6 Address Types - Cisco", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/15-mt/ip6b-15-mt-book/ip6-uni-routing.html"},
+        {"title": "Understanding IPv6 EUI-64", "url": "https://www.cisco.com/c/en/us/td/docs/ios/ipv6/configuration/guide/ipv6-xe-16-book-cat8000/m_ip6-addrg-bsc-con.html"}
       ]
     },
     {
       "objectiveCode": "1.10",
       "title": "Verify IP parameters for Client OS (Windows, Mac OS, Linux)",
-      "summary": "Network troubleshooting often begins at the client endpoint by verifying IP parameters. Each major operating system has specific commands for displaying IP address, subnet mask, default gateway, and DNS server information. Knowing these commands across Windows, macOS, and Linux is a practical skill tested on the exam.",
+      "summary": "Network troubleshooting often begins at the client endpoint by verifying IP parameters. Each major operating system has specific commands for displaying IP address, subnet mask, default gateway, and DNS server information. Knowing these commands across Windows, macOS, and Linux is an essential practical networking skill.",
       "keyPoints": [
         "Windows uses 'ipconfig' to display basic IP settings and 'ipconfig /all' for detailed information including MAC address, DHCP lease, and DNS servers. 'ipconfig /release' and 'ipconfig /renew' manage DHCP leases.",
         "macOS and Linux use 'ifconfig' (legacy) or 'ip addr show' / 'ip a' (modern Linux) to display interface configuration. 'networksetup -getinfo <service>' is used on macOS for detailed settings.",
@@ -196,11 +196,11 @@
         "Key parameters to verify include: IP address, subnet mask, default gateway, DNS server addresses, DHCP status (enabled/disabled), and MAC address."
       ],
       "examTips": [
-        "The exam may show you command output from different operating systems and ask you to identify the problem. Be familiar with the output format of ipconfig, ifconfig, and ip addr.",
-        "Remember that Windows uses 'ipconfig' while Linux and macOS use 'ifconfig' or 'ip addr'. The exam tests this distinction directly."
+        "Be able to identify problems from command output across different operating systems. Be familiar with the output format of ipconfig, ifconfig, and ip addr.",
+        "Remember that Windows uses 'ipconfig' while Linux and macOS use 'ifconfig' or 'ip addr'."
       ],
       "resources": [
-        {"title": "Cisco - Verifying Client IP Configuration", "url": "https://learningnetwork.cisco.com/s/article/ccna-cert-prep-ip-addressing"}
+        {"title": "Cisco Ping and Traceroute Guide", "url": "https://www.cisco.com/c/en/us/support/docs/ios-nx-os-software/ios-software-releases-121-mainline/12778-ping-traceroute.html"}
       ]
     },
     {
@@ -215,12 +215,12 @@
         "Modern wireless encryption standards include WPA2 (uses AES-CCMP, current enterprise standard) and WPA3 (uses SAE for personal mode, 192-bit security for enterprise). WEP and WPA-TKIP are deprecated and insecure."
       ],
       "examTips": [
-        "Memorize the three nonoverlapping channels for 2.4 GHz: 1, 6, and 11. This is one of the most frequently tested wireless facts on the CCNA.",
+        "Memorize the three nonoverlapping channels for 2.4 GHz: 1, 6, and 11. This is one of the most important wireless facts to know.",
         "Know the differences between WPA2-Personal (PSK), WPA2-Enterprise (802.1X with RADIUS), and WPA3 enhancements."
       ],
       "resources": [
         {"title": "Cisco Wireless LAN Fundamentals", "url": "https://www.cisco.com/c/en/us/products/wireless/what-is-wifi.html"},
-        {"title": "Cisco Wireless Design Guide", "url": "https://www.cisco.com/c/en/us/solutions/enterprise-networks/802-11ax-solution/index.html"}
+        {"title": "Cisco Wireless High Density Design Guide", "url": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/technotes/8-7/b_wireless_high_client_density_design_guide.html"}
       ]
     },
     {
@@ -238,8 +238,8 @@
         "Know that VRF-Lite allows a single physical router to maintain separate routing tables for different customers or departments, effectively creating multiple virtual routers."
       ],
       "resources": [
-        {"title": "Cisco VRF Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/iri-xe-16-book/iri-vrf.html"},
-        {"title": "Cisco Virtualization and Containers Overview", "url": "https://www.cisco.com/c/en/us/solutions/data-center-virtualization/index.html"}
+        {"title": "Cisco VRF-Lite Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9200/software/release/17-14/configuration_guide/rtng/b_1714_rtng_9200_cg/configuring_vrf_lite.html"},
+        {"title": "What Is Virtualization - Cisco", "url": "https://www.cisco.com/site/us/en/learn/topics/networking/what-is-virtualization.html"}
       ]
     },
     {
@@ -255,12 +255,12 @@
       ],
       "examTips": [
         "Remember the three actions a switch takes: forward (known unicast), flood (unknown unicast/broadcast/multicast), and filter (frame destined for a MAC on the same port it arrived on).",
-        "The default MAC address aging time on Cisco switches is 300 seconds (5 minutes). This value is frequently tested.",
+        "The default MAC address aging time on Cisco switches is 300 seconds (5 minutes). This is an important value to remember.",
         "Understand that switches create separate collision domains per port but all ports in the same VLAN share one broadcast domain."
       ],
       "resources": [
-        {"title": "Cisco Switching Fundamentals", "url": "https://www.cisco.com/c/en/us/support/docs/switches/catalyst-6500-series-switches/12023-17.html"},
-        {"title": "Understanding MAC Address Tables", "url": "https://learningnetwork.cisco.com/s/article/switching-concepts-x"}
+        {"title": "Cisco Layer 2 Switching Overview", "url": "https://www.cisco.com/c/en/us/td/docs/switches/connectedgrid/cg-switch-sw-master/software/configuration/guide/layer2/CGS_1000_L2/l2_overview.html"},
+        {"title": "Understanding MAC Address Tables", "url": "https://www.ciscopress.com/articles/article.asp?p=3089352&seqNum=6"}
       ]
     }
   ],

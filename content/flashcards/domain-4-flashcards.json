@@ -168,7 +168,7 @@
       "question": "What are the three categories of QoS mechanisms used in managing network traffic?",
       "answer": "Classification and marking, congestion management (queuing), and congestion avoidance.",
       "explanation": "Classification identifies traffic types (using ACLs, DSCP, CoS, etc.). Marking sets QoS fields in packet headers so downstream devices can apply appropriate treatment. Congestion management uses queuing algorithms (FIFO, WFQ, CBWFQ, LLQ) to prioritize traffic. Congestion avoidance techniques like WRED proactively drop packets before queues overflow.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/qos/configuration/xe-16/qos-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/qos/b-quality-of-service.html",
       "difficulty": "medium",
       "tags": ["QoS", "classification", "marking", "queuing"]
     },
@@ -178,7 +178,7 @@
       "question": "What DSCP value is commonly used for voice (EF - Expedited Forwarding), and what is its decimal value?",
       "answer": "DSCP EF has a decimal value of 46.",
       "explanation": "Expedited Forwarding (EF, DSCP 46) is used for low-latency, low-jitter traffic like VoIP. In binary it is 101110. Other well-known DSCP values include AF (Assured Forwarding) classes and CS (Class Selector) values. DSCP uses the first 6 bits of the ToS byte in the IP header, allowing 64 possible values (0-63).",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/qos/configuration/xe-16/qos-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/qos/b-quality-of-service.html",
       "difficulty": "hard",
       "tags": ["QoS", "DSCP", "EF", "voice"]
     },
@@ -188,7 +188,7 @@
       "question": "In QoS, what is the difference between classification and marking?",
       "answer": "Classification identifies and categorizes traffic into classes; marking writes a QoS value into the packet header so other devices can recognize its class.",
       "explanation": "Classification examines packet fields (source/destination IP, port numbers, protocols, DSCP) to assign traffic to a class. Marking modifies a field in the frame or packet header (such as CoS in an 802.1Q tag or DSCP in the IP header) to indicate the assigned class. Marking should be done as close to the source as possible (trust boundary).",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/qos/configuration/xe-16/qos-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/qos/b-quality-of-service.html",
       "difficulty": "medium",
       "tags": ["QoS", "classification", "marking"]
     },
@@ -218,7 +218,7 @@
       "question": "What are the key differences between TFTP and FTP?",
       "answer": "TFTP uses UDP port 69, has no authentication, and supports only simple file transfers. FTP uses TCP ports 20 (data) and 21 (control), supports authentication with username/password, and offers directory listing and other features.",
       "explanation": "TFTP (Trivial File Transfer Protocol) is a lightweight protocol ideal for transferring IOS images and configurations in trusted environments. FTP (File Transfer Protocol) is more feature-rich, supporting directory navigation, file renaming, and authentication, but transmits credentials in plaintext unless secured with FTPS or SFTP.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/tftp/configuration/xe-16/tftp-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/syst-mgmt/b-system-management/m_ifs-file-trans-0.html",
       "difficulty": "medium",
       "tags": ["TFTP", "FTP", "file transfer"]
     },
@@ -228,7 +228,7 @@
       "question": "Which IOS command copies the running configuration to a TFTP server at 10.1.1.200?",
       "answer": "copy running-config tftp://10.1.1.200/<filename>  (or 'copy running-config tftp' and follow the prompts).",
       "explanation": "The 'copy' command in privileged EXEC mode is used to transfer files between local storage and network servers. The router will prompt for the remote server address and destination filename if not specified. TFTP is commonly used for backing up configurations and uploading new IOS images.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/tftp/configuration/xe-16/tftp-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/syst-mgmt/b-system-management/m_ifs-file-trans-0.html",
       "difficulty": "easy",
       "tags": ["TFTP", "copy command", "IOS commands", "backup"]
     },
@@ -288,7 +288,7 @@
       "question": "What Layer 2 QoS marking field is found in an 802.1Q frame header, and how many priority levels does it provide?",
       "answer": "Class of Service (CoS), which uses a 3-bit field providing 8 priority levels (0-7).",
       "explanation": "The 802.1Q tag includes a 3-bit Priority Code Point (PCP) field, commonly referred to as CoS. Values range from 0 (best effort) to 7 (highest priority). CoS only exists in tagged (trunked) frames and is lost when a frame traverses a Layer 3 device, so DSCP marking in the IP header is preferred for end-to-end QoS.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/qos/configuration/xe-16/qos-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/qos/b-quality-of-service.html",
       "difficulty": "hard",
       "tags": ["QoS", "CoS", "802.1Q", "Layer 2"]
     },
@@ -298,7 +298,7 @@
       "question": "Which transport layer protocol does TFTP use and why?",
       "answer": "TFTP uses UDP (port 69) because it is designed to be a simple, lightweight file transfer protocol with minimal overhead.",
       "explanation": "TFTP uses UDP to keep the protocol simple and reduce overhead. It implements its own reliability mechanism using acknowledgments and retransmissions at the application layer. Each data block is 512 bytes (by default) and must be acknowledged before the next block is sent, providing a simple stop-and-wait flow control.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/tftp/configuration/xe-16/tftp-xe-16-book.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/syst-mgmt/b-system-management/m_ifs-file-trans-0.html",
       "difficulty": "easy",
       "tags": ["TFTP", "UDP", "file transfer"]
     }

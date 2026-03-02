@@ -641,7 +641,7 @@
       "id": "se1-q38",
       "objectiveCode": "6.2",
       "type": "multiple_choice",
-      "question": "A network engineer retrieves device information from Cisco DNA Center using a REST API call. The API returns data in JSON format. What HTTP method was most likely used?",
+      "question": "A network engineer retrieves device information from Cisco Catalyst Center using a REST API call. The API returns data in JSON format. What HTTP method was most likely used?",
       "options": [
         "A) POST",
         "B) GET",
@@ -650,7 +650,7 @@
       ],
       "correctAnswer": "B",
       "explanation": "The HTTP GET method is used to retrieve (read) data from a REST API. POST is used to create new resources, PUT is used to update existing resources, and DELETE is used to remove resources.",
-      "sourceUrl": "https://developer.cisco.com/docs/dna-center/",
+      "sourceUrl": "https://developer.cisco.com/docs/catalyst-center/",
       "difficulty": "easy",
       "tags": ["REST API", "HTTP methods", "automation"]
     },
@@ -684,7 +684,7 @@
       ],
       "correctAnswer": ["A", "C"],
       "explanation": "JSON (JavaScript Object Notation) and XML (Extensible Markup Language) are the two most common data formats used with REST APIs. JSON is lightweight and widely preferred. XML is more verbose but also well-supported. While YAML is used in configuration management tools like Ansible, it is not the primary format for REST API communication.",
-      "sourceUrl": "https://developer.cisco.com/docs/dna-center/",
+      "sourceUrl": "https://developer.cisco.com/docs/catalyst-center/",
       "difficulty": "easy",
       "tags": ["JSON", "XML", "REST API", "data formats"]
     }

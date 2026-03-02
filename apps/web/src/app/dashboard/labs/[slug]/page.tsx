@@ -29,6 +29,9 @@ import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { getDifficultyClasses } from "@/lib/ui-constants";
+import { IOSTerminal } from "@/components/labs/ios-terminal";
+import { validateCommands } from "@/components/labs/ios-validator";
+import type { ValidationResult } from "@/components/labs/ios-types";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -159,7 +162,16 @@ export default function LabExecutionPage() {
   const [executionTime, setExecutionTime] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
 
+  // IOS terminal state
+  const [iosCommands, setIosCommands] = useState<string[]>([]);
+  const [iosResetKey, setIosResetKey] = useState(0);
+  const [validationResult, setValidationResult] =
+    useState<ValidationResult | null>(null);
+  const [isChecking, setIsChecking] = useState(false);
+
   const originalCode = useRef("");
+
+  const isIOSLab = lab?.type === "ios-cli";
 
   // ---- Fetch lab data ----
   useEffect(() => {
@@ -176,9 +188,6 @@ export default function LabExecutionPage() {
         }
         const data: LabData = await res.json();
         setLab(data);
-        // Editor starts blank — the instructions panel tells the user
-        // what to build. Starter code is kept in the data for reference
-        // but not pre-loaded into the editor.
         setCode("");
         originalCode.current = "";
       } catch (err) {
@@ -190,14 +199,13 @@ export default function LabExecutionPage() {
     fetchLab();
   }, [slug]);
 
-  // ---- Run code ----
+  // ---- Run code (non-IOS labs) ----
   const handleRun = useCallback(async () => {
     if (!lab || isRunning) return;
     setIsRunning(true);
     setOutput("");
     setRunSuccess(null);
     setExecutionTime(null);
-    // run completed
 
     try {
       const res = await fetch(`/api/labs/${slug}/run`, {
@@ -220,13 +228,64 @@ export default function LabExecutionPage() {
     }
   }, [lab, slug, code, isRunning]);
 
-  // ---- Reset code ----
+  // ---- Check solution (IOS labs) ----
+  const handleCheckSolution = useCallback(async () => {
+    if (!lab || isChecking) return;
+    setIsChecking(true);
+    setValidationResult(null);
+
+    try {
+      // Fetch solution if not cached
+      let solution = solutionData;
+      if (!solution) {
+        const res = await fetch(`/api/labs/${slug}/solution`);
+        if (!res.ok) throw new Error("Failed to load solution");
+        solution = await res.json();
+        setSolutionData(solution);
+      }
+
+      if (!solution) throw new Error("No solution available");
+
+      const result = validateCommands(iosCommands, solution.solutionCode);
+      setValidationResult(result);
+
+      // Save attempt to server
+      const status = result.score === 100 ? "completed" : "started";
+      fetch(`/api/labs/${slug}/run`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code: iosCommands.join("\n"),
+          iosValidation: { score: result.score, status },
+        }),
+      }).catch(() => {});
+    } catch (err) {
+      setValidationResult({
+        score: 0,
+        matched: [],
+        missing: [],
+        extra: [],
+        feedback:
+          err instanceof Error ? err.message : "Failed to validate commands",
+      });
+    } finally {
+      setIsChecking(false);
+    }
+  }, [lab, slug, iosCommands, solutionData, isChecking]);
+
+  // ---- Reset ----
   const handleReset = useCallback(() => {
-    setCode(originalCode.current);
-    setOutput("");
-    setRunSuccess(null);
-    setExecutionTime(null);
-  }, []);
+    if (isIOSLab) {
+      setIosResetKey((k) => k + 1);
+      setValidationResult(null);
+      setIosCommands([]);
+    } else {
+      setCode(originalCode.current);
+      setOutput("");
+      setRunSuccess(null);
+      setExecutionTime(null);
+    }
+  }, [isIOSLab]);
 
   // ---- Show solution ----
   const handleShowSolution = useCallback(async () => {
@@ -471,176 +530,310 @@ export default function LabExecutionPage() {
           </Tabs>
         </div>
 
-        {/* ----- Right Panel: Code Editor + Terminal (40%) ----- */}
+        {/* ----- Right Panel: Editor or IOS Terminal (40%) ----- */}
         <div className="lg:w-[40%] w-full flex flex-col min-h-0">
-          {/* Code Editor */}
-          <div className="flex-1 flex flex-col min-h-0 border-b border-zinc-800">
-            {/* Editor toolbar */}
-            <div className="shrink-0 flex items-center justify-between border-b border-zinc-800 px-4 py-2">
-              <div className="flex items-center gap-2">
-                <Terminal className="h-3.5 w-3.5 text-zinc-500" />
-                <span className="text-xs font-medium text-zinc-400">
-                  {lab.type === "python" ? "script.py" : lab.type === "subnetting" ? "answers" : "config"}
-                </span>
+          {isIOSLab ? (
+            <>
+              {/* IOS CLI Terminal */}
+              <div className="flex-1 flex flex-col min-h-0 border-b border-zinc-800">
+                {/* Terminal toolbar */}
+                <div className="shrink-0 flex items-center justify-between border-b border-zinc-800 px-4 py-2">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1">
+                      <span className="h-2 w-2 rounded-full bg-red-500/60" />
+                      <span className="h-2 w-2 rounded-full bg-amber-500/60" />
+                      <span className="h-2 w-2 rounded-full bg-green-500/60" />
+                    </div>
+                    <Terminal className="h-3.5 w-3.5 text-green-400" />
+                    <span className="text-xs font-medium text-zinc-400">
+                      IOS CLI
+                    </span>
+                  </div>
+                </div>
+
+                {/* Terminal */}
+                <div className="flex-1 min-h-0">
+                  <IOSTerminal
+                    starterCode={lab.starterCode}
+                    expectedOutput={solutionData?.expectedOutput}
+                    onCommandsChange={setIosCommands}
+                    resetKey={iosResetKey}
+                  />
+                </div>
               </div>
-              <div className="flex items-center gap-1.5">
+
+              {/* IOS Action buttons */}
+              <div className="shrink-0 flex items-center gap-2 border-b border-zinc-800 px-4 py-2 bg-zinc-900/50">
                 <Button
-                  onClick={handleCopy}
-                  variant="ghost"
-                  size="xs"
-                  className="text-zinc-500 hover:text-zinc-300"
-                  title="Copy code"
+                  onClick={handleCheckSolution}
+                  disabled={isChecking || iosCommands.length === 0}
+                  size="sm"
+                  className="bg-green-600 hover:bg-green-500 text-white text-xs"
                 >
-                  {copied ? (
-                    <Check className="h-3 w-3" />
+                  {isChecking ? (
+                    <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />
                   ) : (
-                    <Copy className="h-3 w-3" />
+                    <CheckCircle2 className="h-3.5 w-3.5 mr-1" />
                   )}
+                  {isChecking ? "Checking..." : "Check Solution"}
                 </Button>
                 <Button
                   onClick={handleReset}
-                  variant="ghost"
-                  size="xs"
-                  className="text-zinc-500 hover:text-zinc-300"
-                  title="Reset to starter code"
+                  variant="outline"
+                  size="sm"
+                  className="border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100 text-xs"
                 >
-                  <RotateCcw className="h-3 w-3" />
+                  <RotateCcw className="h-3.5 w-3.5 mr-1" />
+                  Reset
+                </Button>
+                <Button
+                  onClick={handleShowSolution}
+                  variant="outline"
+                  size="sm"
+                  className={cn(
+                    "text-xs ml-auto",
+                    showSolution
+                      ? "border-amber-500/50 text-amber-400 hover:bg-amber-500/10"
+                      : "border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100"
+                  )}
+                >
+                  <Eye className="h-3.5 w-3.5 mr-1" />
+                  {showSolution ? "Hide Solution" : "Show Solution"}
                 </Button>
               </div>
-            </div>
 
-            {/* CodeMirror Editor */}
-            <div className="flex-1 min-h-0 overflow-auto">
-              <CodeMirror
-                value={code}
-                onChange={(value) => setCode(value)}
-                extensions={lab.type === "python" ? [python()] : []}
-                theme={oneDark}
-                placeholder={
-                  lab.type === "ios-cli" ? "Enter IOS commands here..." :
-                  lab.type === "subnetting" ? "Enter answers as key=value pairs (e.g. network=192.168.1.0)" :
-                  lab.type === "config-review" ? "Enter the corrected device configuration..." :
-                  lab.type === "acl-builder" ? "Enter ACL statements here..." :
-                  "Write your code here..."
-                }
-                basicSetup={{
-                  lineNumbers: true,
-                  highlightActiveLineGutter: true,
-                  highlightActiveLine: true,
-                  foldGutter: false,
-                  indentOnInput: true,
-                  bracketMatching: lab.type === "python",
-                  autocompletion: lab.type === "python",
-                  tabSize: lab.type === "python" ? 4 : 2,
-                }}
-                className="h-full [&_.cm-editor]:h-full [&_.cm-editor]:outline-none [&_.cm-scroller]:overflow-auto"
-              />
-            </div>
-          </div>
-
-          {/* Action buttons */}
-          <div className="shrink-0 flex items-center gap-2 border-b border-zinc-800 px-4 py-2 bg-zinc-900/50">
-            <Button
-              onClick={handleRun}
-              disabled={isRunning}
-              size="sm"
-              className="bg-blue-600 hover:bg-blue-500 text-white text-xs"
-            >
-              {isRunning ? (
-                <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />
-              ) : (
-                <Play className="h-3.5 w-3.5 mr-1" />
-              )}
-              {isRunning ? "Running..." : "Run Code"}
-            </Button>
-            <Button
-              onClick={handleReset}
-              variant="outline"
-              size="sm"
-              className="border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100 text-xs"
-            >
-              <RotateCcw className="h-3.5 w-3.5 mr-1" />
-              Reset
-            </Button>
-            <Button
-              onClick={handleShowSolution}
-              variant="outline"
-              size="sm"
-              className={cn(
-                "text-xs ml-auto",
-                showSolution
-                  ? "border-amber-500/50 text-amber-400 hover:bg-amber-500/10"
-                  : "border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100"
-              )}
-            >
-              <Eye className="h-3.5 w-3.5 mr-1" />
-              {showSolution ? "Hide Solution" : "Show Solution"}
-            </Button>
-          </div>
-
-          {/* Output Terminal */}
-          <div className="h-48 lg:h-56 shrink-0 flex flex-col min-h-0">
-            <div className="shrink-0 flex items-center justify-between px-4 py-2 border-b border-zinc-800 bg-zinc-900/30">
-              <div className="flex items-center gap-2">
-                <div className="flex gap-1">
-                  <span className="h-2 w-2 rounded-full bg-red-500/60" />
-                  <span className="h-2 w-2 rounded-full bg-amber-500/60" />
-                  <span className="h-2 w-2 rounded-full bg-blue-500/60" />
-                </div>
-                <span className="text-xs font-medium text-zinc-500">
-                  Output
-                </span>
-              </div>
-              {executionTime !== null && executionTime > 0 && (
-                <span className="text-[10px] text-zinc-600">
-                  {executionTime}ms
-                </span>
-              )}
-            </div>
-            <ScrollArea className="flex-1 min-h-0">
-              <div className="p-4 font-mono text-xs leading-relaxed">
-                {isRunning ? (
-                  <div className="flex items-center gap-2 text-zinc-500">
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                    <span>Executing code...</span>
-                  </div>
-                ) : output ? (
-                  <div className="space-y-2">
-                    {/* Status indicator */}
-                    {runSuccess !== null && (
-                      <div
+              {/* Validation Results */}
+              {validationResult && (
+                <div className="shrink-0 max-h-64 flex flex-col min-h-0 border-b border-zinc-800">
+                  {/* Score bar */}
+                  <div className="shrink-0 px-4 py-3 bg-zinc-900/30">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-medium text-zinc-400">
+                        Score
+                      </span>
+                      <span
                         className={cn(
-                          "flex items-center gap-1.5 text-[10px] font-medium pb-2 border-b border-zinc-800 mb-2",
-                          runSuccess ? "text-blue-500" : "text-red-400"
+                          "text-sm font-bold",
+                          validationResult.score === 100
+                            ? "text-green-400"
+                            : validationResult.score >= 50
+                              ? "text-amber-400"
+                              : "text-red-400"
                         )}
                       >
-                        {runSuccess ? (
-                          <CheckCircle2 className="h-3 w-3" />
-                        ) : (
-                          <XCircle className="h-3 w-3" />
+                        {validationResult.score}%
+                      </span>
+                    </div>
+                    <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+                      <div
+                        className={cn(
+                          "h-full rounded-full transition-all duration-500",
+                          validationResult.score === 100
+                            ? "bg-green-500"
+                            : validationResult.score >= 50
+                              ? "bg-amber-500"
+                              : "bg-red-500"
                         )}
-                        {runSuccess ? "Execution successful" : "Execution failed"}
-                      </div>
-                    )}
-                    <pre
-                      className={cn(
-                        "whitespace-pre-wrap break-words",
-                        runSuccess === false
-                          ? "text-red-400"
-                          : "text-blue-400"
-                      )}
-                    >
-                      {output}
-                    </pre>
+                        style={{ width: `${validationResult.score}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-zinc-400 mt-2">
+                      {validationResult.feedback}
+                    </p>
                   </div>
-                ) : (
-                  <p className="text-zinc-600">
-                    Run your code to see output here...
-                  </p>
-                )}
+
+                  {/* Missing commands */}
+                  {validationResult.missing.length > 0 && (
+                    <ScrollArea className="flex-1 min-h-0">
+                      <div className="px-4 py-2 space-y-1">
+                        <span className="text-[10px] uppercase tracking-wider text-red-400 font-medium">
+                          Missing Commands ({validationResult.missing.length})
+                        </span>
+                        {validationResult.missing.map((cmd, i) => (
+                          <div
+                            key={i}
+                            className="flex items-start gap-1.5 text-xs font-mono text-zinc-500"
+                          >
+                            <XCircle className="h-3 w-3 text-red-400 mt-0.5 shrink-0" />
+                            <span>{cmd}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  )}
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              {/* Code Editor (non-IOS labs) */}
+              <div className="flex-1 flex flex-col min-h-0 border-b border-zinc-800">
+                {/* Editor toolbar */}
+                <div className="shrink-0 flex items-center justify-between border-b border-zinc-800 px-4 py-2">
+                  <div className="flex items-center gap-2">
+                    <Terminal className="h-3.5 w-3.5 text-zinc-500" />
+                    <span className="text-xs font-medium text-zinc-400">
+                      {lab.type === "python" ? "script.py" : lab.type === "subnetting" ? "answers" : "config"}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Button
+                      onClick={handleCopy}
+                      variant="ghost"
+                      size="xs"
+                      className="text-zinc-500 hover:text-zinc-300"
+                      title="Copy code"
+                    >
+                      {copied ? (
+                        <Check className="h-3 w-3" />
+                      ) : (
+                        <Copy className="h-3 w-3" />
+                      )}
+                    </Button>
+                    <Button
+                      onClick={handleReset}
+                      variant="ghost"
+                      size="xs"
+                      className="text-zinc-500 hover:text-zinc-300"
+                      title="Reset to starter code"
+                    >
+                      <RotateCcw className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+
+                {/* CodeMirror Editor */}
+                <div className="flex-1 min-h-0 overflow-auto">
+                  <CodeMirror
+                    value={code}
+                    onChange={(value) => setCode(value)}
+                    extensions={lab.type === "python" ? [python()] : []}
+                    theme={oneDark}
+                    placeholder={
+                      lab.type === "subnetting" ? "Enter answers as key=value pairs (e.g. network=192.168.1.0)" :
+                      lab.type === "config-review" ? "Enter the corrected device configuration..." :
+                      lab.type === "acl-builder" ? "Enter ACL statements here..." :
+                      "Write your code here..."
+                    }
+                    basicSetup={{
+                      lineNumbers: true,
+                      highlightActiveLineGutter: true,
+                      highlightActiveLine: true,
+                      foldGutter: false,
+                      indentOnInput: true,
+                      bracketMatching: lab.type === "python",
+                      autocompletion: lab.type === "python",
+                      tabSize: lab.type === "python" ? 4 : 2,
+                    }}
+                    className="h-full [&_.cm-editor]:h-full [&_.cm-editor]:outline-none [&_.cm-scroller]:overflow-auto"
+                  />
+                </div>
               </div>
-            </ScrollArea>
-          </div>
+
+              {/* Action buttons (non-IOS) */}
+              <div className="shrink-0 flex items-center gap-2 border-b border-zinc-800 px-4 py-2 bg-zinc-900/50">
+                <Button
+                  onClick={handleRun}
+                  disabled={isRunning}
+                  size="sm"
+                  className="bg-blue-600 hover:bg-blue-500 text-white text-xs"
+                >
+                  {isRunning ? (
+                    <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />
+                  ) : (
+                    <Play className="h-3.5 w-3.5 mr-1" />
+                  )}
+                  {isRunning ? "Running..." : "Run Code"}
+                </Button>
+                <Button
+                  onClick={handleReset}
+                  variant="outline"
+                  size="sm"
+                  className="border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100 text-xs"
+                >
+                  <RotateCcw className="h-3.5 w-3.5 mr-1" />
+                  Reset
+                </Button>
+                <Button
+                  onClick={handleShowSolution}
+                  variant="outline"
+                  size="sm"
+                  className={cn(
+                    "text-xs ml-auto",
+                    showSolution
+                      ? "border-amber-500/50 text-amber-400 hover:bg-amber-500/10"
+                      : "border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100"
+                  )}
+                >
+                  <Eye className="h-3.5 w-3.5 mr-1" />
+                  {showSolution ? "Hide Solution" : "Show Solution"}
+                </Button>
+              </div>
+
+              {/* Output Terminal (non-IOS) */}
+              <div className="h-48 lg:h-56 shrink-0 flex flex-col min-h-0">
+                <div className="shrink-0 flex items-center justify-between px-4 py-2 border-b border-zinc-800 bg-zinc-900/30">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1">
+                      <span className="h-2 w-2 rounded-full bg-red-500/60" />
+                      <span className="h-2 w-2 rounded-full bg-amber-500/60" />
+                      <span className="h-2 w-2 rounded-full bg-blue-500/60" />
+                    </div>
+                    <span className="text-xs font-medium text-zinc-500">
+                      Output
+                    </span>
+                  </div>
+                  {executionTime !== null && executionTime > 0 && (
+                    <span className="text-[10px] text-zinc-600">
+                      {executionTime}ms
+                    </span>
+                  )}
+                </div>
+                <ScrollArea className="flex-1 min-h-0">
+                  <div className="p-4 font-mono text-xs leading-relaxed">
+                    {isRunning ? (
+                      <div className="flex items-center gap-2 text-zinc-500">
+                        <Loader2 className="h-3 w-3 animate-spin" />
+                        <span>Executing code...</span>
+                      </div>
+                    ) : output ? (
+                      <div className="space-y-2">
+                        {runSuccess !== null && (
+                          <div
+                            className={cn(
+                              "flex items-center gap-1.5 text-[10px] font-medium pb-2 border-b border-zinc-800 mb-2",
+                              runSuccess ? "text-blue-500" : "text-red-400"
+                            )}
+                          >
+                            {runSuccess ? (
+                              <CheckCircle2 className="h-3 w-3" />
+                            ) : (
+                              <XCircle className="h-3 w-3" />
+                            )}
+                            {runSuccess ? "Execution successful" : "Execution failed"}
+                          </div>
+                        )}
+                        <pre
+                          className={cn(
+                            "whitespace-pre-wrap break-words",
+                            runSuccess === false
+                              ? "text-red-400"
+                              : "text-blue-400"
+                          )}
+                        >
+                          {output}
+                        </pre>
+                      </div>
+                    ) : (
+                      <p className="text-zinc-600">
+                        Run your code to see output here...
+                      </p>
+                    )}
+                  </div>
+                </ScrollArea>
+              </div>
+            </>
+          )}
 
           {/* Solution panel (shown below terminal when active) */}
           {showSolution && solutionData && (

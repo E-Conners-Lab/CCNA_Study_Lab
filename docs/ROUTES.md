@@ -202,7 +202,7 @@ Domain-specific study guide providing in-depth coverage of exam topics. Each gui
 | Exam tips | Tips specific to the exam for each topic |
 | External resources | Links to Cisco docs and other references |
 | Practice scenarios sidebar | Real-world scenarios for applied learning |
-| Common mistakes sidebar | Pitfalls to avoid on the exam |
+| Common mistakes sidebar | Pitfalls to avoid when learning these topics |
 
 ### Data Requirements
 

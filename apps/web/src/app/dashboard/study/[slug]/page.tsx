@@ -44,6 +44,17 @@ interface KeyTopic {
   resources: Resource[];
 }
 
+interface PracticeScenario {
+  scenario: string;
+  question: string;
+  answer: string;
+}
+
+interface CommonMistake {
+  mistake: string;
+  correction: string;
+}
+
 interface StudyGuide {
   domain: number;
   slug: string;
@@ -51,8 +62,37 @@ interface StudyGuide {
   weight: number;
   overview: string;
   keyTopics: KeyTopic[];
-  practiceScenarios: string[];
-  commonMistakes: string[];
+  practiceScenarios: PracticeScenario[];
+  commonMistakes: CommonMistake[];
+}
+
+// ---------------------------------------------------------------------------
+// Practice Scenario Component (answer hidden by default)
+// ---------------------------------------------------------------------------
+
+function PracticeScenarioItem({ scenario, index }: { scenario: PracticeScenario; index: number }) {
+  const [showAnswer, setShowAnswer] = useState(false);
+  return (
+    <li className="flex items-start gap-2.5">
+      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500/10 text-[10px] font-bold text-blue-500 shrink-0 mt-0.5">
+        {index + 1}
+      </span>
+      <div className="text-xs text-zinc-400 leading-relaxed space-y-1">
+        <p>{scenario.scenario}</p>
+        <p className="text-zinc-500 italic">{scenario.question}</p>
+        {showAnswer ? (
+          <p className="text-zinc-500">{scenario.answer}</p>
+        ) : (
+          <button
+            onClick={() => setShowAnswer(true)}
+            className="text-blue-500 hover:text-blue-400 text-xs font-medium"
+          >
+            Show Answer
+          </button>
+        )}
+      </div>
+    </li>
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -326,14 +366,7 @@ export default function StudyDomainPage() {
             <CardContent className="pt-0">
               <ul className="space-y-3">
                 {guide.practiceScenarios.map((scenario, i) => (
-                  <li key={i} className="flex items-start gap-2.5">
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500/10 text-[10px] font-bold text-blue-500 shrink-0 mt-0.5">
-                      {i + 1}
-                    </span>
-                    <p className="text-xs text-zinc-400 leading-relaxed">
-                      {scenario}
-                    </p>
-                  </li>
+                  <PracticeScenarioItem key={i} scenario={scenario} index={i} />
                 ))}
               </ul>
             </CardContent>
@@ -355,9 +388,10 @@ export default function StudyDomainPage() {
                     className="flex items-start gap-2.5"
                   >
                     <AlertTriangle className="h-3.5 w-3.5 text-amber-500/70 mt-0.5 shrink-0" />
-                    <p className="text-xs text-zinc-400 leading-relaxed">
-                      {mistake}
-                    </p>
+                    <div className="text-xs text-zinc-400 leading-relaxed space-y-1">
+                      <p>{mistake.mistake}</p>
+                      <p className="text-zinc-500">{mistake.correction}</p>
+                    </div>
                   </li>
                 ))}
               </ul>

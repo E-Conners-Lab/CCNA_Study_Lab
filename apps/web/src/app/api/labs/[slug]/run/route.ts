@@ -86,17 +86,34 @@ export async function POST(
     }
 
     // Parse and validate request body
-    let body: { code: string };
+    let body: { code: string; iosValidation?: { score: number; status: string } };
     try {
       body = await request.json();
     } catch {
       return jsonBadRequest("Invalid JSON in request body");
     }
 
-    const { code } = body;
+    const { code, iosValidation } = body;
 
     if (!code || typeof code !== "string") {
       return jsonBadRequest('"code" string is required');
+    }
+
+    // IOS CLI labs validated client-side — just record the attempt
+    if (iosValidation && lab.type === "ios-cli") {
+      const userId = await getCurrentUserId();
+      if (userId) {
+        const status = iosValidation.score === 100 ? "completed" : "started";
+        saveLabAttempt(userId, slug, status, code).catch((err) =>
+          console.warn("Background lab attempt save failed:", err),
+        );
+      }
+      return jsonOk({
+        success: iosValidation.score === 100,
+        output: `IOS CLI validation: ${iosValidation.score}%`,
+        executionTime: 0,
+        engineAvailable: false,
+      });
     }
 
     // Try to proxy to the Docker lab engine (only if explicitly configured)

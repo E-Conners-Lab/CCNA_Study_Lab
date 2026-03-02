@@ -78,7 +78,7 @@
       "question": "What is a spine-leaf network architecture and where is it commonly used?",
       "answer": "Spine-leaf is a two-layer full-mesh topology where every leaf switch connects to every spine switch. It is commonly used in data centers.",
       "explanation": "In spine-leaf architecture, leaf switches connect to servers/hosts and every leaf connects to every spine switch. This provides predictable latency (every host is the same number of hops from any other host), high bandwidth via ECMP (Equal-Cost Multi-Path), and easy scalability by adding more spine or leaf switches. It eliminates STP by design and is the standard for modern data center fabrics.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/white-paper-c11-737022.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/white-paper-c11-743245.html",
       "difficulty": "medium",
       "tags": ["spine-leaf", "data-center", "network-architecture"]
     },
@@ -88,7 +88,7 @@
       "question": "What is the maximum cable length for a Cat 5e/6 UTP Ethernet cable?",
       "answer": "100 meters (328 feet).",
       "explanation": "The IEEE 802.3 standard specifies a maximum segment length of 100 meters for copper twisted-pair Ethernet (Cat 5e, Cat 6, Cat 6a). This includes up to 90 meters of horizontal cabling plus 10 meters of patch cables. Beyond this distance, signal attenuation degrades performance, and you would need a repeater, switch, or fiber optic connection.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/hardware/install/b_c9300_hig/b_c9300_hig_chapter_01.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/hardware/install/b_c9300_hig/connector-cable-specs.html",
       "difficulty": "easy",
       "tags": ["copper", "UTP", "cable-types", "physical-layer"]
     },
@@ -98,7 +98,7 @@
       "question": "What is the difference between single-mode fiber (SMF) and multimode fiber (MMF)?",
       "answer": "SMF uses a small core (8-10 microns) and laser light for long distances (up to 100+ km). MMF uses a larger core (50/62.5 microns) and LED/VCSEL light for shorter distances (up to ~550 m at 10G).",
       "explanation": "Single-mode fiber has a smaller core that allows only one mode of light to propagate, reducing dispersion and enabling very long distances. Multimode fiber has a larger core that allows multiple light modes, causing modal dispersion which limits distance. SMF is more expensive (laser transceivers) but supports much longer runs. MMF is cheaper and commonly used within buildings and data centers.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/products/interfaces-modules/transceiver-modules/index.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/hardware/install/b_c9300_hig/connector-cable-specs.html",
       "difficulty": "medium",
       "tags": ["fiber", "SMF", "MMF", "cable-types", "physical-layer"]
     },
@@ -108,7 +108,7 @@
       "question": "Which connector types are commonly used with single-mode and multimode fiber?",
       "answer": "LC (Lucent Connector) and SC (Subscriber Connector) are the most common. LC is smaller and widely used with SFP/SFP+ transceivers.",
       "explanation": "LC connectors are small-form-factor connectors commonly used in modern switches and routers with SFP modules. SC connectors are larger push-pull connectors still found in older installations. ST (Straight Tip) connectors use a bayonet twist-lock and are legacy. Both SMF and MMF can use LC or SC connectors; the connector type is independent of fiber type. Color coding helps identify fiber type: yellow jacket = SMF, orange/aqua jacket = MMF.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/products/interfaces-modules/transceiver-modules/index.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/hardware/install/b_c9300_hig/connector-cable-specs.html",
       "difficulty": "easy",
       "tags": ["fiber", "connectors", "LC", "SC", "physical-layer"]
     },
@@ -328,7 +328,7 @@
       "question": "What are the 2.4 GHz and 5 GHz non-overlapping Wi-Fi channels in North America?",
       "answer": "2.4 GHz: channels 1, 6, 11. 5 GHz has many more non-overlapping channels (up to 25 depending on regulatory domain).",
       "explanation": "In the 2.4 GHz band, each channel is 22 MHz wide but channels are spaced only 5 MHz apart, so only channels 1, 6, and 11 do not overlap. In the 5 GHz band, channels are spaced 20 MHz apart with non-overlapping options, and channel bonding to 40/80/160 MHz is supported. The 5 GHz band has more capacity but shorter range. Proper channel planning minimizes co-channel interference.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/technotes/8-6/b_RFDesignGuide.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/technical-reference/wireless-rf-reference-guide.html",
       "difficulty": "medium",
       "tags": ["wireless", "channels", "2.4GHz", "5GHz", "RF"]
     },
@@ -348,7 +348,7 @@
       "question": "What is SSID and what role does it play in wireless networking?",
       "answer": "An SSID (Service Set Identifier) is the name of a wireless network that clients use to identify and connect to a specific WLAN.",
       "explanation": "The SSID is broadcast in beacon frames by the access point (unless SSID broadcast is disabled). Clients scan for SSIDs to discover available networks. Multiple SSIDs can be configured on a single AP to support different user groups or security policies. Each SSID is typically mapped to a different VLAN. The SSID can be up to 32 characters and is case-sensitive.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/technotes/8-6/b_RFDesignGuide.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/technical-reference/wireless-rf-reference-guide.html",
       "difficulty": "easy",
       "tags": ["wireless", "SSID", "WLAN", "access-point"]
     },
@@ -388,7 +388,7 @@
       "question": "What are the key differences between a collision domain and a broadcast domain?",
       "answer": "A collision domain is a network segment where simultaneous transmissions collide (separated by switches/bridges). A broadcast domain is a set of devices that receive each other's broadcasts (separated by routers).",
       "explanation": "Each port on a switch is its own collision domain (full-duplex eliminates collisions). However, all ports in the same VLAN share a broadcast domain. Routers separate broadcast domains -- broadcasts do not cross router interfaces. A hub creates one large collision domain for all connected devices. Understanding these concepts helps determine where to place switches, routers, and VLANs to optimize network performance.",
-      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/lan-switching/ethernet/10561-3.html",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg.html",
       "difficulty": "medium",
       "tags": ["collision-domain", "broadcast-domain", "switching", "routing"]
     },
