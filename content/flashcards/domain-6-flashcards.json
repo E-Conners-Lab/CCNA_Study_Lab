@@ -1,0 +1,256 @@
+{
+  "domain": 6,
+  "domainName": "Automation and Programmability",
+  "flashcards": [
+    {
+      "id": "d6-fc-001",
+      "objectiveCode": "6.1",
+      "question": "What are three key benefits of network automation?",
+      "answer": "Reduced human error, faster deployment and configuration changes, and improved consistency across the network.",
+      "explanation": "Network automation replaces manual CLI-based configuration with programmatic tools and scripts. Additional benefits include better scalability (configure thousands of devices simultaneously), improved compliance (enforced standard configurations), lower operational costs, and faster troubleshooting through automated data collection and analysis.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/automation/network-automation.html",
+      "difficulty": "easy",
+      "tags": ["automation", "benefits", "network management"]
+    },
+    {
+      "id": "d6-fc-002",
+      "objectiveCode": "6.1",
+      "question": "How does network automation improve network consistency compared to manual configuration?",
+      "answer": "Automation uses templates and scripts to ensure every device receives the same standardized configuration, eliminating variations caused by human error or different administrators.",
+      "explanation": "When administrators manually configure devices, inconsistencies arise from typos, different interpretations of policies, or forgotten steps. Automation tools apply the same configuration template to all devices, enforce naming conventions, and validate configurations before deployment. This is especially critical in large networks with hundreds or thousands of devices.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/automation/network-automation.html",
+      "difficulty": "easy",
+      "tags": ["automation", "consistency", "templates"]
+    },
+    {
+      "id": "d6-fc-003",
+      "objectiveCode": "6.2",
+      "question": "What is SDN (Software-Defined Networking) and how does it differ from traditional networking?",
+      "answer": "SDN centralizes the control plane in a software controller, separating it from the data plane on individual devices. Traditional networking has the control and data planes integrated on each device.",
+      "explanation": "In traditional networking, each router/switch makes independent forwarding decisions using its own control plane (routing protocols, MAC tables). In SDN, a centralized controller makes forwarding decisions and programs the data plane of network devices. This enables network-wide visibility, centralized policy enforcement, and programmability through APIs.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/software-defined-networking/overview.html",
+      "difficulty": "medium",
+      "tags": ["SDN", "control plane", "data plane", "controller"]
+    },
+    {
+      "id": "d6-fc-004",
+      "objectiveCode": "6.2",
+      "question": "What are the three planes in the SDN architecture?",
+      "answer": "Control plane, Data plane (forwarding plane), and Management plane.",
+      "explanation": "The Control plane makes decisions about how traffic should be forwarded (routing protocols, path selection) and is centralized in the SDN controller. The Data plane (forwarding plane) handles the actual forwarding of packets based on instructions from the control plane. The Management plane handles device configuration, monitoring, and management tasks (SSH, SNMP, syslog).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/software-defined-networking/overview.html",
+      "difficulty": "medium",
+      "tags": ["SDN", "control plane", "data plane", "management plane"]
+    },
+    {
+      "id": "d6-fc-005",
+      "objectiveCode": "6.2",
+      "question": "In SDN architecture, what is the difference between northbound and southbound APIs?",
+      "answer": "Northbound APIs connect the SDN controller to applications (above the controller). Southbound APIs connect the SDN controller to network devices (below the controller).",
+      "explanation": "Northbound APIs (NBIs) are typically REST APIs that allow business applications, orchestration tools, and network management software to communicate with the controller and request network services. Southbound APIs (SBIs) are protocols like OpenFlow, NETCONF, or RESTCONF used by the controller to program and manage the forwarding behavior of switches and routers.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/software-defined-networking/overview.html",
+      "difficulty": "medium",
+      "tags": ["SDN", "northbound API", "southbound API", "REST"]
+    },
+    {
+      "id": "d6-fc-006",
+      "objectiveCode": "6.3",
+      "question": "What is Cisco DNA Center and what role does it play in a network?",
+      "answer": "Cisco DNA Center is a centralized network management and automation platform that serves as the SDN controller for Cisco intent-based networking (IBN).",
+      "explanation": "DNA Center provides a dashboard for network design, policy-based automation, assurance (monitoring and troubleshooting), and device provisioning. It uses intent-based networking to translate business intent into network configurations. Key features include network plug-and-play (PnP), software image management (SWIM), path trace, and AI-driven analytics.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/cloud-systems-management/dna-center/index.html",
+      "difficulty": "easy",
+      "tags": ["DNA Center", "SDN", "intent-based networking", "Cisco"]
+    },
+    {
+      "id": "d6-fc-007",
+      "objectiveCode": "6.3",
+      "question": "What southbound protocols does Cisco DNA Center use to communicate with network devices?",
+      "answer": "NETCONF, RESTCONF, CLI (SSH/Telnet), and SNMP.",
+      "explanation": "DNA Center supports multiple southbound interfaces to manage diverse device types. NETCONF (using YANG models over SSH) and RESTCONF (using YANG models over HTTPS) are the preferred modern protocols. CLI over SSH is used for legacy devices. SNMP is used for monitoring. The controller abstracts these differences, presenting a unified northbound REST API to applications.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/cloud-systems-management/dna-center/index.html",
+      "difficulty": "medium",
+      "tags": ["DNA Center", "NETCONF", "RESTCONF", "southbound"]
+    },
+    {
+      "id": "d6-fc-008",
+      "objectiveCode": "6.4",
+      "question": "What does REST stand for and what are its key characteristics?",
+      "answer": "REST stands for Representational State Transfer. Key characteristics include statelessness, client-server architecture, use of standard HTTP methods, and resource identification through URIs.",
+      "explanation": "REST is an architectural style, not a protocol. RESTful APIs use HTTP methods to perform operations on resources identified by URIs. They are stateless (each request contains all needed information), cacheable, and use standard data formats (JSON or XML). REST APIs are widely used in network automation for interacting with controllers, cloud platforms, and network devices.",
+      "sourceUrl": "https://developer.cisco.com/learning/modules/rest-api-fundamentals/",
+      "difficulty": "easy",
+      "tags": ["REST", "API", "HTTP", "stateless"]
+    },
+    {
+      "id": "d6-fc-009",
+      "objectiveCode": "6.4",
+      "question": "Match the CRUD operations to their corresponding HTTP methods in a REST API.",
+      "answer": "Create = POST, Read = GET, Update = PUT/PATCH, Delete = DELETE.",
+      "explanation": "CRUD represents the four basic data operations. In REST APIs: POST creates new resources, GET retrieves existing resources (read-only), PUT replaces an entire resource (full update), PATCH partially modifies a resource, and DELETE removes a resource. GET requests are idempotent (same result regardless of how many times called) and safe (no side effects).",
+      "sourceUrl": "https://developer.cisco.com/learning/modules/rest-api-fundamentals/",
+      "difficulty": "easy",
+      "tags": ["REST", "CRUD", "HTTP methods", "API"]
+    },
+    {
+      "id": "d6-fc-010",
+      "objectiveCode": "6.4",
+      "question": "What do the HTTP response status codes 200, 201, 401, 403, 404, and 500 indicate?",
+      "answer": "200 = OK (success), 201 = Created, 401 = Unauthorized, 403 = Forbidden, 404 = Not Found, 500 = Internal Server Error.",
+      "explanation": "HTTP status codes are grouped: 2xx indicates success, 3xx indicates redirection, 4xx indicates client errors, 5xx indicates server errors. 200 OK means the request succeeded. 201 Created confirms a new resource was created (common response to POST). 401 means authentication is required. 403 means the server understood the request but refuses to authorize it. 404 means the resource was not found. 500 indicates a server-side problem.",
+      "sourceUrl": "https://developer.cisco.com/learning/modules/rest-api-fundamentals/",
+      "difficulty": "medium",
+      "tags": ["REST", "HTTP status codes", "API"]
+    },
+    {
+      "id": "d6-fc-011",
+      "objectiveCode": "6.5",
+      "question": "What is JSON and what are its basic data types?",
+      "answer": "JSON (JavaScript Object Notation) is a lightweight, human-readable data interchange format. Basic data types include strings, numbers, booleans, null, arrays, and objects.",
+      "explanation": "JSON uses key-value pairs enclosed in curly braces {} for objects and square brackets [] for arrays. Strings are enclosed in double quotes. JSON is the most common data format for REST APIs due to its simplicity and language-independent nature. Example: {\"hostname\": \"R1\", \"interfaces\": [\"Gi0/0\", \"Gi0/1\"], \"enabled\": true}.",
+      "sourceUrl": "https://developer.cisco.com/learning/modules/rest-api-fundamentals/",
+      "difficulty": "easy",
+      "tags": ["JSON", "data format", "API"]
+    },
+    {
+      "id": "d6-fc-012",
+      "objectiveCode": "6.5",
+      "question": "In JSON, what is the difference between an object and an array?",
+      "answer": "An object is an unordered collection of key-value pairs enclosed in curly braces {}. An array is an ordered list of values enclosed in square brackets [].",
+      "explanation": "Objects use named keys: {\"name\": \"Router1\", \"ip\": \"10.1.1.1\"}. Arrays use index positions: [\"Gi0/0\", \"Gi0/1\", \"Gi0/2\"]. Objects and arrays can be nested: {\"device\": {\"name\": \"SW1\", \"vlans\": [10, 20, 30]}}. JSON does not support comments, and keys must be unique within an object.",
+      "sourceUrl": "https://developer.cisco.com/learning/modules/rest-api-fundamentals/",
+      "difficulty": "easy",
+      "tags": ["JSON", "object", "array", "data structures"]
+    },
+    {
+      "id": "d6-fc-013",
+      "objectiveCode": "6.6",
+      "question": "Compare Ansible, Puppet, and Chef: which are agent-based and which is agentless?",
+      "answer": "Ansible is agentless (uses SSH/NETCONF). Puppet and Chef are agent-based (require agent software installed on managed nodes).",
+      "explanation": "Ansible connects to devices over SSH (or NETCONF for network devices) without requiring any agent installation, making it popular for network automation. Puppet uses a pull model where agents periodically check the Puppet master for configuration changes. Chef also uses a pull model with a Chef client agent. Ansible uses a push model, executing tasks from a control node on demand.",
+      "sourceUrl": "https://developer.cisco.com/learning/modules/network-automation/",
+      "difficulty": "medium",
+      "tags": ["Ansible", "Puppet", "Chef", "agentless", "agent-based"]
+    },
+    {
+      "id": "d6-fc-014",
+      "objectiveCode": "6.6",
+      "question": "What is the difference between a push model and a pull model in configuration management?",
+      "answer": "In a push model, the central server pushes configurations to managed devices on demand. In a pull model, managed devices periodically pull their configurations from the central server.",
+      "explanation": "Ansible uses a push model: the control node connects to devices and pushes changes when an administrator runs a playbook. Puppet and Chef use a pull model: agents on managed nodes periodically (typically every 30 minutes) contact the master/server to check for configuration changes and apply them. Push provides immediate control; pull ensures continuous compliance.",
+      "sourceUrl": "https://developer.cisco.com/learning/modules/network-automation/",
+      "difficulty": "medium",
+      "tags": ["push model", "pull model", "configuration management"]
+    },
+    {
+      "id": "d6-fc-015",
+      "objectiveCode": "6.6",
+      "question": "What programming language is Ansible written in, and what format are Ansible playbooks written in?",
+      "answer": "Ansible is written in Python. Ansible playbooks are written in YAML (YAML Ain't Markup Language).",
+      "explanation": "Playbooks define automation tasks in a human-readable YAML format. Each playbook contains one or more plays, which target specific hosts and define tasks to execute. Ansible uses an inventory file to define managed hosts and groups. Modules (written in Python) perform the actual work on target devices. No programming knowledge is required to write basic playbooks.",
+      "sourceUrl": "https://developer.cisco.com/learning/modules/network-automation/",
+      "difficulty": "medium",
+      "tags": ["Ansible", "Python", "YAML", "playbooks"]
+    },
+    {
+      "id": "d6-fc-016",
+      "objectiveCode": "6.6",
+      "question": "What language does Puppet use for its configuration manifests, and what language does Chef use for its recipes?",
+      "answer": "Puppet uses its own declarative DSL (Domain-Specific Language) for manifests. Chef uses Ruby for its recipes (cookbooks).",
+      "explanation": "Puppet manifests describe the desired state of resources using Puppet's declarative language (files end in .pp). Chef recipes are written in Ruby and are grouped into cookbooks. Puppet focuses on 'what' the end state should be, while Chef provides more procedural flexibility. Both maintain an idempotent approach, only making changes when the current state differs from the desired state.",
+      "sourceUrl": "https://developer.cisco.com/learning/modules/network-automation/",
+      "difficulty": "hard",
+      "tags": ["Puppet", "Chef", "DSL", "Ruby", "configuration management"]
+    },
+    {
+      "id": "d6-fc-017",
+      "objectiveCode": "6.2",
+      "question": "What is OpenFlow and what role does it play in SDN?",
+      "answer": "OpenFlow is a southbound API protocol that allows an SDN controller to directly program the forwarding tables of network switches.",
+      "explanation": "OpenFlow was one of the first SDN southbound protocols, standardized by the Open Networking Foundation (ONF). It defines a communication channel between the controller and the switch, allowing the controller to add, modify, or delete flow entries in the switch's flow table. Each flow entry contains match criteria (packet header fields) and actions (forward, drop, modify). While historically significant, many modern SDN solutions use alternative protocols.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/software-defined-networking/overview.html",
+      "difficulty": "hard",
+      "tags": ["OpenFlow", "SDN", "southbound API", "flow table"]
+    },
+    {
+      "id": "d6-fc-018",
+      "objectiveCode": "6.4",
+      "question": "What does it mean for a REST API to be 'stateless'?",
+      "answer": "Each API request must contain all the information needed for the server to process it. The server does not store any client session state between requests.",
+      "explanation": "Statelessness means the server treats each request independently with no memory of previous requests. Authentication tokens, parameters, and context must be included in every request. This simplifies server design, improves scalability (any server can handle any request), and makes the API more reliable. Session state, if needed, is maintained on the client side.",
+      "sourceUrl": "https://developer.cisco.com/learning/modules/rest-api-fundamentals/",
+      "difficulty": "medium",
+      "tags": ["REST", "stateless", "API", "architecture"]
+    },
+    {
+      "id": "d6-fc-019",
+      "objectiveCode": "6.7",
+      "question": "What is YANG and how is it used in network automation?",
+      "answer": "YANG is a data modeling language used to define the structure and constraints of configuration and operational data for network devices.",
+      "explanation": "YANG (Yet Another Next Generation) models define what data a device can be configured with and what operational data it can report. YANG models are used with NETCONF (over SSH) and RESTCONF (over HTTPS) protocols. They provide a standardized way to describe device capabilities, replacing vendor-specific CLI syntax. YANG models can be vendor-specific (Cisco, Juniper) or industry-standard (IETF, OpenConfig).",
+      "sourceUrl": "https://developer.cisco.com/learning/modules/network-automation/",
+      "difficulty": "hard",
+      "tags": ["YANG", "NETCONF", "RESTCONF", "data modeling"]
+    },
+    {
+      "id": "d6-fc-020",
+      "objectiveCode": "6.3",
+      "question": "What is intent-based networking (IBN) as implemented by Cisco DNA Center?",
+      "answer": "IBN translates high-level business intent (what you want the network to do) into network configurations, and continuously validates that the network is operating as intended.",
+      "explanation": "With IBN, administrators express desired outcomes (e.g., 'sales team needs access to CRM on VLAN 100') rather than device-by-device CLI commands. DNA Center translates this intent into device configurations, deploys them, and uses assurance features to continuously monitor and verify the network matches the intent. If deviations are detected, the system alerts administrators or auto-remediates.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/cloud-systems-management/dna-center/index.html",
+      "difficulty": "medium",
+      "tags": ["IBN", "intent-based networking", "DNA Center", "Cisco"]
+    },
+    {
+      "id": "d6-fc-021",
+      "objectiveCode": "6.4",
+      "question": "What is the difference between HTTP PUT and HTTP PATCH in a REST API?",
+      "answer": "PUT replaces the entire resource with the provided data. PATCH partially updates only the specified fields of a resource.",
+      "explanation": "If a resource has fields A, B, and C, a PUT request must include all three fields (missing fields may be set to defaults or null). A PATCH request can include just field B to update only that field while leaving A and C unchanged. PUT is idempotent (same request yields the same result), and PATCH may or may not be idempotent depending on implementation.",
+      "sourceUrl": "https://developer.cisco.com/learning/modules/rest-api-fundamentals/",
+      "difficulty": "hard",
+      "tags": ["REST", "PUT", "PATCH", "HTTP methods"]
+    },
+    {
+      "id": "d6-fc-022",
+      "objectiveCode": "6.5",
+      "question": "How does XML differ from JSON as a data format for APIs?",
+      "answer": "XML uses opening and closing tags (markup) to define data structure, while JSON uses key-value pairs with curly braces and square brackets. JSON is more concise and easier to parse.",
+      "explanation": "XML example: <hostname>R1</hostname>. JSON equivalent: {\"hostname\": \"R1\"}. XML supports attributes, namespaces, and schemas (XSD) for validation. JSON is lighter weight and more commonly used in modern REST APIs. NETCONF uses XML, while most REST APIs prefer JSON. Both are human-readable and platform-independent.",
+      "sourceUrl": "https://developer.cisco.com/learning/modules/rest-api-fundamentals/",
+      "difficulty": "easy",
+      "tags": ["XML", "JSON", "data format", "comparison"]
+    },
+    {
+      "id": "d6-fc-023",
+      "objectiveCode": "6.2",
+      "question": "In a traditional network, where does the control plane reside, and what happens to it in an SDN architecture?",
+      "answer": "In traditional networking, the control plane resides on each individual network device. In SDN, the control plane is centralized in the SDN controller.",
+      "explanation": "Traditional devices (routers, switches) each run their own control plane processes (OSPF, STP, ARP) and independently build forwarding tables. In SDN, these decisions are made centrally by the controller, which has a global view of the network. The controller then programs the data plane of each device through southbound APIs. This centralization enables optimal path selection and faster convergence.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/software-defined-networking/overview.html",
+      "difficulty": "medium",
+      "tags": ["SDN", "control plane", "traditional networking"]
+    },
+    {
+      "id": "d6-fc-024",
+      "objectiveCode": "6.1",
+      "question": "What is Infrastructure as Code (IaC) and how does it relate to network automation?",
+      "answer": "IaC manages and provisions network infrastructure through machine-readable definition files (code) rather than manual CLI configuration.",
+      "explanation": "IaC applies software development practices to infrastructure management. Network configurations are stored as code in version control systems (Git), enabling change tracking, peer review, rollback, and collaboration. Tools like Ansible playbooks, Terraform configurations, and Python scripts implement IaC for networks. Benefits include reproducibility, auditability, and the ability to test configurations before deployment.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/automation/network-automation.html",
+      "difficulty": "medium",
+      "tags": ["IaC", "infrastructure as code", "automation", "version control"]
+    },
+    {
+      "id": "d6-fc-025",
+      "objectiveCode": "6.7",
+      "question": "What is the difference between NETCONF and RESTCONF?",
+      "answer": "NETCONF uses SSH (port 830) and XML encoding. RESTCONF uses HTTPS (port 443) and supports both JSON and XML encoding.",
+      "explanation": "Both protocols use YANG data models to interact with network device configurations. NETCONF provides more powerful operations including candidate configurations, locking, validation, and transaction-based commits (all-or-nothing). RESTCONF is simpler, mapping YANG models to REST API resources accessible via standard HTTP methods (GET, POST, PUT, PATCH, DELETE). RESTCONF is easier to use with modern web development tools.",
+      "sourceUrl": "https://developer.cisco.com/learning/modules/network-automation/",
+      "difficulty": "hard",
+      "tags": ["NETCONF", "RESTCONF", "YANG", "network automation"]
+    }
+  ]
+}

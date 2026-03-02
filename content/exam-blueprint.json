@@ -1,0 +1,108 @@
+{
+  "examCode": "200-301",
+  "examName": "Implementing and Administering Cisco Networking Technologies",
+  "duration": 120,
+  "domains": [
+    {
+      "number": 1,
+      "slug": "network-fundamentals",
+      "name": "Network Fundamentals",
+      "weight": 20,
+      "objectives": [
+        { "code": "1.1", "title": "Explain the role and function of network components", "subobjectives": ["1.1.a Routers", "1.1.b Layer 2 and Layer 3 switches", "1.1.c Next-generation firewalls and IPS", "1.1.d Access points", "1.1.e Controllers (Cisco DNA Center and WLC)", "1.1.f Endpoints", "1.1.g Servers", "1.1.h PoE"] },
+        { "code": "1.2", "title": "Describe characteristics of network topology architectures", "subobjectives": ["1.2.a Two-tier", "1.2.b Three-tier", "1.2.c Spine-leaf", "1.2.d WAN", "1.2.e Small office/home office (SOHO)", "1.2.f On-premises and cloud"] },
+        { "code": "1.3", "title": "Compare physical interface and cabling types", "subobjectives": ["1.3.a Single-mode fiber, multimode fiber, copper", "1.3.b Connections (Ethernet shared media and point-to-point)"] },
+        { "code": "1.4", "title": "Identify interface and cable issues (collisions, errors, mismatch duplex, and/or speed)" },
+        { "code": "1.5", "title": "Compare TCP to UDP" },
+        { "code": "1.6", "title": "Configure and verify IPv4 addressing and subnetting" },
+        { "code": "1.7", "title": "Describe the need for private IPv4 addressing" },
+        { "code": "1.8", "title": "Configure and verify IPv6 addressing and prefix" },
+        { "code": "1.9", "title": "Describe IPv6 address types", "subobjectives": ["1.9.a Unicast (global, unique local, and link local)", "1.9.b Anycast", "1.9.c Multicast", "1.9.d Modified EUI 64"] },
+        { "code": "1.10", "title": "Verify IP parameters for Client OS (Windows, Mac OS, Linux)" },
+        { "code": "1.11", "title": "Describe wireless principles", "subobjectives": ["1.11.a Nonoverlapping Wi-Fi channels", "1.11.b SSID", "1.11.c RF", "1.11.d Encryption"] },
+        { "code": "1.12", "title": "Explain virtualization fundamentals (server virtualization, containers, and VRFs)" },
+        { "code": "1.13", "title": "Describe switching concepts", "subobjectives": ["1.13.a MAC learning and aging", "1.13.b Frame switching", "1.13.c Frame flooding", "1.13.d MAC address table"] }
+      ]
+    },
+    {
+      "number": 2,
+      "slug": "network-access",
+      "name": "Network Access",
+      "weight": 20,
+      "objectives": [
+        { "code": "2.1", "title": "Configure and verify VLANs (normal range) spanning multiple switches", "subobjectives": ["2.1.a Access ports (data and voice)", "2.1.b Default VLAN", "2.1.c InterVLAN connectivity"] },
+        { "code": "2.2", "title": "Configure and verify interswitch connectivity", "subobjectives": ["2.2.a Trunk ports", "2.2.b 802.1Q", "2.2.c Native VLAN"] },
+        { "code": "2.3", "title": "Configure and verify Layer 2 discovery protocols (Cisco Discovery Protocol and LLDP)" },
+        { "code": "2.4", "title": "Configure and verify (Layer 2/Layer 3) EtherChannel (LACP)" },
+        { "code": "2.5", "title": "Interpret the Rapid PVST+ Spanning Tree Protocol", "subobjectives": ["2.5.a Root port, root bridge (primary/secondary), and other port names", "2.5.b Port states (forwarding/blocking)", "2.5.c PortFast"] },
+        { "code": "2.6", "title": "Describe Cisco Wireless Architectures and AP modes" },
+        { "code": "2.7", "title": "Describe physical infrastructure connections of WLAN components (AP, WLC, access/trunk ports, and LAG)" },
+        { "code": "2.8", "title": "Describe AP and WLC management access connections (Telnet, SSH, HTTP, HTTPS, console, and TACACS+/RADIUS)" },
+        { "code": "2.9", "title": "Interpret the wireless LAN GUI configuration for client connectivity, such as WLAN creation, security settings, QoS profiles, and advanced settings" }
+      ]
+    },
+    {
+      "number": 3,
+      "slug": "ip-connectivity",
+      "name": "IP Connectivity",
+      "weight": 25,
+      "objectives": [
+        { "code": "3.1", "title": "Interpret the components of routing table", "subobjectives": ["3.1.a Routing protocol code", "3.1.b Prefix", "3.1.c Network mask", "3.1.d Next hop", "3.1.e Administrative distance", "3.1.f Metric", "3.1.g Gateway of last resort"] },
+        { "code": "3.2", "title": "Determine how a router makes a forwarding decision by default", "subobjectives": ["3.2.a Longest prefix match", "3.2.b Administrative distance", "3.2.c Routing protocol metric"] },
+        { "code": "3.3", "title": "Configure and verify IPv4 and IPv6 static routing", "subobjectives": ["3.3.a Default route", "3.3.b Network route", "3.3.c Host route", "3.3.d Floating static"] },
+        { "code": "3.4", "title": "Configure and verify single area OSPFv2", "subobjectives": ["3.4.a Neighbor adjacencies", "3.4.b Point-to-point", "3.4.c Broadcast (DR/BDR selection)", "3.4.d Router ID"] },
+        { "code": "3.5", "title": "Describe the purpose, functions, and concepts of first hop redundancy protocols" }
+      ]
+    },
+    {
+      "number": 4,
+      "slug": "ip-services",
+      "name": "IP Services",
+      "weight": 10,
+      "objectives": [
+        { "code": "4.1", "title": "Configure and verify inside source NAT using static and pools" },
+        { "code": "4.2", "title": "Configure and verify NTP operating in a client and server mode" },
+        { "code": "4.3", "title": "Explain the role of DHCP and DNS within the network" },
+        { "code": "4.4", "title": "Explain the function of SNMP in network operations" },
+        { "code": "4.5", "title": "Describe the use of syslog features including facilities and levels" },
+        { "code": "4.6", "title": "Configure and verify DHCP client and relay" },
+        { "code": "4.7", "title": "Explain the forwarding per-hop behavior (PHB) for QoS, such as classification, marking, queuing, congestion, policing, and shaping" },
+        { "code": "4.8", "title": "Configure network devices for remote access using SSH" },
+        { "code": "4.9", "title": "Describe the capabilities and functions of TFTP/FTP in the network" }
+      ]
+    },
+    {
+      "number": 5,
+      "slug": "security-fundamentals",
+      "name": "Security Fundamentals",
+      "weight": 15,
+      "objectives": [
+        { "code": "5.1", "title": "Define key security concepts (threats, vulnerabilities, exploits, and mitigation techniques)" },
+        { "code": "5.2", "title": "Describe security program elements (user awareness, training, and physical access control)" },
+        { "code": "5.3", "title": "Configure and verify device access control using local passwords" },
+        { "code": "5.4", "title": "Describe security password policies elements, such as management, complexity, and password alternatives (multifactor authentication, certificates, and biometrics)" },
+        { "code": "5.5", "title": "Describe IPsec remote access and site-to-site VPNs" },
+        { "code": "5.6", "title": "Configure and verify access control lists" },
+        { "code": "5.7", "title": "Configure and verify Layer 2 security features (DHCP snooping, dynamic ARP inspection, and port security)" },
+        { "code": "5.8", "title": "Compare authentication, authorization, and accounting concepts" },
+        { "code": "5.9", "title": "Describe wireless security protocols (WPA, WPA2, and WPA3)" },
+        { "code": "5.10", "title": "Configure and verify WLAN within the GUI using WPA2 PSK" }
+      ]
+    },
+    {
+      "number": 6,
+      "slug": "automation-programmability",
+      "name": "Automation and Programmability",
+      "weight": 10,
+      "objectives": [
+        { "code": "6.1", "title": "Explain how automation impacts network management" },
+        { "code": "6.2", "title": "Compare traditional networks with controller-based networking" },
+        { "code": "6.3", "title": "Describe controller-based, software defined architecture (overlay, underlay, and fabric)", "subobjectives": ["6.3.a Separation of control plane and data plane", "6.3.b Northbound and Southbound APIs"] },
+        { "code": "6.4", "title": "Compare traditional campus device management with Cisco DNA Center enabled device management" },
+        { "code": "6.5", "title": "Describe characteristics of REST-based APIs (CRUD, HTTP verbs, and data encoding)" },
+        { "code": "6.6", "title": "Recognize the capabilities of configuration management mechanisms Puppet, Chef, and Ansible" },
+        { "code": "6.7", "title": "Recognize components of JSON-encoded data" }
+      ]
+    }
+  ]
+}

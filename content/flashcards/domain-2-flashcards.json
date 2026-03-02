@@ -1,0 +1,356 @@
+{
+  "domain": 2,
+  "domainName": "Network Access",
+  "flashcards": [
+    {
+      "id": "d2-fc-001",
+      "objectiveCode": "2.1",
+      "question": "What Cisco IOS commands configure a switch port as an access port in VLAN 10?",
+      "answer": "interface GigabitEthernet0/1\n switchport mode access\n switchport access vlan 10",
+      "explanation": "The 'switchport mode access' command sets the port to access mode, meaning it carries traffic for only one VLAN. The 'switchport access vlan 10' command assigns the port to VLAN 10. Access ports are used to connect end devices (PCs, phones, printers). Frames sent on access ports are untagged. If the VLAN doesn't exist, the switch will create it automatically on some platforms.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/vlan/b_176_vlan_9300_cg.html",
+      "difficulty": "easy",
+      "tags": ["VLAN", "access-port", "switchport", "IOS-command"]
+    },
+    {
+      "id": "d2-fc-002",
+      "objectiveCode": "2.1",
+      "question": "What is a VLAN and what problem does it solve?",
+      "answer": "A VLAN (Virtual LAN) logically segments a physical switch into separate broadcast domains, reducing broadcast traffic and improving security.",
+      "explanation": "Without VLANs, all ports on a switch are in one broadcast domain. VLANs allow you to group ports logically regardless of physical location. Each VLAN is its own broadcast domain, so broadcasts in VLAN 10 don't reach VLAN 20. Benefits include: reduced broadcast scope, improved security (isolation between groups), flexible network design (users can be grouped by function, not location), and easier management. Inter-VLAN communication requires a Layer 3 device (router or L3 switch).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/vlan/b_176_vlan_9300_cg.html",
+      "difficulty": "easy",
+      "tags": ["VLAN", "broadcast-domain", "segmentation", "switching"]
+    },
+    {
+      "id": "d2-fc-003",
+      "objectiveCode": "2.1",
+      "question": "What Cisco IOS command creates VLAN 20 with the name 'Sales'?",
+      "answer": "vlan 20\n name Sales",
+      "explanation": "From global configuration mode, the 'vlan 20' command creates VLAN 20 (or enters its configuration if it already exists). The 'name Sales' command assigns a descriptive name. Without the name command, the VLAN is named VLAN0020 by default. VLANs 1, 1002-1005 are reserved and cannot be deleted. The valid VLAN range is 1-4094, with 1-1005 being normal range and 1006-4094 being extended range.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/vlan/b_176_vlan_9300_cg.html",
+      "difficulty": "easy",
+      "tags": ["VLAN", "IOS-command", "configuration"]
+    },
+    {
+      "id": "d2-fc-004",
+      "objectiveCode": "2.1",
+      "question": "What command shows all VLANs and their assigned ports on a Cisco switch?",
+      "answer": "show vlan brief",
+      "explanation": "The 'show vlan brief' command displays a concise table of all VLANs, their names, status, and assigned access ports. Note that trunk ports do NOT appear in this output -- use 'show interfaces trunk' to see trunk port VLAN assignments. 'show vlan id 10' shows details for a specific VLAN. VLAN 1 is the default VLAN and all ports are initially assigned to it.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/vlan/b_176_vlan_9300_cg.html",
+      "difficulty": "easy",
+      "tags": ["VLAN", "show-commands", "IOS-command", "troubleshooting"]
+    },
+    {
+      "id": "d2-fc-005",
+      "objectiveCode": "2.2",
+      "question": "What is the purpose of an 802.1Q trunk and how does it differ from an access port?",
+      "answer": "A trunk port carries traffic for multiple VLANs by inserting a 4-byte 802.1Q tag into Ethernet frames. An access port carries traffic for only one VLAN without tagging.",
+      "explanation": "802.1Q is the IEEE standard for VLAN tagging on trunk links. The tag is inserted between the source MAC address and the EtherType field, adding a 4-byte header that includes a 12-bit VLAN ID field (supporting VLANs 1-4094). Trunk links are used between switches, between a switch and a router (router-on-a-stick), and between a switch and a server needing multiple VLAN access. The native VLAN traffic is sent untagged on the trunk.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/vlan/b_176_vlan_9300_cg.html",
+      "difficulty": "medium",
+      "tags": ["802.1Q", "trunk", "VLAN-tagging", "switching"]
+    },
+    {
+      "id": "d2-fc-006",
+      "objectiveCode": "2.2",
+      "question": "What is the native VLAN on an 802.1Q trunk, and why is it important to match on both ends?",
+      "answer": "The native VLAN is the VLAN whose traffic is sent untagged on a trunk. It must match on both sides to prevent VLAN hopping attacks and traffic misrouting.",
+      "explanation": "By default, the native VLAN is VLAN 1. Frames belonging to the native VLAN are transmitted without an 802.1Q tag. If the native VLAN is mismatched between two switches (e.g., one side native VLAN 1, other side native VLAN 99), untagged traffic from one side is placed into the wrong VLAN on the other side, causing connectivity issues and security vulnerabilities (VLAN hopping). Best practice: change the native VLAN from the default VLAN 1 and ensure it matches on both ends. Configure with 'switchport trunk native vlan <vlan-id>'.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/vlan/b_176_vlan_9300_cg.html",
+      "difficulty": "medium",
+      "tags": ["native-VLAN", "802.1Q", "trunk", "security"]
+    },
+    {
+      "id": "d2-fc-007",
+      "objectiveCode": "2.2",
+      "question": "What Cisco IOS commands configure a trunk port and restrict it to VLANs 10, 20, and 30?",
+      "answer": "interface GigabitEthernet0/1\n switchport mode trunk\n switchport trunk allowed vlan 10,20,30",
+      "explanation": "The 'switchport mode trunk' command forces the port into trunk mode. The 'switchport trunk allowed vlan 10,20,30' command restricts the trunk to carry only VLANs 10, 20, and 30 (plus the native VLAN if it is one of these). By default, a trunk allows all VLANs (1-4094). Restricting VLANs on trunks is a best practice to limit unnecessary traffic. You can add or remove VLANs with 'switchport trunk allowed vlan add <vlan>' or 'switchport trunk allowed vlan remove <vlan>'.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/vlan/b_176_vlan_9300_cg.html",
+      "difficulty": "medium",
+      "tags": ["trunk", "allowed-VLANs", "IOS-command", "configuration"]
+    },
+    {
+      "id": "d2-fc-008",
+      "objectiveCode": "2.2",
+      "question": "What is the 'router-on-a-stick' inter-VLAN routing configuration?",
+      "answer": "A single physical router interface is configured with subinterfaces, each assigned to a different VLAN. The switch port connecting to the router is configured as a trunk.",
+      "explanation": "In router-on-a-stick, the router uses one physical interface divided into logical subinterfaces (e.g., Gi0/0.10, Gi0/0.20). Each subinterface is configured with 'encapsulation dot1q <vlan-id>' and an IP address serving as the default gateway for that VLAN. The switch port facing the router is a trunk carrying all relevant VLANs. While simple, this method creates a bottleneck since all inter-VLAN traffic shares one physical link. Layer 3 switches with SVIs are preferred for larger networks.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/lan-switching/inter-vlan-routing/14976-50.html",
+      "difficulty": "medium",
+      "tags": ["inter-VLAN-routing", "router-on-a-stick", "subinterface", "trunk"]
+    },
+    {
+      "id": "d2-fc-009",
+      "objectiveCode": "2.3",
+      "question": "What is the difference between DTP and manually configuring trunk or access modes?",
+      "answer": "DTP (Dynamic Trunking Protocol) automatically negotiates whether a port becomes a trunk or access port. Manual configuration uses 'switchport mode trunk' or 'switchport mode access' with no negotiation.",
+      "explanation": "DTP is a Cisco proprietary protocol. DTP modes include: 'dynamic desirable' (actively tries to form a trunk), 'dynamic auto' (forms a trunk only if the other side requests it), 'trunk' (forces trunk, still sends DTP), and 'access' (forces access, still sends DTP). Best practice is to manually set ports and disable DTP with 'switchport nonegotiate' on trunk ports to prevent unauthorized trunk formation. Two 'dynamic auto' ports will NOT form a trunk (neither side initiates).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/vlan/b_176_vlan_9300_cg.html",
+      "difficulty": "hard",
+      "tags": ["DTP", "trunk-negotiation", "switchport", "security"]
+    },
+    {
+      "id": "d2-fc-010",
+      "objectiveCode": "2.3",
+      "question": "What command verifies the trunk status and VLANs allowed on trunk ports?",
+      "answer": "show interfaces trunk",
+      "explanation": "The 'show interfaces trunk' command displays all trunk ports, their mode, encapsulation (802.1Q), native VLAN, and which VLANs are allowed, active, and in the spanning-tree forwarding state on each trunk. This is essential for troubleshooting trunk issues. If a port does not appear in this output, it is not operating as a trunk. Common issues include DTP negotiation failures, mismatched native VLANs, and VLANs being pruned or not allowed.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/vlan/b_176_vlan_9300_cg.html",
+      "difficulty": "easy",
+      "tags": ["trunk", "show-commands", "IOS-command", "troubleshooting"]
+    },
+    {
+      "id": "d2-fc-011",
+      "objectiveCode": "2.4",
+      "question": "What is CDP and what information does it provide?",
+      "answer": "CDP (Cisco Discovery Protocol) is a Layer 2 Cisco proprietary protocol that discovers directly connected Cisco devices and shares device ID, IP address, platform, capabilities, and interface information.",
+      "explanation": "CDP operates at Layer 2 using multicast (01:00:0C:CC:CC:CC) and works even without IP configuration. CDP advertisements are sent every 60 seconds by default with a 180-second hold time. Key commands: 'show cdp neighbors' (summary view), 'show cdp neighbors detail' (includes IP addresses and IOS version), 'show cdp entry <name>' (specific device). CDP can be disabled globally with 'no cdp run' or per-interface with 'no cdp enable'. Disable CDP on external-facing ports for security.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/cdp/configuration/xe-16/cdp-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["CDP", "discovery-protocol", "Cisco-proprietary", "layer-2"]
+    },
+    {
+      "id": "d2-fc-012",
+      "objectiveCode": "2.4",
+      "question": "How does LLDP differ from CDP?",
+      "answer": "LLDP (Link Layer Discovery Protocol) is an IEEE standard (802.1AB) that works with multi-vendor equipment, while CDP is Cisco proprietary.",
+      "explanation": "LLDP is vendor-neutral and defined by IEEE 802.1AB. Like CDP, it operates at Layer 2 and discovers directly connected devices. LLDP sends advertisements every 30 seconds (default) with a 120-second hold time. LLDP must be explicitly enabled on Cisco devices with 'lldp run'. Key differences from CDP: LLDP is standards-based (works with non-Cisco devices), LLDP can be enabled for transmit only ('lldp transmit'), receive only ('lldp receive'), or both per interface. Commands: 'show lldp neighbors' and 'show lldp neighbors detail'.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/cdp/configuration/xe-16/cdp-xe-16-book/nm-cdp-lldp-overview.html",
+      "difficulty": "medium",
+      "tags": ["LLDP", "IEEE-802.1AB", "discovery-protocol", "multi-vendor"]
+    },
+    {
+      "id": "d2-fc-013",
+      "objectiveCode": "2.4",
+      "question": "What command shows CDP neighbor details including IP addresses and IOS version?",
+      "answer": "show cdp neighbors detail",
+      "explanation": "The 'show cdp neighbors detail' command provides comprehensive information about each directly connected Cisco device: Device ID (hostname), IP addresses (management and interface), platform (model number), capabilities (Router, Switch, etc.), interface on local and remote sides, IOS version, and VTP management domain. The shorter 'show cdp neighbors' shows only a summary table with device ID, local interface, hold time, capability, platform, and remote port ID.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/cdp/configuration/xe-16/cdp-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["CDP", "show-commands", "IOS-command", "troubleshooting"]
+    },
+    {
+      "id": "d2-fc-014",
+      "objectiveCode": "2.5",
+      "question": "What is EtherChannel and why is it used?",
+      "answer": "EtherChannel bundles multiple physical links between switches into one logical link, increasing bandwidth and providing redundancy without triggering STP to block ports.",
+      "explanation": "Without EtherChannel, STP would block redundant parallel links between switches to prevent loops. EtherChannel combines up to 8 physical links into one logical channel (Port-Channel), providing aggregated bandwidth and link redundancy. If one physical link fails, traffic redistributes across remaining links without reconvergence. Traffic distribution across member links uses a hash algorithm based on source/destination MAC, IP, or port numbers. All ports in an EtherChannel must have matching speed, duplex, VLAN, and trunk settings.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_etherchannels.html",
+      "difficulty": "medium",
+      "tags": ["EtherChannel", "link-aggregation", "redundancy", "bandwidth"]
+    },
+    {
+      "id": "d2-fc-015",
+      "objectiveCode": "2.5",
+      "question": "What is LACP and how does it differ from PAgP for EtherChannel negotiation?",
+      "answer": "LACP (IEEE 802.3ad) is an open standard for EtherChannel negotiation. PAgP (Port Aggregation Protocol) is Cisco proprietary. LACP uses active/passive modes; PAgP uses desirable/auto modes.",
+      "explanation": "LACP modes: 'active' (initiates negotiation) and 'passive' (responds but doesn't initiate). PAgP modes: 'desirable' (initiates) and 'auto' (responds only). At least one side must be active/desirable for negotiation to succeed. Two passive or two auto ports will NOT form an EtherChannel. LACP is preferred in multi-vendor environments. A third option is 'on' mode, which forces EtherChannel without any negotiation protocol -- both sides must be set to 'on'. LACP supports up to 16 ports (8 active + 8 standby).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_etherchannels.html",
+      "difficulty": "medium",
+      "tags": ["LACP", "PAgP", "EtherChannel", "negotiation"]
+    },
+    {
+      "id": "d2-fc-016",
+      "objectiveCode": "2.5",
+      "question": "What Cisco IOS commands configure an LACP EtherChannel using interfaces Gi0/1-2?",
+      "answer": "interface range GigabitEthernet0/1-2\n channel-group 1 mode active\n\nThis creates Port-Channel 1 using LACP active mode.",
+      "explanation": "The 'channel-group 1 mode active' command assigns the interfaces to EtherChannel group 1 using LACP in active mode. The Port-Channel 1 interface is automatically created. Configure trunk or access settings on the Port-Channel interface (not the member interfaces): 'interface port-channel 1', then 'switchport mode trunk'. Verify with 'show etherchannel summary'. All member ports must have matching speed, duplex, VLAN assignment, and trunk configuration.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_etherchannels.html",
+      "difficulty": "easy",
+      "tags": ["LACP", "EtherChannel", "channel-group", "IOS-command"]
+    },
+    {
+      "id": "d2-fc-017",
+      "objectiveCode": "2.5",
+      "question": "What command verifies EtherChannel status and shows which ports are bundled?",
+      "answer": "show etherchannel summary",
+      "explanation": "The 'show etherchannel summary' command displays all EtherChannels with their protocol (LACP/PAgP/none), port-channel number, and member port status. Port flags include: P (bundled in port-channel), I (stand-alone), s (suspended), D (down), U (in use). Group flags include: SU (Layer 2 in use), RU (Layer 3 in use). Additional commands: 'show etherchannel port-channel' (detailed), 'show etherchannel load-balance' (hashing method), and 'show lacp neighbor' (LACP-specific info).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_etherchannels.html",
+      "difficulty": "easy",
+      "tags": ["EtherChannel", "show-commands", "IOS-command", "verification"]
+    },
+    {
+      "id": "d2-fc-018",
+      "objectiveCode": "2.6",
+      "question": "How does STP (Spanning Tree Protocol) prevent Layer 2 loops?",
+      "answer": "STP elects a root bridge, calculates the shortest path to it, and blocks redundant ports to create a loop-free tree topology.",
+      "explanation": "STP (IEEE 802.1D) prevents switching loops that cause broadcast storms, MAC table instability, and duplicate frames. The process: (1) Elect a root bridge (lowest Bridge ID = priority + MAC). (2) Each non-root switch selects one root port (best path to root). (3) Each segment selects one designated port (best path to root from that segment). (4) All other ports are blocked (do not forward data). STP uses BPDUs (Bridge Protocol Data Units) exchanged every 2 seconds to maintain the topology.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_spanning_tree_protocol.html",
+      "difficulty": "medium",
+      "tags": ["STP", "root-bridge", "loop-prevention", "layer-2"]
+    },
+    {
+      "id": "d2-fc-019",
+      "objectiveCode": "2.6",
+      "question": "How is the STP root bridge elected?",
+      "answer": "The switch with the lowest Bridge ID (BID) becomes root bridge. BID = Bridge Priority (default 32768) + VLAN number + MAC address.",
+      "explanation": "All switches initially claim to be root and send BPDUs. They compare Bridge IDs: lowest priority wins. If priority is tied, the lowest MAC address wins. The default priority is 32768. To influence root bridge election, lower the priority with 'spanning-tree vlan <id> priority <value>' (increments of 4096) or use 'spanning-tree vlan <id> root primary' (sets priority to 24576 or lower). The root bridge has all ports in designated (forwarding) state. Only one root bridge exists per VLAN in PVST+.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_spanning_tree_protocol.html",
+      "difficulty": "medium",
+      "tags": ["STP", "root-bridge", "bridge-ID", "priority"]
+    },
+    {
+      "id": "d2-fc-020",
+      "objectiveCode": "2.6",
+      "question": "What are the STP port states in 802.1D?",
+      "answer": "Blocking, Listening, Learning, Forwarding, and Disabled.",
+      "explanation": "Blocking (20 sec max age): Port receives BPDUs but does not forward data or learn MACs. Listening (15 sec forward delay): Port sends/receives BPDUs, participates in root election, but does not forward data or learn MACs. Learning (15 sec forward delay): Port learns MAC addresses from incoming frames but does not yet forward data. Forwarding: Port fully operational, forwards data and learns MACs. Disabled: Administratively shut down. Total convergence from blocking to forwarding takes 30-50 seconds (802.1D). Rapid STP (802.1w) significantly reduces this.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_spanning_tree_protocol.html",
+      "difficulty": "medium",
+      "tags": ["STP", "port-states", "convergence", "802.1D"]
+    },
+    {
+      "id": "d2-fc-021",
+      "objectiveCode": "2.6",
+      "question": "What is PortFast and when should it be used?",
+      "answer": "PortFast allows a switch port to skip STP listening and learning states and immediately enter forwarding. It should only be used on access ports connected to end devices.",
+      "explanation": "Without PortFast, a port takes 30 seconds (listening + learning) to start forwarding after a link comes up, which delays DHCP and PXE boot. PortFast skips these states, going directly to forwarding. Configure per-port with 'spanning-tree portfast' or globally for all access ports with 'spanning-tree portfast default'. NEVER enable PortFast on ports connected to other switches -- this could cause temporary loops. Pair PortFast with BPDU Guard for security.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_spanning_tree_protocol.html",
+      "difficulty": "easy",
+      "tags": ["PortFast", "STP", "access-port", "convergence"]
+    },
+    {
+      "id": "d2-fc-022",
+      "objectiveCode": "2.6",
+      "question": "What is BPDU Guard and why is it used with PortFast?",
+      "answer": "BPDU Guard shuts down (err-disables) a PortFast-enabled port if it receives a BPDU, preventing loops from unauthorized switch connections.",
+      "explanation": "BPDU Guard protects the network from loops that could occur if someone connects a switch to a PortFast-enabled port. If a BPDU is received, the port is immediately placed in err-disabled state. Configure per-interface with 'spanning-tree bpduguard enable' or globally with 'spanning-tree portfast bpduguard default'. To recover an err-disabled port: 'shutdown' then 'no shutdown', or configure automatic recovery with 'errdisable recovery cause bpduguard' and 'errdisable recovery interval <seconds>'.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_spanning_tree_protocol.html",
+      "difficulty": "medium",
+      "tags": ["BPDU-Guard", "PortFast", "STP", "security"]
+    },
+    {
+      "id": "d2-fc-023",
+      "objectiveCode": "2.6",
+      "question": "What are the differences between STP (802.1D), RSTP (802.1w), and PVST+?",
+      "answer": "802.1D is the original STP with slow convergence (30-50s). 802.1w (RSTP) converges in seconds. PVST+ runs a separate STP instance per VLAN (Cisco proprietary). Rapid PVST+ combines RSTP speed with per-VLAN instances.",
+      "explanation": "802.1D STP converges slowly due to timer-based transitions. RSTP (802.1w) introduces new port roles (alternate, backup) and uses proposal/agreement mechanism for rapid convergence (typically under 6 seconds). PVST+ (Per-VLAN Spanning Tree Plus) creates a separate 802.1D instance per VLAN, allowing different root bridges and load balancing across VLANs. Rapid PVST+ (the Cisco default) runs a separate RSTP instance per VLAN, providing both fast convergence and per-VLAN optimization.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_spanning_tree_protocol.html",
+      "difficulty": "hard",
+      "tags": ["STP", "RSTP", "PVST+", "convergence", "comparison"]
+    },
+    {
+      "id": "d2-fc-024",
+      "objectiveCode": "2.6",
+      "question": "What command shows the STP root bridge information for a specific VLAN?",
+      "answer": "show spanning-tree vlan <vlan-id>",
+      "explanation": "The 'show spanning-tree vlan <vlan-id>' command displays the root bridge ID (priority + MAC), local bridge ID, root port, root path cost, and the state/role/cost of each port for that VLAN. 'show spanning-tree summary' shows an overview of all VLAN STP instances. 'show spanning-tree root' shows root bridge information for all VLANs. To identify if the local switch is root: look for 'This bridge is the root' in the output.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_spanning_tree_protocol.html",
+      "difficulty": "easy",
+      "tags": ["STP", "show-commands", "IOS-command", "root-bridge"]
+    },
+    {
+      "id": "d2-fc-025",
+      "objectiveCode": "2.7",
+      "question": "What is the difference between autonomous AP and lightweight AP architectures?",
+      "answer": "Autonomous APs operate independently with full configuration stored locally. Lightweight APs require a WLC (Wireless LAN Controller) and use CAPWAP to communicate with it.",
+      "explanation": "Autonomous APs are self-contained: each AP is individually configured and manages its own RF, security, and QoS. This works for small deployments but doesn't scale. Lightweight APs use a split-MAC architecture: real-time functions (beaconing, encryption, ACKs) stay at the AP, while management functions (authentication, roaming, RF management) are handled by the centralized WLC via CAPWAP tunnels (UDP 5246 control, UDP 5247 data). This enables centralized management, seamless roaming, and dynamic RF optimization.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-6/config-guide/b_wl_17_6_cg.html",
+      "difficulty": "medium",
+      "tags": ["wireless", "autonomous-AP", "lightweight-AP", "WLC", "CAPWAP"]
+    },
+    {
+      "id": "d2-fc-026",
+      "objectiveCode": "2.7",
+      "question": "What protocol do lightweight APs use to communicate with a WLC?",
+      "answer": "CAPWAP (Control and Provisioning of Wireless Access Points Protocol), using UDP port 5246 for control and UDP port 5247 for data.",
+      "explanation": "CAPWAP is an IETF standard (RFC 5415) that creates tunnels between lightweight APs and the WLC. The control channel (UDP 5246) is always encrypted with DTLS and carries management traffic (configuration, firmware updates, authentication). The data channel (UDP 5247) carries user traffic and can optionally be encrypted with DTLS. When an AP boots, it discovers the WLC through methods including DHCP option 43, DNS resolution of CISCO-CAPWAP-CONTROLLER, broadcast, or a statically configured WLC IP.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-6/config-guide/b_wl_17_6_cg.html",
+      "difficulty": "medium",
+      "tags": ["CAPWAP", "WLC", "lightweight-AP", "wireless"]
+    },
+    {
+      "id": "d2-fc-027",
+      "objectiveCode": "2.7",
+      "question": "What are the Cisco wireless AP modes: Local, FlexConnect, and Monitor?",
+      "answer": "Local mode: AP tunnels all traffic to WLC. FlexConnect: AP can switch traffic locally at the branch. Monitor mode: AP does not serve clients, only scans for rogues and IDS.",
+      "explanation": "Local mode is the default -- all client data is tunneled to the WLC via CAPWAP, and the WLC handles forwarding. FlexConnect (formerly H-REAP) is for branch offices: the AP can locally switch traffic to the wired network without tunneling to the WLC, and can continue operating if the WLC connection is lost. Monitor mode dedicates the AP to scanning all channels for rogue APs, interference, and intrusion detection. Other modes include Sniffer, Rogue Detector, Bridge, and Flex+Bridge.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-6/config-guide/b_wl_17_6_cg.html",
+      "difficulty": "hard",
+      "tags": ["wireless", "AP-modes", "FlexConnect", "local-mode", "monitor-mode"]
+    },
+    {
+      "id": "d2-fc-028",
+      "objectiveCode": "2.8",
+      "question": "What physical infrastructure components are needed for wireless AP deployment?",
+      "answer": "Ethernet switch with PoE, Cat 5e/6 cabling, ceiling/wall mounts, and optionally a WLC for lightweight APs.",
+      "explanation": "Wireless APs typically require: (1) A PoE-capable switch port (802.3af provides 15.4W, 802.3at provides 25.5W, 802.3bt provides up to 90W for advanced APs). (2) Cat 5e or Cat 6 Ethernet cabling (max 100m). (3) Proper physical mounting hardware for ceiling, wall, or outdoor installation. (4) For lightweight deployments: a WLC (physical appliance, virtual, or cloud-based). Site surveys determine optimal AP placement based on coverage, capacity, and interference. Consider RF factors like building materials, interference sources, and user density.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/technotes/8-6/b_RFDesignGuide.html",
+      "difficulty": "easy",
+      "tags": ["wireless", "PoE", "infrastructure", "AP-deployment"]
+    },
+    {
+      "id": "d2-fc-029",
+      "objectiveCode": "2.8",
+      "question": "What is the difference between 802.3af and 802.3at PoE standards?",
+      "answer": "802.3af (PoE) provides up to 15.4W per port. 802.3at (PoE+) provides up to 25.5W per port.",
+      "explanation": "Power over Ethernet delivers DC power over the same Cat 5e/6 cable used for data. 802.3af (2003) provides 15.4W (12.95W at the device after cable loss), sufficient for basic APs and IP phones. 802.3at (2009) provides 25.5W (21.9W at device), needed for more advanced APs, pan-tilt-zoom cameras, and video phones. 802.3bt (2018) provides up to 60W (Type 3) or 90W (Type 4) for high-power devices. The switch detects whether a device needs power using a signature detection process before delivering power.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/hardware/install/b_c9300_hig/b_c9300_hig_chapter_01.html",
+      "difficulty": "medium",
+      "tags": ["PoE", "802.3af", "802.3at", "power", "wireless"]
+    },
+    {
+      "id": "d2-fc-030",
+      "objectiveCode": "2.9",
+      "question": "What are the key interfaces for managing a Cisco WLC?",
+      "answer": "Management interface (for WLC management traffic), AP-manager interface (for CAPWAP communication with APs), virtual interface (for client web auth and DHCP relay), and dynamic interfaces (mapped to VLANs for client data).",
+      "explanation": "The management interface is the default interface for in-band management (SSH, HTTPS, SNMP) and is used for CAPWAP communication if no separate AP-manager is configured. The virtual interface (typically 1.1.1.1) handles Layer 3 client authentication (web auth redirect) and DHCP relay. Dynamic interfaces map to VLANs and WLANs -- when a client connects to a WLAN, traffic is placed on the corresponding dynamic interface/VLAN. The service port is an optional out-of-band management interface.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-6/config-guide/b_wl_17_6_cg.html",
+      "difficulty": "hard",
+      "tags": ["WLC", "interfaces", "management", "wireless"]
+    },
+    {
+      "id": "d2-fc-031",
+      "objectiveCode": "2.9",
+      "question": "How do you access the WLC GUI for management?",
+      "answer": "Connect via HTTPS to the WLC's management interface IP address using a web browser.",
+      "explanation": "The WLC provides a web-based GUI accessible via HTTPS (e.g., https://192.168.1.100). Initial setup can be done through the console port using a wizard that configures the management interface IP, SSID, and admin credentials. The GUI provides tabs for monitoring, WLANs, controller settings, wireless configuration, security, and management. CLI access is available via SSH or console. The Cisco 9800 series WLC also supports configuration via Cisco DNA Center and programmable APIs (RESTCONF/NETCONF).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-6/config-guide/b_wl_17_6_cg.html",
+      "difficulty": "easy",
+      "tags": ["WLC", "GUI", "management", "HTTPS"]
+    },
+    {
+      "id": "d2-fc-032",
+      "objectiveCode": "2.6",
+      "question": "What are the STP port roles in RSTP (802.1w)?",
+      "answer": "Root port, designated port, alternate port, and backup port.",
+      "explanation": "Root port: Best path to the root bridge (one per non-root switch). Designated port: Best port on each segment toward the root (forwards traffic). Alternate port: An alternate path to the root bridge, ready to become root port if the current root port fails (replaces 802.1D blocking port concept). Backup port: A backup for a designated port on the same switch (rare, only with shared media). Alternate and backup ports are in discarding state but can transition to forwarding almost instantly, enabling RSTP's fast convergence.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_spanning_tree_protocol.html",
+      "difficulty": "hard",
+      "tags": ["RSTP", "STP", "port-roles", "802.1w"]
+    },
+    {
+      "id": "d2-fc-033",
+      "objectiveCode": "2.2",
+      "question": "What is a voice VLAN and how is it configured?",
+      "answer": "A voice VLAN is a separate VLAN assigned to an interface for IP phone traffic, allowing the port to carry both data VLAN (for the PC) and voice VLAN (for the phone). Configure with 'switchport voice vlan <vlan-id>'.",
+      "explanation": "Cisco IP phones have a built-in switch: the PC connects to the phone, and the phone connects to the switch port. The switch port is configured with both an access VLAN (for PC traffic) and a voice VLAN (for phone traffic, tagged with 802.1Q). This separation ensures QoS for voice traffic. Configuration: 'switchport mode access', 'switchport access vlan 10', 'switchport voice vlan 20'. The phone tags its frames with the voice VLAN ID using CDP/LLDP information from the switch.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/vlan/b_176_vlan_9300_cg.html",
+      "difficulty": "medium",
+      "tags": ["voice-VLAN", "IP-phone", "QoS", "switchport"]
+    },
+    {
+      "id": "d2-fc-034",
+      "objectiveCode": "2.5",
+      "question": "What happens if EtherChannel member ports have mismatched configurations?",
+      "answer": "The EtherChannel will not form, or individual ports may be suspended. All member ports must have identical speed, duplex, VLAN, STP, and trunk settings.",
+      "explanation": "EtherChannel requires all member ports to match on: speed, duplex, VLAN mode (access/trunk), access VLAN or trunk allowed VLANs, native VLAN, and STP settings. If settings are mismatched, the ports may remain as individual links instead of bundling, or they will show as suspended (s) in the 'show etherchannel summary' output. Using LACP or PAgP negotiation helps detect mismatches. With 'on' mode (no negotiation), mismatches can cause loops because the switch forces the channel without verification.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_etherchannels.html",
+      "difficulty": "medium",
+      "tags": ["EtherChannel", "misconfiguration", "troubleshooting", "LACP"]
+    },
+    {
+      "id": "d2-fc-035",
+      "objectiveCode": "2.3",
+      "question": "What is DTP mode 'nonegotiate' and when should it be used?",
+      "answer": "The 'switchport nonegotiate' command disables DTP negotiation on a trunk port. It should be used on all manually configured trunk ports for security.",
+      "explanation": "DTP (Dynamic Trunking Protocol) sends negotiation frames even on ports manually set to trunk mode. These DTP frames can be exploited in VLAN hopping attacks. The 'switchport nonegotiate' command stops DTP frames from being sent, preventing an attacker from negotiating a trunk with the switch. Best practice: on access ports use 'switchport mode access' (disables DTP), on trunk ports use 'switchport mode trunk' plus 'switchport nonegotiate'. Always manually configure ports rather than relying on dynamic negotiation.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/vlan/b_176_vlan_9300_cg.html",
+      "difficulty": "medium",
+      "tags": ["DTP", "nonegotiate", "trunk", "security", "hardening"]
+    }
+  ]
+}

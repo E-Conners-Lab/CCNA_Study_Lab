@@ -1,0 +1,26 @@
+{
+  "slug": "ospf-config",
+  "title": "Single-Area OSPF Configuration",
+  "description": "Configure single-area OSPFv2 on a Cisco router, including router ID assignment, network advertisements, interface-level settings, and passive interfaces.",
+  "domain": "IP Connectivity",
+  "domainSlug": "ip-connectivity",
+  "objectiveCode": "3.4",
+  "difficulty": "hard",
+  "estimatedMinutes": 30,
+  "type": "ios-cli",
+  "tags": ["ospf", "dynamic-routing", "area-0", "router-id", "passive-interface"],
+  "instructions": "## Single-Area OSPF Configuration Lab\n\nIn this lab you will configure OSPFv2 in a single-area design on a Cisco router.\n\n### Topology\n\n- **Router1** has the following interfaces:\n  - Gi0/0: 192.168.1.1/24 (point-to-point link to Router2)\n  - Gi0/1: 10.0.0.1/24 (connected to internal LAN)\n  - Gi0/2: 172.16.1.1/24 (connected to a server network - no OSPF neighbors here)\n  - Loopback0: 1.1.1.1/32\n\n### Requirements\n\n1. **OSPF Process**\n   - Enable OSPF with process ID 1.\n   - Manually set the router ID to 1.1.1.1.\n\n2. **Network Advertisements**\n   - Advertise the 192.168.1.0/24 network in Area 0.\n   - Advertise the 10.0.0.0/24 network in Area 0.\n   - Use the `network` command with appropriate wildcard masks.\n\n3. **Interface Settings**\n   - Set Gi0/0 to use the point-to-point OSPF network type (since it is a direct link to one other router).\n\n4. **Passive Interface**\n   - Configure Gi0/2 as a passive interface (it connects to a server network with no OSPF neighbors).\n\n### Steps\n\n1. Enter global configuration mode.\n2. Start the OSPF routing process with `router ospf 1`.\n3. Set the router ID with `router-id 1.1.1.1`.\n4. Add network statements for each network to advertise into Area 0.\n5. Configure the passive interface for Gi0/2.\n6. Exit OSPF configuration and enter Gi0/0 to set the network type.\n7. Verify with `show ip ospf interface brief` and `show ip ospf neighbor`.\n\n### Key Concepts\n\n- **Router ID**: A 32-bit identifier for the OSPF router. It is recommended to set it manually.\n- **Wildcard mask**: The inverse of a subnet mask. For /24 (255.255.255.0), the wildcard is 0.0.0.255.\n- **Point-to-point**: Eliminates the DR/BDR election on a link with only two routers.\n- **Passive interface**: OSPF will advertise the network but will not send or process OSPF hello packets on that interface.",
+  "starterCode": "! Enter your IOS commands below\nenable\nconfigure terminal\n!\n! Step 1: Configure OSPF process and router ID\n!\n!\n! Step 2: Advertise networks into Area 0\n!\n!\n! Step 3: Configure passive interface\n!\n!\n! Step 4: Set Gi0/0 to point-to-point network type\n!\n!\nend",
+  "solutionCode": "enable\nconfigure terminal\n!\nrouter ospf 1\n router-id 1.1.1.1\n network 192.168.1.0 0.0.0.255 area 0\n network 10.0.0.0 0.0.0.255 area 0\n passive-interface GigabitEthernet0/2\n exit\n!\ninterface GigabitEthernet0/0\n ip ospf network point-to-point\n exit\n!\nend",
+  "expectedOutput": "Router1# show ip ospf interface brief\nInterface    PID   Area   IP Address/Mask    Cost  State  Nbrs F/C\nGi0/0        1     0      192.168.1.1/24     1     P2P    1/1\nGi0/1        1     0      10.0.0.1/24        1     DR     0/0\n\nRouter1# show ip protocols\nRouting Protocol is \"ospf 1\"\n  Router ID 1.1.1.1\n  Passive Interface(s):\n    GigabitEthernet0/2\n  Routing for Networks:\n    192.168.1.0 0.0.0.255 area 0\n    10.0.0.0 0.0.0.255 area 0",
+  "hints": [
+    "The OSPF network command uses wildcard masks, not subnet masks. For a /24 network the wildcard mask is 0.0.0.255. The syntax is: network <network-address> <wildcard-mask> area <area-id>.",
+    "The 'ip ospf network point-to-point' command is configured under the interface, not inside the OSPF process configuration. Enter interface Gi0/0 and apply it there.",
+    "The passive-interface command is configured inside the OSPF router configuration mode: 'passive-interface GigabitEthernet0/2'. This stops OSPF hellos on that interface while still advertising the connected network."
+  ],
+  "learningObjectives": [
+    "Configure an OSPFv2 routing process with a manually assigned router ID",
+    "Use network statements with wildcard masks to advertise specific networks into OSPF Area 0",
+    "Configure OSPF interface-level settings including point-to-point network type and passive interfaces"
+  ]
+}

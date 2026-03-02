@@ -1,0 +1,147 @@
+{
+  "examId": "domain-6-quiz",
+  "title": "Domain 6: Automation and Programmability Quiz",
+  "description": "Focused quiz on Automation and Programmability objectives 6.5, 6.6, and 6.7",
+  "totalQuestions": 8,
+  "timeLimit": 16,
+  "questions": [
+    {
+      "id": "dq6-q1",
+      "objectiveCode": "6.5",
+      "type": "multiple_choice",
+      "question": "In a REST API, which HTTP verb is used to create a new resource on the server?",
+      "options": [
+        "A) GET",
+        "B) PUT",
+        "C) POST",
+        "D) PATCH"
+      ],
+      "correctAnswer": "C",
+      "explanation": "In REST APIs, POST is used to create a new resource. The CRUD (Create, Read, Update, Delete) operations map to HTTP verbs as follows: POST = Create, GET = Read, PUT/PATCH = Update, DELETE = Delete. PUT replaces an entire existing resource, while PATCH makes a partial update.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/cloud-systems-management/application-policy-infrastructure-controller/apic/5x/rest-api-config/cisco-apic-rest-api-configuration-guide/m_using_the_rest_api.html",
+      "difficulty": "easy",
+      "tags": ["REST API", "HTTP verbs", "CRUD"]
+    },
+    {
+      "id": "dq6-q2",
+      "objectiveCode": "6.5",
+      "type": "multiple_select",
+      "question": "Which two statements accurately describe characteristics of REST-based APIs? (Choose two.)",
+      "options": [
+        "A) REST APIs use HTTP methods such as GET, POST, PUT, and DELETE to perform operations on resources",
+        "B) REST APIs require that the server maintain session state between client requests",
+        "C) REST APIs commonly use JSON or XML for data encoding in request and response bodies",
+        "D) REST APIs require the use of SOAP envelopes for message formatting",
+        "E) REST APIs can only return data in XML format"
+      ],
+      "correctAnswer": ["A", "C"],
+      "explanation": "REST (Representational State Transfer) APIs use standard HTTP methods to perform CRUD operations on resources identified by URIs. They commonly use JSON or XML for data encoding. REST is stateless by design, meaning the server does NOT maintain session state between requests -- each request must contain all necessary information. SOAP is a separate API architecture, not a requirement of REST. REST APIs can return multiple formats including JSON, XML, and YAML.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/cloud-systems-management/application-policy-infrastructure-controller/apic/5x/rest-api-config/cisco-apic-rest-api-configuration-guide/m_using_the_rest_api.html",
+      "difficulty": "medium",
+      "tags": ["REST API", "HTTP verbs", "data encoding", "stateless"]
+    },
+    {
+      "id": "dq6-q3",
+      "objectiveCode": "6.5",
+      "type": "multiple_choice",
+      "question": "A network engineer sends an HTTP PUT request to a REST API endpoint for a specific device resource. What CRUD operation does this represent?",
+      "options": [
+        "A) Create",
+        "B) Read",
+        "C) Update",
+        "D) Delete"
+      ],
+      "correctAnswer": "C",
+      "explanation": "The HTTP PUT method maps to the Update operation in CRUD. PUT replaces an existing resource entirely with the data provided in the request body. The full CRUD-to-HTTP mapping is: Create = POST, Read = GET, Update = PUT (full replacement) or PATCH (partial update), Delete = DELETE.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/cloud-systems-management/application-policy-infrastructure-controller/apic/5x/rest-api-config/cisco-apic-rest-api-configuration-guide/m_using_the_rest_api.html",
+      "difficulty": "easy",
+      "tags": ["REST API", "HTTP verbs", "CRUD", "PUT"]
+    },
+    {
+      "id": "dq6-q4",
+      "objectiveCode": "6.6",
+      "type": "multiple_choice",
+      "question": "Which configuration management tool is agentless, uses SSH to communicate with managed devices, and defines automation tasks in YAML-based playbooks?",
+      "options": [
+        "A) Puppet",
+        "B) Chef",
+        "C) Ansible",
+        "D) SaltStack"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Ansible is agentless and communicates with managed devices over SSH (or NETCONF for network devices). It uses YAML-based files called playbooks to define automation tasks. Puppet uses an agent-based model with a proprietary declarative language and communicates over HTTPS (port 8140). Chef also uses agents and defines configurations in Ruby-based 'recipes' and 'cookbooks'. SaltStack can use agents (minions) or run agentless.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html",
+      "difficulty": "easy",
+      "tags": ["Ansible", "configuration management", "automation", "agentless"]
+    },
+    {
+      "id": "dq6-q5",
+      "objectiveCode": "6.6",
+      "type": "multiple_select",
+      "question": "Which two statements correctly describe differences between Puppet, Chef, and Ansible? (Choose two.)",
+      "options": [
+        "A) Puppet uses a declarative, model-based approach and its own domain-specific language for manifests",
+        "B) Chef is agentless and uses YAML for its recipe definitions",
+        "C) Ansible requires a dedicated agent to be installed on every managed node",
+        "D) Chef uses Ruby-based DSL for its recipes and requires an agent on managed nodes",
+        "E) Puppet and Ansible both require agents on managed devices"
+      ],
+      "correctAnswer": ["A", "D"],
+      "explanation": "Puppet uses a declarative approach with manifests written in Puppet's own domain-specific language (DSL) and requires an agent on managed nodes. Chef uses an imperative approach with recipes written in a Ruby-based DSL and also requires an agent (chef-client) on managed nodes. Ansible is the agentless tool that uses YAML playbooks and SSH -- it does NOT require agents. Chef is not agentless and does not use YAML.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html",
+      "difficulty": "hard",
+      "tags": ["Puppet", "Chef", "Ansible", "configuration management", "comparison"]
+    },
+    {
+      "id": "dq6-q6",
+      "objectiveCode": "6.6",
+      "type": "multiple_choice",
+      "question": "In Puppet's architecture, what is the role of the component called the 'manifest'?",
+      "options": [
+        "A) It is the agent software installed on managed nodes",
+        "B) It is the file that defines the desired state of system resources using Puppet DSL",
+        "C) It is the encrypted communication channel between master and agents",
+        "D) It is the inventory file listing all managed devices"
+      ],
+      "correctAnswer": "B",
+      "explanation": "In Puppet, a manifest is a file (with a .pp extension) written in Puppet's declarative domain-specific language that defines the desired state of system resources such as packages, services, files, and users. The Puppet agent on managed nodes pulls configurations from the Puppet master and enforces the desired state described in the manifests. The inventory of nodes is managed through Puppet's node classification, not manifests.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html",
+      "difficulty": "medium",
+      "tags": ["Puppet", "configuration management", "manifest"]
+    },
+    {
+      "id": "dq6-q7",
+      "objectiveCode": "6.7",
+      "type": "multiple_choice",
+      "question": "Which of the following is a valid JSON object?",
+      "options": [
+        "A) {name: \"Router1\", ip: \"10.0.0.1\"}",
+        "B) {\"name\": \"Router1\", \"ip\": \"10.0.0.1\"}",
+        "C) <name>Router1</name><ip>10.0.0.1</ip>",
+        "D) name: Router1\\nip: 10.0.0.1"
+      ],
+      "correctAnswer": "B",
+      "explanation": "In JSON (JavaScript Object Notation), keys must be enclosed in double quotes, and string values must also be enclosed in double quotes. Option A is invalid because the keys lack quotes. Option C is XML syntax, not JSON. Option D resembles YAML syntax. A valid JSON object uses curly braces with quoted key-value pairs separated by colons and commas.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/cloud-systems-management/application-policy-infrastructure-controller/apic/5x/rest-api-config/cisco-apic-rest-api-configuration-guide/m_using_the_rest_api.html",
+      "difficulty": "easy",
+      "tags": ["JSON", "data encoding", "syntax"]
+    },
+    {
+      "id": "dq6-q8",
+      "objectiveCode": "6.7",
+      "type": "multiple_choice",
+      "question": "Examine the following JSON data:\n\n{\n  \"device\": {\n    \"hostname\": \"SW1\",\n    \"interfaces\": [\n      {\"name\": \"GigabitEthernet0/1\", \"status\": \"up\"},\n      {\"name\": \"GigabitEthernet0/2\", \"status\": \"down\"}\n    ],\n    \"managed\": true\n  }\n}\n\nWhat data type is the value of the \"interfaces\" key?",
+      "options": [
+        "A) String",
+        "B) Object",
+        "C) Array",
+        "D) Boolean"
+      ],
+      "correctAnswer": "C",
+      "explanation": "In JSON, square brackets [ ] denote an array (an ordered list of values). The \"interfaces\" key contains an array of two objects, each with \"name\" and \"status\" key-value pairs. Curly braces { } denote objects, double-quoted text denotes strings, and true/false are boolean values. The \"managed\" key has a boolean value (true), and \"hostname\" has a string value.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/cloud-systems-management/application-policy-infrastructure-controller/apic/5x/rest-api-config/cisco-apic-rest-api-configuration-guide/m_using_the_rest_api.html",
+      "difficulty": "medium",
+      "tags": ["JSON", "data types", "arrays", "objects"]
+    }
+  ]
+}

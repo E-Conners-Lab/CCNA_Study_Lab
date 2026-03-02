@@ -1,0 +1,693 @@
+{
+  "examId": "sample-exam-2",
+  "title": "CCNA Practice Exam 2",
+  "description": "40-question practice exam covering all 6 domains of the Cisco CCNA 200-301 exam, weighted by exam blueprint percentages.",
+  "totalQuestions": 40,
+  "timeLimit": 60,
+  "questions": [
+    {
+      "id": "se2-q01",
+      "objectiveCode": "1.1",
+      "type": "multiple_choice",
+      "question": "Which device operates at Layer 3 of the OSI model and makes forwarding decisions based on IP addresses?",
+      "options": [
+        "A) Hub",
+        "B) Switch",
+        "C) Router",
+        "D) Access point"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Routers operate at Layer 3 (Network layer) and make forwarding decisions based on destination IP addresses by consulting their routing table. Hubs operate at Layer 1, switches at Layer 2 (using MAC addresses), and access points at Layer 2.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/routers/index.html",
+      "difficulty": "easy",
+      "tags": ["OSI model", "network devices"]
+    },
+    {
+      "id": "se2-q02",
+      "objectiveCode": "1.4",
+      "type": "multiple_choice",
+      "question": "What is the prefix length of an IPv6 link-local address?",
+      "options": [
+        "A) /32",
+        "B) /48",
+        "C) /64",
+        "D) /10"
+      ],
+      "correctAnswer": "D",
+      "explanation": "IPv6 link-local addresses use the prefix FE80::/10, meaning the first 10 bits are fixed (1111 1110 10). These addresses are automatically assigned to every IPv6-enabled interface and are used for communication on the local link only. While the interface ID portion is 64 bits, the defined prefix length for the link-local range is /10.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/xe-3s/ip6b-xe-3s-book/ip6-add-basic-conn-xe.html",
+      "difficulty": "medium",
+      "tags": ["IPv6", "link-local", "addressing"]
+    },
+    {
+      "id": "se2-q03",
+      "objectiveCode": "1.4",
+      "type": "multiple_choice",
+      "question": "Which IPv6 address type is equivalent to an IPv4 broadcast address, sending traffic to all nodes on a local segment?",
+      "options": [
+        "A) Unicast",
+        "B) Anycast",
+        "C) Multicast (FF02::1)",
+        "D) Global unicast"
+      ],
+      "correctAnswer": "C",
+      "explanation": "IPv6 does not have a broadcast address type. Instead, the multicast address FF02::1 is the all-nodes multicast address, which functions similarly to an IPv4 broadcast by reaching all devices on the local link. Anycast delivers to the nearest interface with that address.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/xe-3s/ip6b-xe-3s-book/ip6-add-basic-conn-xe.html",
+      "difficulty": "medium",
+      "tags": ["IPv6", "multicast", "addressing"]
+    },
+    {
+      "id": "se2-q04",
+      "objectiveCode": "1.3",
+      "type": "multiple_choice",
+      "question": "A host has the IP address 192.168.10.75/26. What is the broadcast address for this subnet?",
+      "options": [
+        "A) 192.168.10.63",
+        "B) 192.168.10.127",
+        "C) 192.168.10.79",
+        "D) 192.168.10.255"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A /26 mask (255.255.255.192) creates subnets in increments of 64. The subnets are .0, .64, .128, .192. The address 192.168.10.75 is in the 192.168.10.64 subnet. The broadcast address for this subnet is the last address before the next subnet: 192.168.10.127.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13788-3.html",
+      "difficulty": "medium",
+      "tags": ["subnetting", "IPv4", "broadcast address"]
+    },
+    {
+      "id": "se2-q05",
+      "objectiveCode": "1.6",
+      "type": "multiple_choice",
+      "question": "Which Cisco IOS command is used to verify the neighbor relationships of a CDP-enabled device?",
+      "options": [
+        "A) show cdp",
+        "B) show cdp neighbors",
+        "C) show lldp neighbors",
+        "D) show ip neighbors"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The 'show cdp neighbors' command displays information about directly connected Cisco devices discovered via CDP (Cisco Discovery Protocol), including device ID, local interface, hold time, capability, platform, and port ID. 'show lldp neighbors' uses the vendor-neutral LLDP protocol instead.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/cdp/configuration/xe-16/cdp-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["CDP", "show commands", "IOS commands"]
+    },
+    {
+      "id": "se2-q06",
+      "objectiveCode": "1.1",
+      "type": "multiple_select",
+      "question": "Which two statements correctly describe the difference between a collision domain and a broadcast domain? (Choose two.)",
+      "options": [
+        "A) A router creates separate broadcast domains on each interface",
+        "B) A switch creates separate broadcast domains on each port",
+        "C) Each port on a switch is a separate collision domain",
+        "D) Hubs extend the collision domain across all ports",
+        "E) VLANs have no effect on broadcast domains"
+      ],
+      "correctAnswer": ["A", "C"],
+      "explanation": "Routers separate broadcast domains -- each router interface is in a different broadcast domain. Switches separate collision domains -- each switch port is its own collision domain. Switches do NOT separate broadcast domains by default (VLANs do). Hubs share a single collision domain across all ports.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/lan-switching/ethernet/10561-3.html",
+      "difficulty": "medium",
+      "tags": ["collision domain", "broadcast domain", "network fundamentals"]
+    },
+    {
+      "id": "se2-q07",
+      "objectiveCode": "1.5",
+      "type": "multiple_choice",
+      "question": "Which well-known TCP port number is used by HTTPS?",
+      "options": [
+        "A) 80",
+        "B) 443",
+        "C) 22",
+        "D) 53"
+      ],
+      "correctAnswer": "B",
+      "explanation": "HTTPS uses TCP port 443. HTTP uses port 80, SSH uses port 22, and DNS uses port 53 (both TCP and UDP).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/access-lists/13608-21.html",
+      "difficulty": "easy",
+      "tags": ["TCP", "port numbers", "HTTPS"]
+    },
+    {
+      "id": "se2-q08",
+      "objectiveCode": "1.1",
+      "type": "drag_drop",
+      "question": "Match each network topology to its correct description.",
+      "options": ["Star", "Mesh", "Ring", "Bus"],
+      "correctAnswer": {
+        "Star": "All devices connect to a central hub or switch",
+        "Mesh": "Every device has a dedicated point-to-point link to every other device",
+        "Ring": "Each device connects to exactly two other devices forming a circular path",
+        "Bus": "All devices share a single communication medium or backbone cable"
+      },
+      "explanation": "Star topologies connect all devices to a central point. Full mesh provides redundant links between every pair of devices. Ring connects devices in a closed loop. Bus uses a shared backbone that all devices tap into.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/enterprise-networks/what-is-a-lan-local-area-network.html",
+      "difficulty": "easy",
+      "tags": ["network topologies", "network fundamentals"]
+    },
+    {
+      "id": "se2-q09",
+      "objectiveCode": "2.1",
+      "type": "multiple_choice",
+      "question": "A network administrator creates VLAN 100 on Switch A but forgets to create it on Switch B. What happens to frames tagged with VLAN 100 that traverse the trunk link to Switch B?",
+      "options": [
+        "A) Switch B automatically creates VLAN 100",
+        "B) Switch B drops the frames because VLAN 100 does not exist in its database",
+        "C) Switch B forwards the frames on all ports",
+        "D) The trunk link goes down"
+      ],
+      "correctAnswer": "B",
+      "explanation": "When a switch receives frames tagged with a VLAN that does not exist in its local VLAN database, it drops those frames. VTP in server/client mode could propagate VLAN creation, but in transparent mode or without VTP, VLANs must be manually created on each switch.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/vlan/b_1612_vlan_9300_cg.html",
+      "difficulty": "medium",
+      "tags": ["VLANs", "trunking", "troubleshooting"]
+    },
+    {
+      "id": "se2-q10",
+      "objectiveCode": "2.1",
+      "type": "multiple_choice",
+      "question": "Which command verifies the trunking status and allowed VLANs on a switch interface?",
+      "options": [
+        "A) show vlan brief",
+        "B) show interfaces trunk",
+        "C) show interfaces status",
+        "D) show spanning-tree"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The 'show interfaces trunk' command displays trunk port status, encapsulation type, native VLAN, and the list of allowed and active VLANs on each trunk. 'show vlan brief' shows VLAN-to-port assignments for access ports, not trunk details.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/vlan/b_1612_vlan_9300_cg/configuring_vlan_trunks.html",
+      "difficulty": "easy",
+      "tags": ["trunking", "show commands", "VLANs"]
+    },
+    {
+      "id": "se2-q11",
+      "objectiveCode": "2.3",
+      "type": "multiple_choice",
+      "question": "In a Spanning Tree Protocol (STP) topology, which bridge ID component is used as the tiebreaker when bridge priorities are equal?",
+      "options": [
+        "A) Port number",
+        "B) MAC address",
+        "C) IP address",
+        "D) VLAN ID"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The STP bridge ID consists of the bridge priority and the MAC address. When priorities are equal, the switch with the lowest MAC address becomes the root bridge. Port numbers are used as tiebreakers for port roles, not root bridge election.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/lyr2/b_1612_lyr2_9300_cg/configuring_spanning_tree_protocol.html",
+      "difficulty": "medium",
+      "tags": ["STP", "spanning tree", "root bridge"]
+    },
+    {
+      "id": "se2-q12",
+      "objectiveCode": "2.3",
+      "type": "multiple_choice",
+      "question": "A switch has four ports connected to other switches. STP has determined the root bridge is elsewhere. Which port state will the designated port be in after convergence?",
+      "options": [
+        "A) Blocking",
+        "B) Listening",
+        "C) Learning",
+        "D) Forwarding"
+      ],
+      "correctAnswer": "D",
+      "explanation": "After STP convergence, designated ports are in the Forwarding state. Each network segment has one designated port that forwards traffic. Root ports (the best path to root bridge) also forward. Non-designated ports are placed in Blocking state to prevent loops.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/lyr2/b_1612_lyr2_9300_cg/configuring_spanning_tree_protocol.html",
+      "difficulty": "medium",
+      "tags": ["STP", "port states", "spanning tree"]
+    },
+    {
+      "id": "se2-q13",
+      "objectiveCode": "2.2",
+      "type": "multiple_choice",
+      "question": "What is the purpose of a router-on-a-stick configuration?",
+      "options": [
+        "A) To connect two routers using a crossover cable",
+        "B) To enable inter-VLAN routing using a single router interface with subinterfaces",
+        "C) To configure redundant default gateways for hosts",
+        "D) To load-balance traffic across multiple router interfaces"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Router-on-a-stick is a method of inter-VLAN routing where a single physical router interface is configured with multiple subinterfaces, each assigned to a different VLAN. The router interface connects to the switch via a trunk link, and the router routes traffic between VLANs.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/lan-switching/inter-vlan-routing/14976-50.html",
+      "difficulty": "medium",
+      "tags": ["inter-VLAN routing", "router-on-a-stick", "subinterfaces"]
+    },
+    {
+      "id": "se2-q14",
+      "objectiveCode": "2.4",
+      "type": "multiple_choice",
+      "question": "In a Cisco wireless architecture using a WLC, what is the CAPWAP tunnel used for?",
+      "options": [
+        "A) Encrypting management traffic between the router and firewall",
+        "B) Encapsulating data and control traffic between lightweight APs and the WLC",
+        "C) Creating a VPN tunnel for remote users",
+        "D) Connecting two WLCs for high availability"
+      ],
+      "correctAnswer": "B",
+      "explanation": "CAPWAP (Control And Provisioning of Wireless Access Points) creates a tunnel between lightweight APs and the Wireless LAN Controller. It carries both control messages (AP management, configuration) and data traffic (client frames) between the AP and WLC.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/config-guide/b_wl_16_10_cg.html",
+      "difficulty": "medium",
+      "tags": ["wireless", "CAPWAP", "WLC"]
+    },
+    {
+      "id": "se2-q15",
+      "objectiveCode": "2.5",
+      "type": "multiple_select",
+      "question": "Which two protocols can be used to negotiate EtherChannel link aggregation? (Choose two.)",
+      "options": [
+        "A) STP",
+        "B) LACP",
+        "C) PAgP",
+        "D) CDP",
+        "E) DTP"
+      ],
+      "correctAnswer": ["B", "C"],
+      "explanation": "LACP (Link Aggregation Control Protocol, IEEE 802.3ad) and PAgP (Port Aggregation Protocol, Cisco proprietary) are the two protocols used to negotiate EtherChannel formation. STP prevents loops, CDP discovers neighbors, and DTP negotiates trunk links.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/lyr2/b_1612_lyr2_9300_cg/configuring_etherchannels.html",
+      "difficulty": "easy",
+      "tags": ["EtherChannel", "LACP", "PAgP"]
+    },
+    {
+      "id": "se2-q16",
+      "objectiveCode": "2.6",
+      "type": "drag_drop",
+      "question": "Match each wireless standard to its maximum theoretical data rate.",
+      "options": ["802.11a", "802.11n (Wi-Fi 4)", "802.11ac (Wi-Fi 5)", "802.11ax (Wi-Fi 6)"],
+      "correctAnswer": {
+        "802.11a": "54 Mbps",
+        "802.11n (Wi-Fi 4)": "600 Mbps",
+        "802.11ac (Wi-Fi 5)": "6.93 Gbps",
+        "802.11ax (Wi-Fi 6)": "9.6 Gbps"
+      },
+      "explanation": "802.11a supports up to 54 Mbps in the 5 GHz band. 802.11n (Wi-Fi 4) supports up to 600 Mbps with MIMO and channel bonding. 802.11ac (Wi-Fi 5) supports up to 6.93 Gbps with MU-MIMO and 160 MHz channels. 802.11ax (Wi-Fi 6) supports up to 9.6 Gbps with OFDMA and improved efficiency.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/wireless/what-is-wifi-6.html",
+      "difficulty": "medium",
+      "tags": ["wireless", "Wi-Fi standards", "802.11"]
+    },
+    {
+      "id": "se2-q17",
+      "objectiveCode": "3.1",
+      "type": "multiple_choice",
+      "question": "Which command correctly configures an IPv6 address on a router interface?",
+      "options": [
+        "A) ip address 2001:DB8::1/64",
+        "B) ipv6 address 2001:DB8::1/64",
+        "C) ipv6 address 2001:DB8::1 255.255.255.0",
+        "D) ip address 2001:DB8::1 64"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The correct command is 'ipv6 address 2001:DB8::1/64'. IPv6 addresses use the 'ipv6 address' command (not 'ip address') and specify the prefix length with a forward slash notation, not a subnet mask.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/xe-3s/ip6b-xe-3s-book/ip6-add-basic-conn-xe.html",
+      "difficulty": "easy",
+      "tags": ["IPv6", "configuration", "IOS commands"]
+    },
+    {
+      "id": "se2-q18",
+      "objectiveCode": "3.2",
+      "type": "multiple_choice",
+      "question": "Examine the following routing table entry:\n\nO IA 10.20.0.0/16 [110/30] via 192.168.1.1, 00:05:23, GigabitEthernet0/1\n\nWhat does 'O IA' indicate?",
+      "options": [
+        "A) An OSPF intra-area route",
+        "B) An OSPF inter-area route learned from another OSPF area",
+        "C) An OSPF external type 1 route",
+        "D) An OSPF route that is inactive"
+      ],
+      "correctAnswer": "B",
+      "explanation": "'O IA' in the routing table indicates an OSPF inter-area route, which means the route was learned from a different OSPF area via an Area Border Router (ABR). 'O' alone indicates an intra-area route. 'O E1' or 'O E2' indicate external routes. The [110/30] shows AD of 110 and cost of 30.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html",
+      "difficulty": "medium",
+      "tags": ["OSPF", "routing table", "inter-area"]
+    },
+    {
+      "id": "se2-q19",
+      "objectiveCode": "3.2",
+      "type": "multiple_choice",
+      "question": "A router has the following entries in its routing table:\n\nS 10.0.0.0/8 via 192.168.1.1\nD 10.10.0.0/16 [90/2172416] via 192.168.2.1\nO 10.10.10.0/24 [110/20] via 192.168.3.1\n\nA packet arrives destined for 10.10.10.50. Which route will be used?",
+      "options": [
+        "A) S 10.0.0.0/8 via 192.168.1.1",
+        "B) D 10.10.0.0/16 via 192.168.2.1",
+        "C) O 10.10.10.0/24 via 192.168.3.1",
+        "D) The packet will be dropped"
+      ],
+      "correctAnswer": "C",
+      "explanation": "The router uses the longest prefix match. 10.10.10.50 matches all three routes: /8, /16, and /24. The /24 route (10.10.10.0/24) is the most specific match, so the router forwards the packet via 192.168.3.1 regardless of administrative distance differences.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/ip-routing/16448-static.html",
+      "difficulty": "medium",
+      "tags": ["routing", "longest prefix match", "routing table"]
+    },
+    {
+      "id": "se2-q20",
+      "objectiveCode": "3.3",
+      "type": "multiple_choice",
+      "question": "Which OSPF network command advertises only the interface with IP address 172.16.1.1 into OSPF area 0?",
+      "options": [
+        "A) network 172.16.0.0 0.0.255.255 area 0",
+        "B) network 172.16.1.1 0.0.0.0 area 0",
+        "C) network 172.16.1.0 255.255.255.0 area 0",
+        "D) network 172.16.1.1 255.255.255.255 area 0"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The 'network 172.16.1.1 0.0.0.0 area 0' command uses a wildcard mask of 0.0.0.0, which matches only the exact IP address 172.16.1.1. This ensures only the interface with that specific IP is added to OSPF area 0. Option A is too broad, and options C and D use subnet masks instead of wildcard masks.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13689-17.html",
+      "difficulty": "medium",
+      "tags": ["OSPF", "wildcard mask", "network command"]
+    },
+    {
+      "id": "se2-q21",
+      "objectiveCode": "3.3",
+      "type": "multiple_choice",
+      "question": "What is the administrative distance of an OSPF-learned route?",
+      "options": [
+        "A) 90",
+        "B) 100",
+        "C) 110",
+        "D) 120"
+      ],
+      "correctAnswer": "C",
+      "explanation": "OSPF has a default administrative distance of 110. EIGRP internal is 90, RIP is 120, and IS-IS is 115. A lower administrative distance indicates a more trusted routing source.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/border-gateway-protocol-bgp/15986-admin-distance.html",
+      "difficulty": "easy",
+      "tags": ["OSPF", "administrative distance"]
+    },
+    {
+      "id": "se2-q22",
+      "objectiveCode": "3.4",
+      "type": "multiple_choice",
+      "question": "A floating static route is configured with an administrative distance of 200. When will this route appear in the routing table?",
+      "options": [
+        "A) Always, because static routes are preferred",
+        "B) Only when no other route to the same destination exists with a lower AD",
+        "C) Only when the router is rebooted",
+        "D) Only during business hours when traffic is high"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A floating static route is a backup route configured with a higher administrative distance than the primary route. It appears in the routing table only when the primary route (with a lower AD) is unavailable. With an AD of 200, it would be less preferred than OSPF (110), EIGRP (90), or RIP (120).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/ip-routing/16448-static.html",
+      "difficulty": "medium",
+      "tags": ["static routing", "floating static", "administrative distance"]
+    },
+    {
+      "id": "se2-q23",
+      "objectiveCode": "3.5",
+      "type": "multiple_select",
+      "question": "A router learns a route to 10.1.0.0/16 from both EIGRP (AD 90) and OSPF (AD 110). Which two statements are true? (Choose two.)",
+      "options": [
+        "A) The EIGRP route is installed in the routing table",
+        "B) The OSPF route is installed in the routing table",
+        "C) Both routes are installed and load-balanced",
+        "D) The EIGRP route is preferred because it has a lower administrative distance",
+        "E) The OSPF route is kept as a backup in the routing table"
+      ],
+      "correctAnswer": ["A", "D"],
+      "explanation": "When a router learns the same prefix from two different routing protocols, it selects the route with the lower administrative distance. EIGRP (AD 90) is preferred over OSPF (AD 110). Only the EIGRP route is installed in the routing table; the OSPF route is not kept as a backup in the RIB.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/border-gateway-protocol-bgp/15986-admin-distance.html",
+      "difficulty": "medium",
+      "tags": ["administrative distance", "EIGRP", "OSPF"]
+    },
+    {
+      "id": "se2-q24",
+      "objectiveCode": "3.3",
+      "type": "multiple_choice",
+      "question": "Which OSPF router type connects an OSPF domain to external routing domains and redistributes external routes into OSPF?",
+      "options": [
+        "A) Internal router",
+        "B) Backbone router",
+        "C) Area Border Router (ABR)",
+        "D) Autonomous System Boundary Router (ASBR)"
+      ],
+      "correctAnswer": "D",
+      "explanation": "An ASBR (Autonomous System Boundary Router) sits at the boundary of the OSPF domain and redistributes routes from external sources (such as static routes, BGP, or EIGRP) into OSPF. An ABR connects different OSPF areas. Internal routers have all interfaces in one area. Backbone routers have at least one interface in Area 0.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html",
+      "difficulty": "medium",
+      "tags": ["OSPF", "ASBR", "router types"]
+    },
+    {
+      "id": "se2-q25",
+      "objectiveCode": "3.1",
+      "type": "multiple_choice",
+      "question": "What is the purpose of the 'ip routing' command on a Layer 3 switch?",
+      "options": [
+        "A) To enable CDP on all interfaces",
+        "B) To enable the switch to route packets between VLANs using SVIs",
+        "C) To configure a default gateway on the switch",
+        "D) To enable DHCP relay on the switch"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The 'ip routing' command enables Layer 3 routing functionality on a multilayer switch, allowing it to route traffic between VLANs using Switch Virtual Interfaces (SVIs). Without this command, the switch operates only at Layer 2 and requires an external router for inter-VLAN routing.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/lan-switching/inter-vlan-routing/14976-50.html",
+      "difficulty": "medium",
+      "tags": ["Layer 3 switch", "inter-VLAN routing", "SVI"]
+    },
+    {
+      "id": "se2-q26",
+      "objectiveCode": "3.4",
+      "type": "multiple_choice",
+      "question": "Which command configures a static route to network 10.20.30.0/24 via the exit interface Serial0/0/0?",
+      "options": [
+        "A) ip route 10.20.30.0 255.255.255.0 Serial0/0/0",
+        "B) ip route 10.20.30.0 0.0.0.255 Serial0/0/0",
+        "C) ip static-route 10.20.30.0/24 Serial0/0/0",
+        "D) route add 10.20.30.0 mask 255.255.255.0 Serial0/0/0"
+      ],
+      "correctAnswer": "A",
+      "explanation": "The 'ip route' command uses the destination network, subnet mask (not wildcard mask), and either a next-hop IP or exit interface. 'ip route 10.20.30.0 255.255.255.0 Serial0/0/0' correctly points traffic for the 10.20.30.0/24 network out Serial0/0/0.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/ip-routing/16448-static.html",
+      "difficulty": "easy",
+      "tags": ["static routing", "IOS commands"]
+    },
+    {
+      "id": "se2-q27",
+      "objectiveCode": "4.3",
+      "type": "multiple_choice",
+      "question": "Which NAT term describes the IP address of an internal host as it appears to the outside network after translation?",
+      "options": [
+        "A) Inside local",
+        "B) Inside global",
+        "C) Outside local",
+        "D) Outside global"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Inside global is the public IP address assigned to an internal host as seen from the outside network. Inside local is the private IP of the internal host. Outside global is the actual IP of the external host. Outside local is the IP of the external host as it appears from inside.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_nat/configuration/xe-16/nat-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["NAT", "inside global", "IP services"]
+    },
+    {
+      "id": "se2-q28",
+      "objectiveCode": "4.3",
+      "type": "multiple_choice",
+      "question": "An administrator configures the following commands:\n\nip nat inside source static 192.168.1.100 203.0.113.50\ninterface GigabitEthernet0/0\n ip nat inside\ninterface GigabitEthernet0/1\n ip nat outside\n\nWhat type of NAT is configured?",
+      "options": [
+        "A) Dynamic NAT with a pool",
+        "B) PAT (NAT overload)",
+        "C) Static NAT",
+        "D) NAT64"
+      ],
+      "correctAnswer": "C",
+      "explanation": "The 'ip nat inside source static' command creates a one-to-one permanent mapping between an inside local address (192.168.1.100) and an inside global address (203.0.113.50). This is static NAT. Dynamic NAT uses a pool of addresses, and PAT uses the 'overload' keyword.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_nat/configuration/xe-16/nat-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["NAT", "static NAT", "configuration"]
+    },
+    {
+      "id": "se2-q29",
+      "objectiveCode": "4.1",
+      "type": "multiple_choice",
+      "question": "A DHCP client sends a DHCPDISCOVER message. What is the destination IP address of this message?",
+      "options": [
+        "A) 192.168.1.1",
+        "B) 127.0.0.1",
+        "C) 255.255.255.255",
+        "D) 224.0.0.1"
+      ],
+      "correctAnswer": "C",
+      "explanation": "DHCPDISCOVER is a broadcast message sent to destination 255.255.255.255 because the client does not yet have an IP address and does not know the DHCP server's address. The source IP is 0.0.0.0. The message is broadcast to reach any available DHCP server on the local subnet.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/xe-16/dhcp-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["DHCP", "DORA process"]
+    },
+    {
+      "id": "se2-q30",
+      "objectiveCode": "4.5",
+      "type": "drag_drop",
+      "question": "Match each IP service to its primary function.",
+      "options": ["DHCP", "DNS", "NTP", "Syslog"],
+      "correctAnswer": {
+        "DHCP": "Automatically assigns IP addresses and network parameters to clients",
+        "DNS": "Resolves domain names to IP addresses",
+        "NTP": "Synchronizes clocks across network devices",
+        "Syslog": "Collects and stores log messages from network devices"
+      },
+      "explanation": "DHCP automates IP addressing. DNS translates human-readable names to IP addresses. NTP ensures all devices have consistent time. Syslog provides centralized logging for monitoring and troubleshooting.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/fundamentals/configuration/guide/cf-fundamentals.html",
+      "difficulty": "easy",
+      "tags": ["IP services", "DHCP", "DNS", "NTP", "Syslog"]
+    },
+    {
+      "id": "se2-q31",
+      "objectiveCode": "5.1",
+      "type": "multiple_choice",
+      "question": "Which security principle ensures that only authorized users can access specific network resources?",
+      "options": [
+        "A) Integrity",
+        "B) Availability",
+        "C) Confidentiality",
+        "D) Scalability"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Confidentiality ensures that data and resources are accessible only to authorized users. This is achieved through encryption, access controls, and authentication mechanisms. Integrity ensures data is unaltered. Availability ensures systems are accessible when needed. Scalability is not a security principle.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/security/what-is-network-security.html",
+      "difficulty": "easy",
+      "tags": ["CIA triad", "confidentiality"]
+    },
+    {
+      "id": "se2-q32",
+      "objectiveCode": "5.4",
+      "type": "multiple_choice",
+      "question": "Which extended ACL entry permits HTTP traffic from any source to the server at 10.1.1.100?",
+      "options": [
+        "A) permit tcp any host 10.1.1.100 eq 80",
+        "B) permit ip any host 10.1.1.100 eq 80",
+        "C) permit tcp any eq 80 host 10.1.1.100",
+        "D) permit udp any host 10.1.1.100 eq 80"
+      ],
+      "correctAnswer": "A",
+      "explanation": "The correct syntax is 'permit tcp any host 10.1.1.100 eq 80'. HTTP uses TCP port 80. The 'eq 80' must be placed after the destination address to match the destination port. Option B uses 'ip' which does not support port matching. Option C places the port after the source. Option D uses UDP instead of TCP.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/security/ios-firewall/23602-confaccesslists.html",
+      "difficulty": "medium",
+      "tags": ["ACL", "extended ACL", "HTTP"]
+    },
+    {
+      "id": "se2-q33",
+      "objectiveCode": "5.4",
+      "type": "multiple_choice",
+      "question": "An administrator needs to block all Telnet access to the 10.10.0.0/16 network from the 192.168.1.0/24 network. Where should this extended ACL be applied?",
+      "options": [
+        "A) On the interface closest to the source, inbound",
+        "B) On the interface closest to the destination, outbound",
+        "C) On all interfaces in both directions",
+        "D) On the loopback interface"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Best practice for extended ACLs is to place them as close to the source as possible. This prevents unwanted traffic from consuming bandwidth across the network. The ACL should be applied inbound on the interface connected to or closest to the 192.168.1.0/24 network.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/security/ios-firewall/23602-confaccesslists.html",
+      "difficulty": "medium",
+      "tags": ["ACL", "ACL placement", "extended ACL"]
+    },
+    {
+      "id": "se2-q34",
+      "objectiveCode": "5.3",
+      "type": "multiple_choice",
+      "question": "Which command encrypts all plaintext passwords currently stored in the running configuration?",
+      "options": [
+        "A) enable secret",
+        "B) service password-encryption",
+        "C) username admin secret cisco",
+        "D) security passwords min-length 8"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The 'service password-encryption' global configuration command applies Type 7 encryption to all current and future plaintext passwords in the configuration. While this is a weak encryption (easily reversible), it prevents casual viewing of passwords. 'enable secret' uses MD5 hashing but only for the enable password.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/security/s1/sec-s1-cr-book.html",
+      "difficulty": "easy",
+      "tags": ["password encryption", "device security", "IOS commands"]
+    },
+    {
+      "id": "se2-q35",
+      "objectiveCode": "5.5",
+      "type": "multiple_choice",
+      "question": "In a Cisco AAA framework, which component is responsible for determining what an authenticated user is allowed to do?",
+      "options": [
+        "A) Authentication",
+        "B) Authorization",
+        "C) Accounting",
+        "D) Auditing"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Authorization determines what actions, services, or resources an authenticated user is permitted to access. Authentication verifies identity. Accounting tracks what users do (logging). Auditing is not one of the three A's in AAA.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_usr_aaa/configuration/xe-16/sec-usr-aaa-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["AAA", "authorization", "security"]
+    },
+    {
+      "id": "se2-q36",
+      "objectiveCode": "5.7",
+      "type": "multiple_select",
+      "question": "Which two Layer 2 security features help prevent DHCP-based attacks on a Cisco switch? (Choose two.)",
+      "options": [
+        "A) Port security",
+        "B) DHCP snooping",
+        "C) Dynamic ARP Inspection (DAI)",
+        "D) IP Source Guard",
+        "E) BPDU Guard"
+      ],
+      "correctAnswer": ["B", "D"],
+      "explanation": "DHCP snooping validates DHCP messages by distinguishing between trusted and untrusted ports, preventing rogue DHCP servers. IP Source Guard works with DHCP snooping to prevent IP spoofing by validating source IP addresses against the DHCP snooping binding table. Port security limits MAC addresses. DAI prevents ARP spoofing. BPDU Guard protects STP topology.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/configuring_dhcp_snooping.html",
+      "difficulty": "medium",
+      "tags": ["DHCP snooping", "IP Source Guard", "Layer 2 security"]
+    },
+    {
+      "id": "se2-q37",
+      "objectiveCode": "6.1",
+      "type": "multiple_choice",
+      "question": "In the Cisco SD-Access architecture, which component serves as the SDN controller?",
+      "options": [
+        "A) Cisco ISE",
+        "B) Cisco DNA Center",
+        "C) Cisco vManage",
+        "D) Cisco ACI"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Cisco DNA Center serves as the SDN controller for Cisco SD-Access, providing centralized management, automation, and assurance for the campus network fabric. Cisco ISE provides identity services. Cisco vManage is the controller for SD-WAN. Cisco ACI is for data center networking.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/enterprise-networks/software-defined-access/index.html",
+      "difficulty": "medium",
+      "tags": ["SD-Access", "DNA Center", "SDN"]
+    },
+    {
+      "id": "se2-q38",
+      "objectiveCode": "6.2",
+      "type": "multiple_choice",
+      "question": "A REST API returns HTTP status code 201. What does this indicate?",
+      "options": [
+        "A) The request was successful and the resource was found",
+        "B) The request was successful and a new resource was created",
+        "C) The request was unauthorized",
+        "D) The requested resource was not found"
+      ],
+      "correctAnswer": "B",
+      "explanation": "HTTP 201 (Created) indicates that the request was successful and a new resource was created as a result. HTTP 200 means general success. HTTP 401 means unauthorized. HTTP 404 means not found. Status codes in the 2xx range indicate success.",
+      "sourceUrl": "https://developer.cisco.com/docs/dna-center/",
+      "difficulty": "easy",
+      "tags": ["REST API", "HTTP status codes", "automation"]
+    },
+    {
+      "id": "se2-q39",
+      "objectiveCode": "6.3",
+      "type": "multiple_choice",
+      "question": "Which data serialization format uses key-value pairs with indentation (no brackets or commas) and is commonly used with Ansible?",
+      "options": [
+        "A) JSON",
+        "B) XML",
+        "C) YAML",
+        "D) CSV"
+      ],
+      "correctAnswer": "C",
+      "explanation": "YAML (YAML Ain't Markup Language) uses indentation and key-value pairs to represent data without brackets or commas, making it human-readable. It is the standard format for Ansible playbooks. JSON uses curly braces and brackets. XML uses angle-bracket tags. CSV uses comma-separated values.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/automation/network-automation.html",
+      "difficulty": "easy",
+      "tags": ["YAML", "data formats", "Ansible"]
+    },
+    {
+      "id": "se2-q40",
+      "objectiveCode": "6.4",
+      "type": "drag_drop",
+      "question": "Match each REST API HTTP method to its CRUD operation.",
+      "options": ["GET", "POST", "PUT", "DELETE"],
+      "correctAnswer": {
+        "GET": "Read - Retrieve a resource or collection of resources",
+        "POST": "Create - Create a new resource",
+        "PUT": "Update - Replace an existing resource with new data",
+        "DELETE": "Delete - Remove an existing resource"
+      },
+      "explanation": "REST APIs use standard HTTP methods that map to CRUD operations: GET reads data, POST creates new resources, PUT updates (replaces) existing resources, and DELETE removes resources. PATCH is another method that partially updates a resource.",
+      "sourceUrl": "https://developer.cisco.com/docs/dna-center/",
+      "difficulty": "easy",
+      "tags": ["REST API", "CRUD", "HTTP methods"]
+    }
+  ]
+}

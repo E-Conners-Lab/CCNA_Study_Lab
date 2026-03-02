@@ -1,0 +1,181 @@
+{
+  "examId": "domain-5-quiz",
+  "title": "Domain 5: Security Fundamentals Quiz",
+  "description": "Focused quiz on Security Fundamentals objectives 5.6, 5.8, 5.9, and 5.10",
+  "totalQuestions": 10,
+  "timeLimit": 20,
+  "questions": [
+    {
+      "id": "dq5-q1",
+      "objectiveCode": "5.6",
+      "type": "multiple_choice",
+      "question": "Which type of ACL filters traffic based only on the source IP address?",
+      "options": [
+        "A) Extended ACL",
+        "B) Standard ACL",
+        "C) Reflexive ACL",
+        "D) Named ACL"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Standard ACLs (numbered 1-99 and 1300-1999) filter traffic based solely on the source IP address. Extended ACLs can filter on source and destination addresses, protocols, and port numbers. Named ACLs and reflexive ACLs are types that can be either standard or extended.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/security/ios-firewall/23602-confaccesslists.html",
+      "difficulty": "easy",
+      "tags": ["ACL", "standard ACL", "access control"]
+    },
+    {
+      "id": "dq5-q2",
+      "objectiveCode": "5.6",
+      "type": "multiple_choice",
+      "question": "A network administrator needs to block Telnet traffic from the 10.0.0.0/8 network to a server at 192.168.1.100 while allowing all other traffic. Which ACL entry accomplishes this?",
+      "options": [
+        "A) access-list 10 deny tcp 10.0.0.0 0.255.255.255 host 192.168.1.100 eq 23",
+        "B) access-list 110 deny tcp 10.0.0.0 0.255.255.255 host 192.168.1.100 eq 23",
+        "C) access-list 110 deny tcp host 192.168.1.100 10.0.0.0 0.255.255.255 eq 23",
+        "D) access-list 10 deny tcp host 192.168.1.100 10.0.0.0 0.255.255.255 eq 23"
+      ],
+      "correctAnswer": "B",
+      "explanation": "An extended ACL (numbered 100-199) is required because the rule must match on both source and destination addresses plus a port number. Standard ACLs (1-99) cannot match destination addresses or protocols. Extended ACL syntax is: access-list {number} {permit|deny} {protocol} {source} {destination} eq {port}. Telnet uses TCP port 23.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/security/ios-firewall/23602-confaccesslists.html",
+      "difficulty": "medium",
+      "tags": ["ACL", "extended ACL", "Telnet", "access control"]
+    },
+    {
+      "id": "dq5-q3",
+      "objectiveCode": "5.6",
+      "type": "multiple_select",
+      "question": "Which two statements about ACL placement are correct? (Choose two.)",
+      "options": [
+        "A) Standard ACLs should be placed as close to the destination as possible",
+        "B) Standard ACLs should be placed as close to the source as possible",
+        "C) Extended ACLs should be placed as close to the source as possible",
+        "D) Extended ACLs should be placed as close to the destination as possible",
+        "E) Both standard and extended ACLs should always be placed on the same interface"
+      ],
+      "correctAnswer": ["A", "C"],
+      "explanation": "Standard ACLs filter only on source address, so placing them near the source could inadvertently block traffic to other legitimate destinations. Therefore, standard ACLs are placed close to the destination. Extended ACLs can filter on source, destination, protocol, and port, so they should be placed close to the source to prevent unwanted traffic from traversing the network.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/security/ios-firewall/23602-confaccesslists.html",
+      "difficulty": "medium",
+      "tags": ["ACL", "ACL placement", "best practices"]
+    },
+    {
+      "id": "dq5-q4",
+      "objectiveCode": "5.8",
+      "type": "multiple_choice",
+      "question": "In the AAA framework, which component is responsible for determining what resources a user is allowed to access after successful login?",
+      "options": [
+        "A) Authentication",
+        "B) Authorization",
+        "C) Accounting",
+        "D) Auditing"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Authorization determines what an authenticated user is permitted to do, such as which commands they can execute or which network resources they can access. Authentication verifies the user's identity (who they are). Accounting tracks and records what the user does (logging). Auditing is not a component of the AAA framework.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/security-vpn/remote-authentication-dial-user-service-radius/13838-10.html",
+      "difficulty": "easy",
+      "tags": ["AAA", "authorization", "security"]
+    },
+    {
+      "id": "dq5-q5",
+      "objectiveCode": "5.8",
+      "type": "multiple_choice",
+      "question": "Which protocol is an open standard for AAA that uses UDP and encrypts only the password in the access-request packet?",
+      "options": [
+        "A) TACACS+",
+        "B) RADIUS",
+        "C) Kerberos",
+        "D) LDAP"
+      ],
+      "correctAnswer": "B",
+      "explanation": "RADIUS (Remote Authentication Dial-In User Service) is an open standard AAA protocol that uses UDP (ports 1812/1813 or legacy 1645/1646) and encrypts only the password portion of the access-request packet. TACACS+ is a Cisco-proprietary protocol that uses TCP port 49 and encrypts the entire packet body. Kerberos is a ticket-based authentication protocol, and LDAP is a directory access protocol.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/security-vpn/remote-authentication-dial-user-service-radius/13838-10.html",
+      "difficulty": "medium",
+      "tags": ["AAA", "RADIUS", "TACACS+", "security protocols"]
+    },
+    {
+      "id": "dq5-q6",
+      "objectiveCode": "5.8",
+      "type": "multiple_select",
+      "question": "Which two characteristics differentiate TACACS+ from RADIUS? (Choose two.)",
+      "options": [
+        "A) TACACS+ uses TCP while RADIUS uses UDP",
+        "B) TACACS+ encrypts only the password while RADIUS encrypts the entire packet",
+        "C) TACACS+ separates authentication, authorization, and accounting into distinct functions",
+        "D) TACACS+ is an open standard while RADIUS is Cisco proprietary",
+        "E) TACACS+ combines authentication and authorization into a single process"
+      ],
+      "correctAnswer": ["A", "C"],
+      "explanation": "TACACS+ uses TCP port 49 for reliable transport, while RADIUS uses UDP. TACACS+ separates AAA into three distinct and independent functions, providing more granular control, while RADIUS combines authentication and authorization. TACACS+ encrypts the entire packet body (not just the password -- that describes RADIUS). TACACS+ is Cisco proprietary, not RADIUS.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/security-vpn/remote-authentication-dial-user-service-radius/13838-10.html",
+      "difficulty": "hard",
+      "tags": ["AAA", "TACACS+", "RADIUS", "comparison"]
+    },
+    {
+      "id": "dq5-q7",
+      "objectiveCode": "5.9",
+      "type": "multiple_choice",
+      "question": "Which wireless security protocol uses the CCMP encryption method based on AES and was the first to provide enterprise-grade security as a mandatory requirement?",
+      "options": [
+        "A) WEP",
+        "B) WPA",
+        "C) WPA2",
+        "D) WPA3"
+      ],
+      "correctAnswer": "C",
+      "explanation": "WPA2 (Wi-Fi Protected Access 2) mandates the use of CCMP (Counter Mode with Cipher Block Chaining Message Authentication Code Protocol) based on AES (Advanced Encryption Standard) encryption. WEP used RC4 encryption and is considered insecure. WPA used TKIP (based on RC4) as a transitional improvement. WPA3 builds upon WPA2 with SAE and enhanced protections but was not the first to mandate CCMP/AES.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/wireless/what-is-wi-fi-security.html",
+      "difficulty": "medium",
+      "tags": ["wireless security", "WPA2", "CCMP", "AES"]
+    },
+    {
+      "id": "dq5-q8",
+      "objectiveCode": "5.9",
+      "type": "multiple_choice",
+      "question": "Which improvement does WPA3-Personal provide over WPA2-Personal for protection against offline dictionary attacks?",
+      "options": [
+        "A) TKIP encryption",
+        "B) Simultaneous Authentication of Equals (SAE)",
+        "C) Pre-shared key (PSK) with RC4",
+        "D) 802.1X authentication"
+      ],
+      "correctAnswer": "B",
+      "explanation": "WPA3-Personal replaces the PSK (Pre-Shared Key) 4-way handshake with SAE (Simultaneous Authentication of Equals), which is based on the Dragonfly key exchange. SAE provides forward secrecy and protects against offline dictionary attacks because an attacker cannot capture a handshake and brute-force the password offline. TKIP and RC4 are older, less secure technologies. 802.1X is used in enterprise mode, not personal mode.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/wireless/what-is-wi-fi-security.html",
+      "difficulty": "hard",
+      "tags": ["wireless security", "WPA3", "SAE", "encryption"]
+    },
+    {
+      "id": "dq5-q9",
+      "objectiveCode": "5.10",
+      "type": "multiple_choice",
+      "question": "When configuring a WLAN on a Cisco Wireless LAN Controller GUI using WPA2 PSK, which security setting must be selected under Layer 2 Security?",
+      "options": [
+        "A) WEP",
+        "B) WPA+WPA2",
+        "C) 802.1X",
+        "D) None"
+      ],
+      "correctAnswer": "B",
+      "explanation": "When configuring WPA2 PSK on a Cisco WLC GUI, you select WPA+WPA2 as the Layer 2 Security policy. Then you enable WPA2 with AES/CCMP encryption and set the authentication key management to PSK, where you enter the pre-shared key. WEP is an older, insecure protocol. 802.1X is used for enterprise authentication with a RADIUS server, not PSK. 'None' disables Layer 2 security entirely.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/config-guide/b_wl_16_10_cg/wireless-security.html",
+      "difficulty": "medium",
+      "tags": ["WLC", "WLAN configuration", "WPA2 PSK", "GUI"]
+    },
+    {
+      "id": "dq5-q10",
+      "objectiveCode": "5.10",
+      "type": "multiple_choice",
+      "question": "An administrator is creating a new WLAN on the Cisco WLC GUI with WPA2 PSK. After setting the SSID and enabling WPA2 with AES encryption, what is the next required step?",
+      "options": [
+        "A) Configure a RADIUS server address",
+        "B) Set the authentication key management to PSK and enter the pre-shared key",
+        "C) Enable TKIP as the primary encryption cipher",
+        "D) Assign the WLAN to a TACACS+ server group"
+      ],
+      "correctAnswer": "B",
+      "explanation": "After enabling WPA2 with AES encryption, you must set the authentication key management to PSK (Pre-Shared Key) and then enter the pre-shared key that clients will use to connect. A RADIUS server is only required for WPA2-Enterprise (802.1X), not PSK mode. TKIP is an older encryption method associated with WPA, not WPA2. TACACS+ is used for device administration, not wireless client authentication.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/config-guide/b_wl_16_10_cg/wireless-security.html",
+      "difficulty": "medium",
+      "tags": ["WLC", "WLAN configuration", "WPA2 PSK", "GUI"]
+    }
+  ]
+}

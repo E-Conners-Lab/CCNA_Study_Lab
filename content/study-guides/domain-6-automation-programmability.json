@@ -1,0 +1,220 @@
+{
+  "domain": 6,
+  "slug": "automation-programmability",
+  "name": "Automation and Programmability",
+  "weight": 10,
+  "overview": "Automation and Programmability represents the modern evolution of network management, moving from manual CLI-based device configuration to programmable, controller-based architectures. This domain covers software-defined networking concepts, REST APIs, configuration management tools, and data encoding formats that are transforming how networks are deployed and managed. While less configuration-heavy than other domains, it requires strong conceptual understanding of emerging networking paradigms.",
+  "keyTopics": [
+    {
+      "objectiveCode": "6.1",
+      "title": "Explain how automation impacts network management",
+      "summary": "Network automation reduces human error, increases efficiency, and enables consistent configuration across large-scale environments. By replacing manual, repetitive CLI tasks with automated workflows, organizations can deploy changes faster, ensure compliance, and free up engineering time for higher-value work.",
+      "keyPoints": [
+        "Automation reduces human error by eliminating manual, repetitive configuration tasks and ensuring consistent device configurations across the network",
+        "Automated workflows enable rapid deployment and changes across hundreds or thousands of devices simultaneously, reducing provisioning time from hours to minutes",
+        "Network automation supports infrastructure-as-code practices, where network configurations are version-controlled, tested, and deployed through CI/CD pipelines",
+        "Automation improves compliance by enforcing standardized templates and configurations, making it easier to audit and remediate deviations",
+        "Common automation benefits include faster troubleshooting through automated data collection, self-healing networks, and predictive analytics"
+      ],
+      "examTips": [
+        "Focus on the business benefits of automation: reduced errors, faster deployment, consistent configurations, and lower operational costs",
+        "Understand that automation does not eliminate the need for network engineers; it shifts their role from manual configuration to designing automation workflows and policies"
+      ],
+      "resources": [
+        {
+          "title": "Cisco Network Automation Overview",
+          "url": "https://www.cisco.com/c/en/us/solutions/automation/network-automation.html"
+        },
+        {
+          "title": "Cisco DevNet Automation Resources",
+          "url": "https://developer.cisco.com/network-automation/"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "6.2",
+      "title": "Compare traditional networks with controller-based networking",
+      "summary": "Traditional networks rely on distributed, device-by-device management where each device independently makes forwarding decisions. Controller-based networking centralizes the control plane into a software controller, providing a single point of management and a holistic view of the entire network.",
+      "keyPoints": [
+        "In traditional networks, each device has its own control plane and data plane, and configurations are managed individually via CLI or SNMP",
+        "Controller-based networks separate the control plane from the data plane; a centralized controller makes forwarding decisions and pushes them to network devices",
+        "Traditional networks are harder to scale and maintain consistently because each device must be configured independently",
+        "Controller-based architectures provide a single pane of glass for network management, policy enforcement, and monitoring",
+        "SDN (Software-Defined Networking) enables programmatic network management through APIs, allowing integration with other IT systems and custom automation scripts"
+      ],
+      "examTips": [
+        "Know that the key advantage of controller-based networking is centralized management and visibility, while traditional networking distributes intelligence across individual devices",
+        "Understand that controller-based does not mean the data plane is centralized; switches and routers still forward traffic locally, but the control plane decisions are made centrally"
+      ],
+      "resources": [
+        {
+          "title": "Cisco Software-Defined Networking",
+          "url": "https://www.cisco.com/c/en/us/solutions/software-defined-networking/overview.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "6.3",
+      "title": "Describe controller-based, software defined architecture",
+      "summary": "Software-defined architecture introduces concepts like overlay and underlay networks, fabric architectures, and the separation of control and data planes. Communication between the controller and applications occurs through northbound APIs, while southbound APIs connect the controller to network infrastructure devices.",
+      "keyPoints": [
+        "The underlay is the physical network infrastructure (switches, routers, cabling) that provides connectivity, while the overlay is a virtual network built on top using tunneling protocols like VXLAN",
+        "A network fabric combines the overlay and underlay into an integrated, automated architecture that simplifies provisioning and policy enforcement",
+        "The control plane is separated from the data plane: the controller handles routing decisions, policy, and management (control plane) while devices handle packet forwarding (data plane)",
+        "Northbound APIs (NBIs) connect the controller to applications and management tools, typically using RESTful APIs with JSON/XML data formats",
+        "Southbound APIs (SBIs) connect the controller to network devices, using protocols such as OpenFlow, NETCONF, RESTCONF, or Cisco OpFlex"
+      ],
+      "examTips": [
+        "Remember the direction of APIs: northbound goes UP from the controller to applications/users, and southbound goes DOWN from the controller to network devices",
+        "Know examples of southbound protocols: OpenFlow (original SDN protocol), NETCONF (uses YANG models over SSH), RESTCONF (REST-based alternative to NETCONF), and CLI/SNMP for legacy devices",
+        "Understand that VXLAN is the most common overlay encapsulation protocol in modern data center fabrics"
+      ],
+      "resources": [
+        {
+          "title": "Cisco SDN Architecture",
+          "url": "https://www.cisco.com/c/en/us/solutions/software-defined-networking/overview.html"
+        },
+        {
+          "title": "Cisco SD-Access Solution Overview",
+          "url": "https://www.cisco.com/c/en/us/solutions/enterprise-networks/software-defined-access/index.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "6.4",
+      "title": "Compare traditional campus device management with Cisco DNA Center enabled device management",
+      "summary": "Traditional campus management relies on device-by-device CLI configuration, while Cisco DNA Center provides intent-based networking with centralized automation, assurance, and policy management. DNA Center transforms how campuses are designed, deployed, and operated by abstracting complexity behind a graphical interface.",
+      "keyPoints": [
+        "Traditional management requires CLI access to each device individually for configuration, monitoring, and troubleshooting, which is time-consuming and error-prone at scale",
+        "Cisco DNA Center is an intent-based networking controller that translates business intent into network configuration and policy automatically",
+        "DNA Center provides network assurance through AI/ML-driven analytics, proactive issue detection, and guided remediation for identified problems",
+        "Software image management (SWIM) in DNA Center automates IOS upgrades across the network, ensuring compliance with golden image standards",
+        "DNA Center uses Cisco SD-Access to create a campus fabric with automated segmentation, eliminating the need for manual VLAN and ACL configuration"
+      ],
+      "examTips": [
+        "Understand that DNA Center is Cisco's intent-based networking platform; intent-based means you declare WHAT you want (policy) and the controller determines HOW to implement it",
+        "Know that DNA Center provides four main workflows: Design (network hierarchy), Policy (access control/QoS), Provision (deploy configurations), and Assurance (monitoring/analytics)"
+      ],
+      "resources": [
+        {
+          "title": "Cisco DNA Center Overview",
+          "url": "https://www.cisco.com/c/en/us/products/cloud-systems-management/dna-center/index.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "6.5",
+      "title": "Describe characteristics of REST-based APIs (CRUD, HTTP verbs, and data encoding)",
+      "summary": "REST (Representational State Transfer) APIs are the standard method for interacting with modern network controllers and platforms. Understanding CRUD operations, HTTP methods, status codes, and data encoding formats is essential for working with network automation tools and programmable infrastructure.",
+      "keyPoints": [
+        "CRUD operations map to HTTP verbs: Create (POST), Read (GET), Update (PUT/PATCH), and Delete (DELETE)",
+        "REST APIs are stateless, meaning each request contains all information needed to process it; the server does not store session state between requests",
+        "HTTP status codes indicate results: 200 (OK), 201 (Created), 400 (Bad Request), 401 (Unauthorized), 403 (Forbidden), 404 (Not Found), 500 (Internal Server Error)",
+        "Data is typically encoded in JSON (lightweight, human-readable) or XML (more verbose, strongly typed) format in both API requests and responses",
+        "REST APIs use URIs (Uniform Resource Identifiers) to identify resources, with a base URL followed by the resource path (e.g., https://controller/api/v1/network-device)"
+      ],
+      "examTips": [
+        "Memorize the CRUD-to-HTTP mapping: POST=Create, GET=Read, PUT/PATCH=Update, DELETE=Delete; PUT replaces the entire resource while PATCH modifies specific fields",
+        "Know common HTTP status code ranges: 2xx means success, 3xx means redirection, 4xx means client error, and 5xx means server error"
+      ],
+      "resources": [
+        {
+          "title": "Cisco DevNet REST API Fundamentals",
+          "url": "https://developer.cisco.com/learning/tracks/networking-basics/"
+        },
+        {
+          "title": "Cisco DevNet Learning Labs",
+          "url": "https://developer.cisco.com/learning/"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "6.6",
+      "title": "Recognize the capabilities of configuration management mechanisms Puppet, Chef, and Ansible",
+      "summary": "Configuration management tools automate the deployment and enforcement of device configurations across the network at scale. Puppet, Chef, and Ansible each take a different approach to automation but share the common goal of ensuring consistent, repeatable infrastructure management.",
+      "keyPoints": [
+        "Ansible is agentless (uses SSH/NETCONF to connect to devices), uses YAML-based playbooks, and is push-based, making it the simplest to deploy for network automation",
+        "Puppet uses an agent-based model (agent on managed devices, master server), a declarative Ruby-based DSL for manifests, and operates on a pull-based model where agents periodically check for changes",
+        "Chef uses an agent-based model (client on managed nodes, Chef server), an imperative Ruby-based DSL for recipes/cookbooks, and operates on a pull-based model",
+        "All three tools support idempotency, meaning running the same configuration multiple times produces the same result without unintended side effects",
+        "Ansible is the most commonly used for network device management because it requires no agent installation on the managed devices (important since routers and switches often cannot run agents)"
+      ],
+      "examTips": [
+        "Know the key differentiators: Ansible is agentless and push-based using YAML; Puppet is agent-based and pull-based using its own DSL; Chef is agent-based and pull-based using Ruby",
+        "Remember that Ansible is the most network-friendly tool because it does not require agent software on managed devices, which is critical for network equipment with limited OS extensibility",
+        "Understand idempotency: applying the same configuration repeatedly should not cause errors or changes if the desired state is already achieved"
+      ],
+      "resources": [
+        {
+          "title": "Cisco DevNet Configuration Management",
+          "url": "https://developer.cisco.com/automation/"
+        },
+        {
+          "title": "Ansible Network Automation",
+          "url": "https://www.ansible.com/integrations/networks/cisco"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "6.7",
+      "title": "Recognize components of JSON-encoded data",
+      "summary": "JSON (JavaScript Object Notation) is the most widely used data encoding format for REST APIs and network automation. Understanding JSON syntax, data types, and structure is essential for interpreting API responses and constructing API requests when working with network controllers.",
+      "keyPoints": [
+        "JSON uses key-value pairs enclosed in curly braces {} for objects, where keys are always strings in double quotes and values can be strings, numbers, booleans, null, arrays, or nested objects",
+        "JSON arrays are ordered lists enclosed in square brackets [] and can contain any valid JSON data types including mixed types",
+        "JSON supports six data types: strings (in double quotes), numbers (integer or floating-point), booleans (true/false), null, objects (curly braces), and arrays (square brackets)",
+        "JSON is human-readable, lightweight, and language-independent, making it the preferred format for REST API communication over XML in most modern applications",
+        "Nested structures allow complex data representation: objects can contain arrays, arrays can contain objects, and nesting can be multiple levels deep"
+      ],
+      "examTips": [
+        "Be able to read and identify valid JSON: keys must be in double quotes, strings must be in double quotes (not single quotes), and trailing commas after the last element are not allowed",
+        "Know the difference between JSON objects ({}) and arrays ([]): objects are unordered collections of key-value pairs, while arrays are ordered lists of values"
+      ],
+      "resources": [
+        {
+          "title": "JSON Introduction",
+          "url": "https://www.json.org/json-en.html"
+        },
+        {
+          "title": "Cisco DevNet JSON Basics",
+          "url": "https://developer.cisco.com/learning/"
+        }
+      ]
+    }
+  ],
+  "practiceScenarios": [
+    {
+      "scenario": "A network engineer receives the following JSON response from a REST API call to a Cisco DNA Center controller:\n\n{\"response\": [{\"hostname\": \"SW-Floor1\", \"managementIpAddress\": \"10.1.1.10\", \"platformId\": \"C9300-48P\", \"reachabilityStatus\": \"Reachable\"}, {\"hostname\": \"SW-Floor2\", \"managementIpAddress\": \"10.1.1.11\", \"platformId\": \"C9300-24T\", \"reachabilityStatus\": \"Unreachable\"}], \"version\": \"1.0\"}",
+      "question": "Identify the JSON components in this response: How many objects are in the response array? What data type is the 'response' key's value? What HTTP verb was most likely used to retrieve this data?",
+      "answer": "The 'response' key contains a JSON array (indicated by square brackets []) with two JSON objects (indicated by curly braces {}). The first object represents SW-Floor1 and the second represents SW-Floor2. Each object contains four key-value pairs where all values are strings. The 'version' key has a string value '1.0'. The HTTP verb used was most likely GET, since this is a read operation retrieving device information (CRUD: Read = GET). The outer structure is a JSON object with two keys: 'response' (array) and 'version' (string)."
+    },
+    {
+      "scenario": "A company is evaluating whether to use Ansible or Puppet to automate configuration of their 200 Cisco switches and routers. The network team has limited programming experience, the devices are running standard Cisco IOS, and they want the simplest deployment possible.",
+      "question": "Which tool would you recommend and why? What are the key technical reasons for your choice?",
+      "answer": "Ansible is the recommended choice for several key reasons: (1) Agentless architecture: Ansible connects via SSH, which is already available on all Cisco IOS devices. Puppet requires an agent installed on managed devices, which is not feasible on standard Cisco IOS routers and switches. (2) Simpler learning curve: Ansible uses YAML-based playbooks which are human-readable and easier to learn than Puppet's custom DSL, making it more accessible for teams with limited programming experience. (3) Push-based model: Ansible pushes configurations on demand, giving operators explicit control over when changes are applied. Puppet's pull-based model requires devices to periodically check in with the master. (4) Minimal infrastructure: Ansible only requires a control node (any Linux machine with Python), while Puppet requires a dedicated Puppet master server. (5) Strong Cisco support: Ansible has extensive built-in Cisco IOS modules maintained by both Red Hat and Cisco."
+    },
+    {
+      "scenario": "A network architect is designing a new campus network and must decide between a traditional network design with individual device management and a Cisco DNA Center-based SD-Access fabric. The campus will have 15 buildings, 300 switches, and requires strict segmentation between departments.",
+      "question": "What are three specific advantages of the DNA Center-based approach over traditional management for this deployment?",
+      "answer": "Three specific advantages: (1) Automated segmentation: DNA Center with SD-Access uses virtual networks (macro-segmentation) and scalable group tags (SGTs) for micro-segmentation, eliminating the need to manually configure VLANs, ACLs, and spanning tree across 300 switches. In a traditional design, maintaining consistent segmentation policies across 15 buildings requires extensive manual ACL management prone to errors. (2) Centralized provisioning: DNA Center can provision all 300 switches through templates and fabric onboarding workflows, reducing deployment time from weeks to days. Traditional management would require CLI access to each switch individually. (3) Network assurance and analytics: DNA Center provides AI-driven health monitoring, client experience scoring, and proactive issue detection across the entire campus from a single dashboard. In a traditional network, troubleshooting requires logging into individual devices and manually correlating data from multiple sources, which is impractical at this scale."
+    }
+  ],
+  "commonMistakes": [
+    {
+      "mistake": "Confusing northbound and southbound APIs, placing them in the wrong direction in the SDN architecture",
+      "correction": "Northbound APIs sit ABOVE the controller, connecting it to applications, orchestration tools, and management platforms (think: applications are 'north' or 'up' from the controller). Southbound APIs sit BELOW the controller, connecting it to network infrastructure devices like switches and routers (think: devices are 'south' or 'down' from the controller). A helpful mnemonic: 'Applications are above (North), Devices are below (South).'"
+    },
+    {
+      "mistake": "Thinking that Ansible, Puppet, and Chef all require agents installed on managed network devices",
+      "correction": "Only Puppet and Chef require agents on managed devices (which makes them challenging for network equipment). Ansible is agentless and communicates with devices via SSH or NETCONF/RESTCONF, making it the most practical choice for managing Cisco routers and switches that cannot run external agent software. This is one of the most important distinctions to remember."
+    },
+    {
+      "mistake": "Confusing the overlay and underlay networks in an SDN fabric architecture",
+      "correction": "The underlay is the physical network (actual switches, routers, and cables providing IP connectivity), while the overlay is a virtual network built on top of the underlay using tunneling protocols like VXLAN. The overlay abstracts the logical network topology from the physical topology. Think of it like this: the underlay is the highway system, and the overlay is a specific delivery route that uses those highways."
+    },
+    {
+      "mistake": "Mixing up HTTP verbs in REST API operations, particularly confusing POST (Create) with PUT (Update)",
+      "correction": "POST creates a new resource and the server typically assigns the resource ID (e.g., POST /api/devices creates a new device). PUT replaces an entire existing resource at a specific URI (e.g., PUT /api/devices/123 replaces all data for device 123). PATCH partially updates specific fields of an existing resource. GET retrieves data without modifying anything. DELETE removes a resource. The CRUD mapping is: Create=POST, Read=GET, Update=PUT or PATCH, Delete=DELETE."
+    }
+  ]
+}

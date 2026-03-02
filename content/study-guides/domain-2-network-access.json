@@ -1,0 +1,229 @@
+{
+  "domain": 2,
+  "slug": "network-access",
+  "name": "Network Access",
+  "weight": 20,
+  "overview": "Network Access covers Layer 2 technologies essential for building and managing switched networks, including VLAN configuration, trunking, EtherChannel, and Spanning Tree Protocol. This domain also addresses wireless architecture, including Cisco AP modes, WLC management, and WLAN configuration. Understanding these topics is critical for designing and troubleshooting campus networks.",
+  "keyTopics": [
+    {
+      "objectiveCode": "2.1",
+      "title": "Configure and verify VLANs (normal range) spanning multiple switches",
+      "summary": "VLANs logically segment a switched network into separate broadcast domains, improving security, performance, and manageability. Normal range VLANs (1-1005) can be configured on access ports to carry data or voice traffic. Proper VLAN design across multiple switches enables efficient traffic separation while inter-VLAN routing provides connectivity between VLANs.",
+      "keyPoints": [
+        "VLANs are created using 'vlan <id>' in global configuration mode and assigned to ports with 'switchport mode access' and 'switchport access vlan <id>'. VLAN names are optional but recommended for manageability.",
+        "Normal range VLANs (1-1005) are stored in the vlan.dat file on the switch flash. Extended range VLANs (1006-4094) require VTP transparent mode or VTPv3 and are stored in the running configuration.",
+        "Voice VLANs are configured on access ports using 'switchport voice vlan <id>' to carry IP phone traffic on a separate VLAN from data traffic, enabling QoS prioritization and simplified management.",
+        "VLAN 1 is the default VLAN and the default native VLAN on trunk links. All ports are in VLAN 1 by default. Best practice is to move user traffic off VLAN 1 and change the native VLAN for security.",
+        "Inter-VLAN routing can be accomplished using a router with subinterfaces (router-on-a-stick), a Layer 3 switch with SVIs (Switch Virtual Interfaces), or separate physical router interfaces per VLAN."
+      ],
+      "examTips": [
+        "Know the router-on-a-stick configuration: create subinterfaces on the router (e.g., G0/0.10, G0/0.20), assign 'encapsulation dot1q <vlan-id>' and an IP address on each subinterface.",
+        "Remember that a switch port in access mode belongs to exactly one data VLAN, but can also carry a voice VLAN simultaneously when configured with 'switchport voice vlan'.",
+        "The 'show vlan brief' command is used to verify VLAN assignments to ports. Trunk ports do NOT appear in this output -- use 'show interfaces trunk' instead."
+      ],
+      "resources": [
+        {"title": "Cisco VLAN Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-3/configuration_guide/vlan/b_173_vlan_9300_cg/configuring_vlans.html"},
+        {"title": "Configuring Inter-VLAN Routing", "url": "https://www.cisco.com/c/en/us/support/docs/lan-switching/inter-vlan-routing/41860-howto-L3-intervlanrouting.html"}
+      ]
+    },
+    {
+      "objectiveCode": "2.2",
+      "title": "Configure and verify interswitch connectivity",
+      "summary": "Trunk ports carry traffic for multiple VLANs between switches using 802.1Q encapsulation, which adds a 4-byte tag to Ethernet frames identifying the VLAN. Proper trunk configuration ensures VLANs span across switches consistently. The native VLAN on a trunk carries untagged traffic and must match on both ends to prevent security issues and misrouted frames.",
+      "keyPoints": [
+        "Trunk ports are configured with 'switchport mode trunk' and carry traffic for all VLANs by default. Use 'switchport trunk allowed vlan <list>' to restrict which VLANs are permitted on the trunk.",
+        "802.1Q is the industry-standard trunking protocol that inserts a 4-byte tag into the Ethernet frame header containing the VLAN ID (12-bit field supporting 4094 VLANs), priority (3-bit PCP), and other metadata.",
+        "The native VLAN is the VLAN whose traffic is sent untagged across an 802.1Q trunk. It defaults to VLAN 1 and must match on both ends of the trunk. A native VLAN mismatch causes frames to be placed in the wrong VLAN.",
+        "DTP (Dynamic Trunking Protocol) negotiates trunk links automatically. Best practice is to disable DTP using 'switchport nonegotiate' and manually configure ports as trunk or access to prevent unauthorized trunk formation.",
+        "Verify trunk configuration with 'show interfaces trunk' (shows mode, encapsulation, native VLAN, and allowed VLANs) and 'show interfaces <id> switchport' (shows detailed port configuration)."
+      ],
+      "examTips": [
+        "A native VLAN mismatch between trunk endpoints is a common troubleshooting scenario. CDP will report this mismatch. Always verify native VLANs match using 'show interfaces trunk'.",
+        "Remember that ISL (Inter-Switch Link) is Cisco proprietary and deprecated. 802.1Q is the standard trunking protocol used on the exam.",
+        "Know how to add or remove VLANs from a trunk: 'switchport trunk allowed vlan add/remove <id>'. Using 'switchport trunk allowed vlan <list>' without 'add' replaces the entire allowed list."
+      ],
+      "resources": [
+        {"title": "Cisco 802.1Q Trunking Configuration", "url": "https://www.cisco.com/c/en/us/support/docs/switches/catalyst-6500-series-switches/10681-90.html"},
+        {"title": "Understanding VLAN Trunking", "url": "https://www.cisco.com/c/en/us/support/docs/lan-switching/vlan-trunking-protocol-vtp/10558-21.html"}
+      ]
+    },
+    {
+      "objectiveCode": "2.3",
+      "title": "Configure and verify Layer 2 discovery protocols (CDP and LLDP)",
+      "summary": "Cisco Discovery Protocol (CDP) and Link Layer Discovery Protocol (LLDP) are Layer 2 protocols that allow directly connected devices to share information about themselves. CDP is Cisco proprietary and enabled by default on Cisco devices, while LLDP is an IEEE standard (802.1AB) that provides interoperability between multi-vendor environments.",
+      "keyPoints": [
+        "CDP is Cisco proprietary, enabled by default, and operates at Layer 2. It shares device ID, local/remote port IDs, platform information, IP addresses, native VLAN, duplex settings, and VTP domain.",
+        "LLDP (IEEE 802.1AB) is vendor-neutral and must be manually enabled on Cisco devices with 'lldp run'. It provides similar information to CDP and is used in multi-vendor environments.",
+        "CDP sends advertisements every 60 seconds by default with a holdtime of 180 seconds. LLDP sends advertisements every 30 seconds with a holdtime of 120 seconds.",
+        "Both protocols can be enabled or disabled globally ('cdp run' / 'no cdp run', 'lldp run' / 'no lldp run') and per interface ('cdp enable' / 'no cdp enable', 'lldp transmit' / 'lldp receive').",
+        "Verification commands: 'show cdp neighbors' and 'show lldp neighbors' for a summary; add 'detail' for full information including IP addresses. 'show cdp entry *' shows all CDP entries in detail."
+      ],
+      "examTips": [
+        "Security best practice is to disable CDP and LLDP on ports facing untrusted networks (e.g., user access ports, Internet-facing ports) to prevent information disclosure.",
+        "LLDP must be explicitly enabled on Cisco devices with 'lldp run', unlike CDP which is on by default. LLDP can separately control transmit and receive per interface.",
+        "Know the default timers: CDP sends every 60 seconds (holdtime 180s), LLDP sends every 30 seconds (holdtime 120s)."
+      ],
+      "resources": [
+        {"title": "Cisco CDP Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/cdp/configuration/xe-16/cdp-xe-16-book.html"},
+        {"title": "Cisco LLDP Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/cdp/configuration/xe-16/cdp-xe-16-book/lldp.html"}
+      ]
+    },
+    {
+      "objectiveCode": "2.4",
+      "title": "Configure and verify (Layer 2/Layer 3) EtherChannel (LACP)",
+      "summary": "EtherChannel bundles multiple physical links between switches into a single logical link, increasing bandwidth and providing redundancy without triggering Spanning Tree topology changes. LACP (Link Aggregation Control Protocol) is the IEEE standard (802.3ad) for negotiating EtherChannel formation. EtherChannel can operate at Layer 2 (switchport) or Layer 3 (routed port).",
+      "keyPoints": [
+        "LACP (IEEE 802.3ad) uses active and passive modes for negotiation. At least one side must be active for the EtherChannel to form. Active-active and active-passive combinations work; passive-passive does not.",
+        "PAgP (Port Aggregation Protocol) is Cisco proprietary with desirable and auto modes. Desirable-desirable and desirable-auto work; auto-auto does not form a channel.",
+        "All member ports must have matching speed, duplex, VLAN (for access ports), allowed VLANs and native VLAN (for trunk ports), and STP settings. Mismatched settings prevent the EtherChannel from forming.",
+        "Layer 2 EtherChannel is configured using 'channel-group <number> mode active' on physical interfaces, creating a Port-channel logical interface. Layer 3 EtherChannel uses 'no switchport' on the Port-channel and assigns an IP address.",
+        "Load balancing across member links uses a hash of source/destination MAC, IP, or port, configurable with 'port-channel load-balance <method>'. Verify with 'show etherchannel summary' and 'show etherchannel port-channel'."
+      ],
+      "examTips": [
+        "Remember the valid mode combinations: LACP active-active or active-passive (not passive-passive). PAgP desirable-desirable or desirable-auto (not auto-auto). On mode forces without negotiation and must match on both sides.",
+        "If an EtherChannel is misconfigured and ports have inconsistent settings, the switch may put ports into a suspended or error-disabled state. Always verify with 'show etherchannel summary'.",
+        "The exam favors LACP over PAgP since LACP is the open standard. Focus your study on LACP modes and configuration."
+      ],
+      "resources": [
+        {"title": "Cisco EtherChannel Configuration Guide", "url": "https://www.cisco.com/c/en/us/support/docs/lan-switching/etherchannel/12023-4.html"},
+        {"title": "Understanding LACP EtherChannel", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-3/configuration_guide/lag/b_173_lag_9300_cg/configuring_etherchannel.html"}
+      ]
+    },
+    {
+      "objectiveCode": "2.5",
+      "title": "Interpret Rapid PVST+ Spanning Tree Protocol",
+      "summary": "Spanning Tree Protocol prevents Layer 2 loops by blocking redundant paths in a switched network while maintaining failover capability. Rapid PVST+ (Rapid Per-VLAN Spanning Tree Plus) is the Cisco enhancement of IEEE 802.1w (RSTP) that runs a separate STP instance for each VLAN, enabling faster convergence than legacy STP. Understanding root bridge election, port roles, and port states is essential for interpreting STP behavior.",
+      "keyPoints": [
+        "The root bridge is elected based on the lowest Bridge ID (priority + MAC address). Default priority is 32768. Change it with 'spanning-tree vlan <id> priority <value>' or 'spanning-tree vlan <id> root primary/secondary'.",
+        "Root ports are the ports on non-root switches that have the lowest cost path to the root bridge. Every non-root switch has exactly one root port per VLAN.",
+        "Designated ports are the ports on each network segment with the lowest cost to the root bridge. The root bridge has all designated ports. Non-designated ports are placed in blocking state.",
+        "Rapid PVST+ port states are: discarding (combines STP blocking and listening), learning (building MAC table but not forwarding), and forwarding (fully operational). RSTP converges in seconds rather than the 30-50 seconds of legacy STP.",
+        "PortFast is configured on access ports connected to end devices using 'spanning-tree portfast'. It immediately transitions the port to forwarding, bypassing the listening and learning states. Never enable PortFast on ports connected to other switches."
+      ],
+      "examTips": [
+        "Know the STP root bridge election process: lowest priority wins; if tied, lowest MAC address wins. 'spanning-tree vlan <id> root primary' sets the priority to 24576 (or lower to beat the current root).",
+        "Understand the difference between port roles (root, designated, alternate, backup) and port states (discarding, learning, forwarding). The exam may show a topology and ask you to identify each.",
+        "PortFast should only be configured on ports connected to end devices (PCs, servers, printers), never on switch-to-switch links. BPDU Guard should accompany PortFast to error-disable the port if a BPDU is received."
+      ],
+      "resources": [
+        {"title": "Cisco Rapid PVST+ Configuration", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-3/configuration_guide/stp/b_173_stp_9300_cg/configuring_rapid_pvst.html"},
+        {"title": "Understanding Spanning Tree Protocol", "url": "https://www.cisco.com/c/en/us/support/docs/lan-switching/spanning-tree-protocol/5234-5.html"}
+      ]
+    },
+    {
+      "objectiveCode": "2.6",
+      "title": "Describe Cisco Wireless Architectures and AP modes",
+      "summary": "Cisco wireless deployments range from standalone (autonomous) access points to centralized controller-based architectures managed by a Wireless LAN Controller (WLC). Modern deployments may also use cloud-managed solutions like Cisco Meraki or Cisco Catalyst Center (DNA Center) with Cisco Embedded Wireless Controllers. Each AP mode serves a different purpose in the wireless infrastructure.",
+      "keyPoints": [
+        "Autonomous APs operate independently with local configuration, handling all wireless functions (authentication, encryption, bridging) themselves. They are suitable for very small deployments but do not scale well.",
+        "Lightweight APs (LAPs) work with a Wireless LAN Controller (WLC) using CAPWAP (Control and Provisioning of Wireless Access Points) protocol. The WLC handles centralized management, configuration, and control-plane functions.",
+        "CAPWAP uses two tunnels: a control tunnel (UDP 5246, encrypted with DTLS) for management traffic and a data tunnel (UDP 5247, optionally encrypted) for client data forwarding to the WLC.",
+        "Common AP modes include: Local (default, serves clients and monitors channels), Monitor (dedicated IDS/IPS sensor), FlexConnect (allows local switching at branch sites when WLC is unreachable), Sniffer (captures wireless frames for analysis), and Bridge (point-to-point/multipoint bridging).",
+        "Cloud-managed wireless (e.g., Cisco Meraki) centralizes management in the cloud dashboard while APs switch data locally, combining the manageability of controller-based with the simplicity of autonomous."
+      ],
+      "examTips": [
+        "Know the difference between split-MAC (lightweight with WLC) and autonomous architectures. In split-MAC, real-time functions stay at the AP while management functions move to the WLC.",
+        "FlexConnect mode is tested frequently. It allows remote branch APs to locally switch traffic and authenticate clients even if the CAPWAP connection to the WLC is lost."
+      ],
+      "resources": [
+        {"title": "Cisco Wireless Architectures Overview", "url": "https://www.cisco.com/c/en/us/products/wireless/buyers-guide.html"},
+        {"title": "Understanding CAPWAP and AP Modes", "url": "https://www.cisco.com/c/en/us/support/docs/wireless/aironet-1240ag-series/70278-lap-faq.html"}
+      ]
+    },
+    {
+      "objectiveCode": "2.7",
+      "title": "Describe physical infrastructure connections of WLAN components",
+      "summary": "Deploying a wireless LAN requires proper physical connectivity between access points, switches, and wireless LAN controllers. APs connect to access or trunk ports on switches and may receive power via PoE. WLCs connect to the network via trunk ports or LAG (Link Aggregation Group) to handle traffic from multiple VLANs and SSIDs.",
+      "keyPoints": [
+        "Lightweight APs typically connect to switch access ports on a dedicated AP VLAN. The CAPWAP tunnel carries all WLAN traffic to the WLC, so the AP only needs Layer 3 reachability to the controller.",
+        "WLCs connect to the network via trunk ports carrying multiple VLANs, one for each SSID/WLAN mapped to a VLAN. LAG (Link Aggregation Group) can bundle multiple physical ports on the WLC for redundancy and bandwidth.",
+        "PoE (Power over Ethernet) is commonly used to power access points, eliminating the need for separate power adapters at each AP location. Ensure the switch PoE budget can support all connected APs.",
+        "FlexConnect APs at remote sites may connect to local trunk ports when configured for local switching, as they need to place client traffic directly onto local VLANs without tunneling to the WLC."
+      ],
+      "examTips": [
+        "Remember that lightweight APs in local mode tunnel all traffic via CAPWAP to the WLC, so the switch port connecting the AP only needs to be an access port on the management VLAN.",
+        "WLC ports are connected as trunks because the controller needs to map different WLANs/SSIDs to different VLANs for traffic separation."
+      ],
+      "resources": [
+        {"title": "Cisco WLC Deployment Guide", "url": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/config-guide/b_wl_16_10_cg.html"},
+        {"title": "Cisco AP Physical Connectivity Guide", "url": "https://www.cisco.com/c/en/us/products/wireless/access-points/index.html"}
+      ]
+    },
+    {
+      "objectiveCode": "2.8",
+      "title": "Describe AP and WLC management access connections",
+      "summary": "Network administrators access APs and WLCs for management using various protocols, each with different security characteristics. Console access provides out-of-band management, while Telnet, SSH, HTTP, HTTPS, and AAA protocols (TACACS+/RADIUS) provide in-band management. Choosing secure management protocols is a critical best practice.",
+      "keyPoints": [
+        "Console access provides out-of-band management via a physical console cable (RJ-45 or USB), useful for initial setup and when network connectivity is unavailable.",
+        "SSH (Secure Shell, port 22) provides encrypted CLI access and is the recommended protocol for remote management. Telnet (port 23) sends data in cleartext and should be avoided in production.",
+        "HTTPS (port 443) provides encrypted web-based GUI management for both WLCs and APs. HTTP (port 80) is unencrypted and should be disabled or redirected to HTTPS for security.",
+        "TACACS+ and RADIUS provide centralized AAA (Authentication, Authorization, Accounting) for management access. TACACS+ (Cisco-favored, TCP port 49) encrypts the entire payload and separates AAA functions. RADIUS (UDP 1812/1813) encrypts only the password and combines authentication/authorization.",
+        "Best practices include disabling Telnet and HTTP, using SSH and HTTPS exclusively, implementing TACACS+ or RADIUS for centralized authentication, and using management VLANs with ACLs to restrict access."
+      ],
+      "examTips": [
+        "Know the key differences between TACACS+ and RADIUS: TACACS+ uses TCP, encrypts entire payload, and separates AAA functions. RADIUS uses UDP, encrypts only the password, and combines authentication with authorization.",
+        "The exam may present scenarios where you need to select the most secure management protocol. Always prefer SSH over Telnet and HTTPS over HTTP.",
+        "RADIUS is typically used for network access (802.1X, VPN), while TACACS+ is preferred for device administration because it provides per-command authorization."
+      ],
+      "resources": [
+        {"title": "Cisco TACACS+ and RADIUS Comparison", "url": "https://www.cisco.com/c/en/us/support/docs/security-vpn/remote-authentication-dial-user-service-radius/13838-10.html"},
+        {"title": "Cisco WLC Management Access Configuration", "url": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/config-guide/b_wl_16_10_cg/managing-the-system.html"}
+      ]
+    },
+    {
+      "objectiveCode": "2.9",
+      "title": "Interpret the wireless LAN GUI configuration for client connectivity",
+      "summary": "The WLC GUI provides a web-based interface for configuring WLANs, security policies, and client connectivity settings. Administrators use the GUI to create SSIDs, assign VLANs, set security modes (WPA2/WPA3), configure QoS policies, and monitor connected clients. Understanding how to interpret these settings is important for the exam.",
+      "keyPoints": [
+        "Creating a WLAN in the WLC GUI involves specifying the SSID name, WLAN ID, profile name, and mapping it to a VLAN interface for client traffic placement.",
+        "Security settings in the WLC GUI include Layer 2 security (WPA2-PSK, WPA2-Enterprise with 802.1X), Layer 3 security (web authentication, captive portal), and AAA server assignment for enterprise authentication.",
+        "QoS settings allow administrators to set bandwidth contracts and priority levels (Platinum for voice, Gold for video, Silver for best effort, Bronze for background) per WLAN to ensure voice and video quality.",
+        "The WLC GUI monitoring pages show connected clients, their signal strength (RSSI), data rates, connected AP, VLAN assignment, and session duration for troubleshooting client connectivity issues.",
+        "WLAN policies can control the maximum number of clients, enable client exclusion (blocking), configure DHCP assignment, and set session timeouts and idle timeouts."
+      ],
+      "examTips": [
+        "The exam may show WLC GUI screenshots and ask you to identify the correct VLAN mapping, security mode, or troubleshoot a client connectivity issue based on the displayed settings.",
+        "Remember that each WLAN/SSID is mapped to a dynamic interface (VLAN) on the WLC. If the VLAN mapping is incorrect, clients connect but cannot reach the correct network resources."
+      ],
+      "resources": [
+        {"title": "Cisco WLC GUI Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/config-guide/b_wl_16_10_cg/wlan-configuration.html"},
+        {"title": "Cisco WLAN Security Best Practices", "url": "https://www.cisco.com/c/en/us/products/wireless/what-is-wireless-security.html"}
+      ]
+    }
+  ],
+  "practiceScenarios": [
+    {
+      "scenario": "You have three switches (SW1, SW2, SW3) connected in a triangle topology. SW1 has a priority of 4096, SW2 has 32768, and SW3 has 32768. SW2's MAC address is lower than SW3's MAC address. All links are Gigabit Ethernet. You need to determine the STP topology for VLAN 10.",
+      "question": "Which switch is the root bridge, which ports are root ports, and which port(s) will be in blocking state?",
+      "answer": "SW1 is the root bridge because it has the lowest bridge priority (4096). All of SW1's ports are designated ports in the forwarding state. SW2 and SW3 each have a root port -- the port directly connected to SW1 on each switch is the root port (lowest cost path to root). On the SW2-to-SW3 link, the designated port is determined by lowest bridge ID. SW2 has a lower MAC address, so SW2's port toward SW3 is the designated port (forwarding). SW3's port toward SW2 becomes the alternate (blocking) port, as SW3 has the higher bridge ID and its port is neither root nor designated."
+    },
+    {
+      "scenario": "You are configuring a new trunk link between two Cisco switches. Switch A has VLANs 10, 20, and 30 configured. Switch B has VLANs 10 and 20 configured. The native VLAN on Switch A is set to VLAN 99, while Switch B is using the default native VLAN of 1.",
+      "question": "What problems will occur, and how do you fix them?",
+      "answer": "Two problems will occur. First, there is a native VLAN mismatch (VLAN 99 on Switch A vs. VLAN 1 on Switch B), which will cause CDP to generate native VLAN mismatch warnings, and untagged frames will be placed in the wrong VLAN on the receiving end, causing connectivity issues and potential security vulnerabilities. Second, VLAN 30 traffic will not cross the trunk because VLAN 30 does not exist on Switch B. To fix: (1) configure the same native VLAN on both ends using 'switchport trunk native vlan 99' on Switch B (or change Switch A to match), and (2) create VLAN 30 on Switch B with 'vlan 30' if VLAN 30 traffic needs to reach Switch B."
+    },
+    {
+      "scenario": "You need to configure a two-link EtherChannel between two switches using LACP. On Switch 1, port GigabitEthernet0/1 is configured for VLAN 10 access and GigabitEthernet0/2 is configured as a trunk.",
+      "question": "Will the EtherChannel form successfully, and if not, what needs to be fixed?",
+      "answer": "The EtherChannel will NOT form successfully. All member ports of an EtherChannel must have identical configuration settings, including switchport mode (access vs. trunk), VLAN assignments, speed, duplex, and STP settings. Having Gi0/1 as an access port on VLAN 10 and Gi0/2 as a trunk port creates a configuration mismatch that prevents the channel from forming. To fix this, configure both ports identically -- either both as trunk ports or both as access ports on the same VLAN -- before applying the 'channel-group <number> mode active' command on both interfaces."
+    }
+  ],
+  "commonMistakes": [
+    {
+      "mistake": "Configuring EtherChannel with mismatched port settings (different VLANs, speed, duplex, or trunk mode) and wondering why the channel does not form.",
+      "correction": "All member ports of an EtherChannel MUST have identical configurations before the channel-group command is applied. Configure speed, duplex, switchport mode, VLAN assignments, trunk settings, and STP parameters identically on all member ports."
+    },
+    {
+      "mistake": "Enabling PortFast on switch-to-switch links to speed up convergence, creating the risk of Layer 2 loops.",
+      "correction": "PortFast should ONLY be enabled on access ports connected to end devices (PCs, servers, printers, IP phones). Enabling it on inter-switch links bypasses STP and can cause broadcast storms. Always pair PortFast with BPDU Guard to error-disable the port if a BPDU is received."
+    },
+    {
+      "mistake": "Forgetting to create a VLAN on all switches in the path, so traffic for that VLAN is dropped at switches where the VLAN does not exist.",
+      "correction": "A VLAN must be created (present in the VLAN database) on every switch along the trunk path for traffic in that VLAN to be forwarded. If you create VLAN 30 on Switch A but not on Switch B, traffic for VLAN 30 will be dropped at Switch B even if the trunk allows it."
+    },
+    {
+      "mistake": "Using passive mode on both ends of an LACP EtherChannel and expecting the channel to form.",
+      "correction": "LACP passive-passive will never form a channel because neither side initiates negotiation. At least one side must be set to active mode. Valid combinations are active-active or active-passive. Similarly, PAgP auto-auto will not form; at least one side must be desirable."
+    }
+  ]
+}

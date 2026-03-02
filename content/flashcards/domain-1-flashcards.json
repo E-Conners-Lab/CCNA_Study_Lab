@@ -1,0 +1,416 @@
+{
+  "domain": 1,
+  "domainName": "Network Fundamentals",
+  "flashcards": [
+    {
+      "id": "d1-fc-001",
+      "objectiveCode": "1.1",
+      "question": "What is the primary function of a router in a network?",
+      "answer": "A router forwards packets between different networks (Layer 3) by making decisions based on destination IP addresses.",
+      "explanation": "Routers operate at Layer 3 (Network layer) of the OSI model. They examine the destination IP address of each packet and use their routing table to determine the best next-hop interface. Routers separate broadcast domains and connect different IP subnets together.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/routers/index.html",
+      "difficulty": "easy",
+      "tags": ["router", "layer-3", "network-components"]
+    },
+    {
+      "id": "d1-fc-002",
+      "objectiveCode": "1.1",
+      "question": "What is the difference between a Layer 2 switch and a Layer 3 switch?",
+      "answer": "A Layer 2 switch forwards frames based on MAC addresses. A Layer 3 switch can also route packets between VLANs using IP addresses.",
+      "explanation": "Layer 2 switches use MAC address tables to forward Ethernet frames within a single broadcast domain. Layer 3 switches add routing capabilities, allowing inter-VLAN routing without an external router. Layer 3 switches use hardware-based routing (ASICs) for wire-speed performance, making them faster than using a traditional router for inter-VLAN traffic.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/switches/index.html",
+      "difficulty": "medium",
+      "tags": ["switch", "layer-2", "layer-3", "network-components"]
+    },
+    {
+      "id": "d1-fc-003",
+      "objectiveCode": "1.1",
+      "question": "What role does a next-generation firewall (NGFW) play in a network?",
+      "answer": "An NGFW filters traffic based on applications, users, and content in addition to traditional port/protocol filtering.",
+      "explanation": "Next-generation firewalls go beyond traditional stateful inspection by adding application awareness, integrated intrusion prevention (IPS), URL filtering, and advanced malware protection. They can identify and control applications regardless of port, protocol, or encryption. Cisco's Firepower series is an example of an NGFW.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/security/firewalls/index.html",
+      "difficulty": "medium",
+      "tags": ["firewall", "NGFW", "security", "network-components"]
+    },
+    {
+      "id": "d1-fc-004",
+      "objectiveCode": "1.1",
+      "question": "What is the function of a wireless LAN controller (WLC)?",
+      "answer": "A WLC centrally manages, configures, and monitors multiple lightweight access points (APs) in a wireless network.",
+      "explanation": "The WLC handles functions like RF management, security policy enforcement, QoS, roaming, and firmware updates for all associated lightweight APs. APs in this architecture use CAPWAP (Control and Provisioning of Wireless Access Points) tunnels to communicate with the WLC. This centralizes management and simplifies large-scale wireless deployments.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/wireless/wireless-lan-controller/index.html",
+      "difficulty": "easy",
+      "tags": ["WLC", "wireless", "access-point", "network-components"]
+    },
+    {
+      "id": "d1-fc-005",
+      "objectiveCode": "1.1",
+      "question": "What is the difference between an access point (AP) and a wireless LAN controller (WLC)?",
+      "answer": "An AP provides wireless connectivity to clients, while a WLC centrally manages multiple APs and handles control-plane decisions.",
+      "explanation": "Access points transmit and receive wireless signals, bridging wireless clients to the wired network. In a split-MAC architecture, lightweight APs handle real-time functions (encryption, beaconing) while the WLC handles management functions (authentication, roaming, RF management). Autonomous APs operate independently without a WLC but are harder to manage at scale.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/wireless/access-points/index.html",
+      "difficulty": "easy",
+      "tags": ["AP", "WLC", "wireless", "network-components"]
+    },
+    {
+      "id": "d1-fc-006",
+      "objectiveCode": "1.2",
+      "question": "Describe the two-tier (collapsed core) network architecture.",
+      "answer": "Two-tier combines the core and distribution layers into a single collapsed core/distribution layer, with a separate access layer below it.",
+      "explanation": "In a two-tier (collapsed core) design, the core and distribution functions are merged into one layer to reduce cost and complexity. This is common in small to medium-sized campus networks. The access layer connects end devices, while the collapsed core/distribution layer handles routing, policy enforcement, and high-speed transport. It is simpler but less scalable than a three-tier design.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/solutions/CVD/Campus/cisco-campus-lan-wlan-design-guide.html",
+      "difficulty": "medium",
+      "tags": ["two-tier", "collapsed-core", "network-architecture"]
+    },
+    {
+      "id": "d1-fc-007",
+      "objectiveCode": "1.2",
+      "question": "What are the three layers in a three-tier campus network architecture?",
+      "answer": "Access layer, distribution layer, and core layer.",
+      "explanation": "The access layer connects end devices (PCs, phones, APs). The distribution layer aggregates access-layer connections and enforces policies, routing, and filtering. The core layer provides high-speed, redundant transport between distribution blocks. This hierarchical model scales well for large enterprises because each layer has a specific function and can be upgraded independently.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/solutions/CVD/Campus/cisco-campus-lan-wlan-design-guide.html",
+      "difficulty": "easy",
+      "tags": ["three-tier", "hierarchical", "network-architecture"]
+    },
+    {
+      "id": "d1-fc-008",
+      "objectiveCode": "1.2",
+      "question": "What is a spine-leaf network architecture and where is it commonly used?",
+      "answer": "Spine-leaf is a two-layer full-mesh topology where every leaf switch connects to every spine switch. It is commonly used in data centers.",
+      "explanation": "In spine-leaf architecture, leaf switches connect to servers/hosts and every leaf connects to every spine switch. This provides predictable latency (every host is the same number of hops from any other host), high bandwidth via ECMP (Equal-Cost Multi-Path), and easy scalability by adding more spine or leaf switches. It eliminates STP by design and is the standard for modern data center fabrics.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/white-paper-c11-737022.html",
+      "difficulty": "medium",
+      "tags": ["spine-leaf", "data-center", "network-architecture"]
+    },
+    {
+      "id": "d1-fc-009",
+      "objectiveCode": "1.3",
+      "question": "What is the maximum cable length for a Cat 5e/6 UTP Ethernet cable?",
+      "answer": "100 meters (328 feet).",
+      "explanation": "The IEEE 802.3 standard specifies a maximum segment length of 100 meters for copper twisted-pair Ethernet (Cat 5e, Cat 6, Cat 6a). This includes up to 90 meters of horizontal cabling plus 10 meters of patch cables. Beyond this distance, signal attenuation degrades performance, and you would need a repeater, switch, or fiber optic connection.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/hardware/install/b_c9300_hig/b_c9300_hig_chapter_01.html",
+      "difficulty": "easy",
+      "tags": ["copper", "UTP", "cable-types", "physical-layer"]
+    },
+    {
+      "id": "d1-fc-010",
+      "objectiveCode": "1.3",
+      "question": "What is the difference between single-mode fiber (SMF) and multimode fiber (MMF)?",
+      "answer": "SMF uses a small core (8-10 microns) and laser light for long distances (up to 100+ km). MMF uses a larger core (50/62.5 microns) and LED/VCSEL light for shorter distances (up to ~550 m at 10G).",
+      "explanation": "Single-mode fiber has a smaller core that allows only one mode of light to propagate, reducing dispersion and enabling very long distances. Multimode fiber has a larger core that allows multiple light modes, causing modal dispersion which limits distance. SMF is more expensive (laser transceivers) but supports much longer runs. MMF is cheaper and commonly used within buildings and data centers.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/interfaces-modules/transceiver-modules/index.html",
+      "difficulty": "medium",
+      "tags": ["fiber", "SMF", "MMF", "cable-types", "physical-layer"]
+    },
+    {
+      "id": "d1-fc-011",
+      "objectiveCode": "1.3",
+      "question": "Which connector types are commonly used with single-mode and multimode fiber?",
+      "answer": "LC (Lucent Connector) and SC (Subscriber Connector) are the most common. LC is smaller and widely used with SFP/SFP+ transceivers.",
+      "explanation": "LC connectors are small-form-factor connectors commonly used in modern switches and routers with SFP modules. SC connectors are larger push-pull connectors still found in older installations. ST (Straight Tip) connectors use a bayonet twist-lock and are legacy. Both SMF and MMF can use LC or SC connectors; the connector type is independent of fiber type. Color coding helps identify fiber type: yellow jacket = SMF, orange/aqua jacket = MMF.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/interfaces-modules/transceiver-modules/index.html",
+      "difficulty": "easy",
+      "tags": ["fiber", "connectors", "LC", "SC", "physical-layer"]
+    },
+    {
+      "id": "d1-fc-012",
+      "objectiveCode": "1.4",
+      "question": "At which OSI layer does TCP operate, and what are its key characteristics?",
+      "answer": "TCP operates at Layer 4 (Transport). It is connection-oriented, reliable, uses three-way handshake, provides flow control and error recovery.",
+      "explanation": "TCP (Transmission Control Protocol) establishes a connection using a three-way handshake (SYN, SYN-ACK, ACK) before data transfer. It guarantees delivery through sequence numbers and acknowledgments, retransmits lost segments, and uses windowing for flow control. TCP is used by applications that require reliable delivery such as HTTP, FTP, SSH, and SMTP.",
+      "sourceUrl": "https://www.ietf.org/rfc/rfc793.txt",
+      "difficulty": "easy",
+      "tags": ["TCP", "transport-layer", "layer-4", "connection-oriented"]
+    },
+    {
+      "id": "d1-fc-013",
+      "objectiveCode": "1.4",
+      "question": "What are the key differences between TCP and UDP?",
+      "answer": "TCP is connection-oriented, reliable, and ordered. UDP is connectionless, unreliable (best-effort), and faster with less overhead.",
+      "explanation": "TCP provides reliability through acknowledgments, sequencing, retransmission, and flow control but adds overhead (20-byte header minimum). UDP provides no guarantees of delivery, ordering, or duplicate protection but has minimal overhead (8-byte header) and lower latency. TCP is used for web browsing, email, and file transfers. UDP is used for DNS queries, VoIP, video streaming, and DHCP where speed matters more than guaranteed delivery.",
+      "sourceUrl": "https://www.ietf.org/rfc/rfc768.txt",
+      "difficulty": "easy",
+      "tags": ["TCP", "UDP", "transport-layer", "comparison"]
+    },
+    {
+      "id": "d1-fc-014",
+      "objectiveCode": "1.4",
+      "question": "Match these common services to their port numbers: HTTP, HTTPS, SSH, DNS, DHCP server, DHCP client, FTP data, FTP control, Telnet, TFTP, SMTP, SNMP, Syslog.",
+      "answer": "HTTP=80, HTTPS=443, SSH=22, DNS=53, DHCP server=67, DHCP client=68, FTP data=20, FTP control=21, Telnet=23, TFTP=69, SMTP=25, SNMP=161/162, Syslog=514.",
+      "explanation": "These are well-known port numbers (0-1023) assigned by IANA. DNS uses both TCP and UDP port 53. DHCP uses UDP ports 67 (server) and 68 (client). SNMP uses UDP 161 for queries and UDP 162 for traps. Syslog uses UDP 514. FTP uses TCP 20 for data transfer and TCP 21 for control commands. Knowing these ports is essential for configuring ACLs and troubleshooting connectivity.",
+      "sourceUrl": "https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml",
+      "difficulty": "medium",
+      "tags": ["port-numbers", "TCP", "UDP", "well-known-ports"]
+    },
+    {
+      "id": "d1-fc-015",
+      "objectiveCode": "1.4",
+      "question": "What is the TCP three-way handshake process?",
+      "answer": "SYN -> SYN-ACK -> ACK. The client sends SYN, server replies with SYN-ACK, client responds with ACK.",
+      "explanation": "The three-way handshake establishes a TCP connection: (1) Client sends a SYN segment with an initial sequence number. (2) Server responds with SYN-ACK, acknowledging the client's sequence number and providing its own. (3) Client sends ACK confirming the server's sequence number. After this exchange, a full-duplex connection is established and data transfer can begin. Connection teardown uses a four-way process with FIN and ACK segments.",
+      "sourceUrl": "https://www.ietf.org/rfc/rfc793.txt",
+      "difficulty": "easy",
+      "tags": ["TCP", "three-way-handshake", "transport-layer"]
+    },
+    {
+      "id": "d1-fc-016",
+      "objectiveCode": "1.5",
+      "question": "What Cisco IOS command displays the IP address, subnet mask, and status of all interfaces?",
+      "answer": "show ip interface brief",
+      "explanation": "The 'show ip interface brief' command provides a concise summary of all interfaces including their IP address, OK status, method of configuration, protocol status, and line status. The output shows interfaces as 'up/up' (working), 'administratively down/down' (shut down), or 'up/down' (Layer 1 up but Layer 2 issue). This is one of the most frequently used troubleshooting commands.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/interface/command/ir-cr-book.html",
+      "difficulty": "easy",
+      "tags": ["IOS-command", "show-commands", "interface", "troubleshooting"]
+    },
+    {
+      "id": "d1-fc-017",
+      "objectiveCode": "1.5",
+      "question": "What is the purpose of the Cisco IOS command 'show interfaces'?",
+      "answer": "It displays detailed Layer 1 and Layer 2 information for all interfaces, including counters, errors, MTU, bandwidth, duplex, and speed.",
+      "explanation": "The 'show interfaces' command (or 'show interfaces <type/number>' for a specific interface) provides comprehensive details: line/protocol status, hardware type, MAC address, MTU, bandwidth, delay, reliability, txload/rxload, encapsulation, duplex, speed, and detailed input/output counters including errors (CRC, runts, giants, collisions). It is essential for diagnosing physical and data-link layer problems.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/interface/command/ir-cr-book.html",
+      "difficulty": "medium",
+      "tags": ["IOS-command", "show-commands", "interface", "troubleshooting"]
+    },
+    {
+      "id": "d1-fc-018",
+      "objectiveCode": "1.6",
+      "question": "Given a host IP of 192.168.10.50/26, what is the subnet address, broadcast address, and usable host range?",
+      "answer": "Subnet: 192.168.10.0, Broadcast: 192.168.10.63, Usable range: 192.168.10.1 - 192.168.10.62.",
+      "explanation": "A /26 mask is 255.255.255.192, giving 64 addresses per subnet (2^6 = 64). The subnets in the fourth octet are 0, 64, 128, 192. Since 50 falls between 0 and 63, the subnet is 192.168.10.0. The broadcast is the last address in this block: 192.168.10.63. Usable hosts range from .1 to .62, providing 62 usable host addresses (2^6 - 2 = 62).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13788-3.html",
+      "difficulty": "medium",
+      "tags": ["subnetting", "IPv4", "CIDR", "subnet-calculation"]
+    },
+    {
+      "id": "d1-fc-019",
+      "objectiveCode": "1.6",
+      "question": "How many usable host addresses are available in a /28 subnet?",
+      "answer": "14 usable host addresses.",
+      "explanation": "A /28 prefix means 28 network bits and 4 host bits. Total addresses = 2^4 = 16. Subtract 2 (network address and broadcast address) = 14 usable hosts. The subnet mask is 255.255.255.240. This is commonly used for small subnets such as point-to-point WAN links or management VLANs with few devices.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13788-3.html",
+      "difficulty": "easy",
+      "tags": ["subnetting", "IPv4", "CIDR", "host-calculation"]
+    },
+    {
+      "id": "d1-fc-020",
+      "objectiveCode": "1.6",
+      "question": "What is VLSM (Variable-Length Subnet Masking) and why is it important?",
+      "answer": "VLSM allows different subnets within the same network to use different subnet mask lengths, enabling efficient IP address allocation.",
+      "explanation": "Without VLSM (classful subnetting), all subnets must use the same mask, wasting addresses. With VLSM, you can assign a /30 to a point-to-point link (2 hosts needed), a /24 to a large LAN (254 hosts), and a /27 to a small office (30 hosts), all within the same major network. VLSM requires a classless routing protocol (OSPF, EIGRP, RIPv2) that carries subnet mask information in routing updates.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13788-3.html",
+      "difficulty": "medium",
+      "tags": ["VLSM", "subnetting", "IPv4", "address-efficiency"]
+    },
+    {
+      "id": "d1-fc-021",
+      "objectiveCode": "1.6",
+      "question": "What are the RFC 1918 private IPv4 address ranges?",
+      "answer": "10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16.",
+      "explanation": "RFC 1918 defines three private address ranges that are not routable on the public Internet: 10.0.0.0 to 10.255.255.255 (Class A, 1 network, ~16.7M hosts), 172.16.0.0 to 172.31.255.255 (Class B, 16 networks), and 192.168.0.0 to 192.168.255.255 (Class C, 256 networks). Organizations use these internally and employ NAT (Network Address Translation) to access the Internet. These addresses can be reused by any organization without coordination.",
+      "sourceUrl": "https://www.ietf.org/rfc/rfc1918.txt",
+      "difficulty": "easy",
+      "tags": ["RFC-1918", "private-IP", "IPv4", "NAT"]
+    },
+    {
+      "id": "d1-fc-022",
+      "objectiveCode": "1.6",
+      "question": "What subnet mask corresponds to a /20 CIDR prefix?",
+      "answer": "255.255.240.0",
+      "explanation": "A /20 prefix means 20 bits are set to 1 in the subnet mask. The first two octets are all 1s (8+8=16 bits = 255.255). The third octet has 4 more bits set to 1: 11110000 = 240. The fourth octet is 0. So the mask is 255.255.240.0. This provides 2^12 = 4096 total addresses (4094 usable hosts) per subnet, useful for large LAN segments.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13788-3.html",
+      "difficulty": "medium",
+      "tags": ["subnetting", "CIDR", "subnet-mask", "IPv4"]
+    },
+    {
+      "id": "d1-fc-023",
+      "objectiveCode": "1.7",
+      "question": "What are the three main types of IPv6 addresses?",
+      "answer": "Unicast (one-to-one), Multicast (one-to-many), and Anycast (one-to-nearest).",
+      "explanation": "Unicast identifies a single interface (global unicast, link-local, unique local). Multicast delivers to all interfaces in a group (replaces IPv4 broadcast; FF00::/8). Anycast is assigned to multiple interfaces but routed to the nearest one. Note that IPv6 has no broadcast address type. Global unicast addresses (2000::/3) are routable on the Internet, similar to public IPv4. Link-local (FE80::/10) are for communication on a single link and are auto-configured on every IPv6-enabled interface.",
+      "sourceUrl": "https://www.ietf.org/rfc/rfc4291.txt",
+      "difficulty": "easy",
+      "tags": ["IPv6", "address-types", "unicast", "multicast", "anycast"]
+    },
+    {
+      "id": "d1-fc-024",
+      "objectiveCode": "1.7",
+      "question": "How does EUI-64 generate an IPv6 interface ID from a MAC address?",
+      "answer": "Split the 48-bit MAC in half, insert FFFE in the middle, and flip the 7th bit (U/L bit) of the first byte.",
+      "explanation": "EUI-64 creates a 64-bit interface ID from a 48-bit MAC address: (1) Take the MAC (e.g., AA:BB:CC:DD:EE:FF). (2) Split it: AA:BB:CC | DD:EE:FF. (3) Insert FF:FE in the middle: AA:BB:CC:FF:FE:DD:EE:FF. (4) Flip the 7th bit (Universal/Local bit) of the first byte. If AA = 10101010, the 7th bit (from left) flips: 10101000 = A8. Result: A8BB:CCFF:FEDD:EEFF. This method allows automatic IPv6 address generation without DHCP.",
+      "sourceUrl": "https://www.ietf.org/rfc/rfc4291.txt",
+      "difficulty": "hard",
+      "tags": ["IPv6", "EUI-64", "interface-ID", "MAC-address"]
+    },
+    {
+      "id": "d1-fc-025",
+      "objectiveCode": "1.7",
+      "question": "What is an IPv6 link-local address and what prefix does it use?",
+      "answer": "A link-local address (FE80::/10) is automatically assigned to every IPv6-enabled interface and is only valid for communication on the local link.",
+      "explanation": "Link-local addresses are not routable beyond the local network segment. They are used for neighbor discovery, router solicitation/advertisement, and as next-hop addresses in routing tables. Every IPv6 interface must have a link-local address, even if no global unicast address is configured. Routers use link-local addresses as the source for routing protocol messages. The format is typically FE80::interface_id.",
+      "sourceUrl": "https://www.ietf.org/rfc/rfc4291.txt",
+      "difficulty": "easy",
+      "tags": ["IPv6", "link-local", "FE80", "address-types"]
+    },
+    {
+      "id": "d1-fc-026",
+      "objectiveCode": "1.8",
+      "question": "What are the characteristics of IPv6 SLAAC (Stateless Address Autoconfiguration)?",
+      "answer": "SLAAC allows hosts to automatically configure their IPv6 address using the network prefix from Router Advertisements (RA) combined with a self-generated interface ID, without a DHCP server.",
+      "explanation": "With SLAAC, the router sends Router Advertisement (RA) messages containing the network prefix and prefix length. The host combines this prefix with an interface ID (generated via EUI-64 or random/privacy methods) to form a complete IPv6 address. The host also uses the router's link-local address as its default gateway. SLAAC is stateless because no server tracks address assignments. The A (Autonomous) flag in the RA must be set for SLAAC to work.",
+      "sourceUrl": "https://www.ietf.org/rfc/rfc4862.txt",
+      "difficulty": "medium",
+      "tags": ["IPv6", "SLAAC", "autoconfiguration", "RA"]
+    },
+    {
+      "id": "d1-fc-027",
+      "objectiveCode": "1.8",
+      "question": "What Cisco IOS command displays IPv6 addresses assigned to interfaces?",
+      "answer": "show ipv6 interface brief",
+      "explanation": "The 'show ipv6 interface brief' command displays each interface's IPv6 addresses (both link-local and global unicast), along with the interface status. For more detail including multicast groups and SLAAC status, use 'show ipv6 interface <type/number>'. To see the IPv6 routing table, use 'show ipv6 route'. To configure an IPv6 address, use 'ipv6 address <address/prefix>' in interface configuration mode.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/xe-16/ip6b-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["IPv6", "IOS-command", "show-commands", "interface"]
+    },
+    {
+      "id": "d1-fc-028",
+      "objectiveCode": "1.9",
+      "question": "What is the function of the default gateway on an end host?",
+      "answer": "The default gateway is the router interface IP address that a host sends packets to when the destination is on a different subnet.",
+      "explanation": "When a host needs to communicate with a device outside its local subnet, it forwards the packet to its configured default gateway (a router). The host compares the destination IP with its own IP and subnet mask. If the destination is not on the local subnet, the host ARPs for the default gateway's MAC address and sends the frame to the router. The router then looks up the destination in its routing table and forwards accordingly.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13788-3.html",
+      "difficulty": "easy",
+      "tags": ["default-gateway", "routing", "end-host", "IP-connectivity"]
+    },
+    {
+      "id": "d1-fc-029",
+      "objectiveCode": "1.9",
+      "question": "What is the purpose of DNS and what port does it use?",
+      "answer": "DNS resolves hostnames to IP addresses. It primarily uses UDP port 53, and TCP port 53 for zone transfers or large responses.",
+      "explanation": "The Domain Name System is a hierarchical naming system that translates human-readable domain names (e.g., www.cisco.com) into IP addresses. DNS queries typically use UDP port 53 for speed. TCP port 53 is used for zone transfers between DNS servers and for responses exceeding 512 bytes. Key DNS record types include A (IPv4 address), AAAA (IPv6 address), CNAME (alias), MX (mail exchange), and PTR (reverse lookup).",
+      "sourceUrl": "https://www.ietf.org/rfc/rfc1035.txt",
+      "difficulty": "easy",
+      "tags": ["DNS", "port-53", "name-resolution", "UDP"]
+    },
+    {
+      "id": "d1-fc-030",
+      "objectiveCode": "1.9",
+      "question": "Describe the DHCP DORA process.",
+      "answer": "DORA stands for Discover, Offer, Request, Acknowledge -- the four-step process a client uses to obtain an IP address from a DHCP server.",
+      "explanation": "1) Discover: Client broadcasts a DHCPDISCOVER to find DHCP servers (src 0.0.0.0, dst 255.255.255.255). 2) Offer: Server responds with a DHCPOFFER containing an available IP. 3) Request: Client broadcasts a DHCPREQUEST accepting the offered IP. 4) Acknowledge: Server sends DHCPACK confirming the lease. DHCP uses UDP ports 67 (server) and 68 (client). If the DHCP server is on a different subnet, a DHCP relay agent (ip helper-address) is needed.",
+      "sourceUrl": "https://www.ietf.org/rfc/rfc2131.txt",
+      "difficulty": "medium",
+      "tags": ["DHCP", "DORA", "IP-addressing", "UDP"]
+    },
+    {
+      "id": "d1-fc-031",
+      "objectiveCode": "1.10",
+      "question": "What Cisco IOS command configures a DHCP relay agent on a router interface?",
+      "answer": "ip helper-address <DHCP-server-IP>",
+      "explanation": "When clients and the DHCP server are on different subnets, the router must relay DHCP broadcasts. The 'ip helper-address' command is configured on the interface facing the clients. It converts the client's broadcast DHCPDISCOVER into a unicast packet directed to the specified DHCP server IP. The relay agent inserts its own interface IP into the giaddr (gateway IP address) field so the server knows which scope to use.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/xe-16/dhcp-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["DHCP", "relay-agent", "ip-helper-address", "IOS-command"]
+    },
+    {
+      "id": "d1-fc-031b",
+      "objectiveCode": "1.10",
+      "question": "What Cisco IOS commands configure a router as a DHCP server for the 192.168.1.0/24 network?",
+      "answer": "ip dhcp pool LAN\n network 192.168.1.0 255.255.255.0\n default-router 192.168.1.1\n dns-server 8.8.8.8\n\nip dhcp excluded-address 192.168.1.1 192.168.1.10",
+      "explanation": "A Cisco router can act as a DHCP server. The 'ip dhcp pool' command creates a named pool. Under the pool: 'network' defines the subnet to assign from, 'default-router' sets the default gateway clients receive, and 'dns-server' specifies DNS servers. The 'ip dhcp excluded-address' command (in global config, not under the pool) reserves addresses for static devices like routers, servers, and printers. Use 'show ip dhcp binding' to see current leases and 'show ip dhcp pool' for pool statistics.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/xe-16/dhcp-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["DHCP", "DHCP-server", "IOS-command", "configuration"]
+    },
+    {
+      "id": "d1-fc-032",
+      "objectiveCode": "1.11",
+      "question": "What are the 2.4 GHz and 5 GHz non-overlapping Wi-Fi channels in North America?",
+      "answer": "2.4 GHz: channels 1, 6, 11. 5 GHz has many more non-overlapping channels (up to 25 depending on regulatory domain).",
+      "explanation": "In the 2.4 GHz band, each channel is 22 MHz wide but channels are spaced only 5 MHz apart, so only channels 1, 6, and 11 do not overlap. In the 5 GHz band, channels are spaced 20 MHz apart with non-overlapping options, and channel bonding to 40/80/160 MHz is supported. The 5 GHz band has more capacity but shorter range. Proper channel planning minimizes co-channel interference.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/technotes/8-6/b_RFDesignGuide.html",
+      "difficulty": "medium",
+      "tags": ["wireless", "channels", "2.4GHz", "5GHz", "RF"]
+    },
+    {
+      "id": "d1-fc-033",
+      "objectiveCode": "1.11",
+      "question": "What is the difference between WPA2 and WPA3 wireless security?",
+      "answer": "WPA2 uses a Pre-Shared Key (PSK) or 802.1X with AES-CCMP encryption. WPA3 adds SAE (Simultaneous Authentication of Equals) for stronger key exchange and forward secrecy.",
+      "explanation": "WPA2-Personal uses PSK with a four-way handshake vulnerable to offline dictionary attacks. WPA3-Personal replaces PSK with SAE (Dragonfly handshake), which provides protection against offline attacks and forward secrecy (compromising one session key doesn't expose past sessions). WPA3-Enterprise offers 192-bit cryptographic strength. WPA3 also includes Enhanced Open (OWE) for encrypting open networks. WPA3 is required for Wi-Fi 6 (802.11ax) certification.",
+      "sourceUrl": "https://www.wi-fi.org/discover-wi-fi/security",
+      "difficulty": "hard",
+      "tags": ["wireless", "WPA2", "WPA3", "security", "encryption"]
+    },
+    {
+      "id": "d1-fc-034",
+      "objectiveCode": "1.11",
+      "question": "What is SSID and what role does it play in wireless networking?",
+      "answer": "An SSID (Service Set Identifier) is the name of a wireless network that clients use to identify and connect to a specific WLAN.",
+      "explanation": "The SSID is broadcast in beacon frames by the access point (unless SSID broadcast is disabled). Clients scan for SSIDs to discover available networks. Multiple SSIDs can be configured on a single AP to support different user groups or security policies. Each SSID is typically mapped to a different VLAN. The SSID can be up to 32 characters and is case-sensitive.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/technotes/8-6/b_RFDesignGuide.html",
+      "difficulty": "easy",
+      "tags": ["wireless", "SSID", "WLAN", "access-point"]
+    },
+    {
+      "id": "d1-fc-035",
+      "objectiveCode": "1.12",
+      "question": "How does a switch build its MAC address table?",
+      "answer": "A switch learns source MAC addresses from incoming frames and records the MAC address with the ingress port in its MAC address table.",
+      "explanation": "When a frame arrives on a port, the switch examines the source MAC address and adds an entry mapping that MAC to the port (if not already present). Entries are timestamped and aged out after 300 seconds (default) of inactivity. When forwarding, the switch looks up the destination MAC: if found, it forwards to that specific port (known unicast); if not found, it floods the frame to all ports except the source port (unknown unicast flooding). Broadcast and multicast frames are also flooded.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg.html",
+      "difficulty": "easy",
+      "tags": ["switching", "MAC-table", "frame-forwarding", "layer-2"]
+    },
+    {
+      "id": "d1-fc-036",
+      "objectiveCode": "1.12",
+      "question": "What Cisco IOS command displays the MAC address table on a switch?",
+      "answer": "show mac address-table",
+      "explanation": "The 'show mac address-table' command displays all learned MAC addresses, including the VLAN, MAC address, type (dynamic or static), and the interface where the MAC was learned. You can filter the output with options: 'show mac address-table dynamic' (only dynamically learned), 'show mac address-table interface Gi0/1' (specific port), or 'show mac address-table vlan 10' (specific VLAN). The default aging time is 300 seconds and can be changed with 'mac address-table aging-time'.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg.html",
+      "difficulty": "easy",
+      "tags": ["switching", "MAC-table", "IOS-command", "show-commands"]
+    },
+    {
+      "id": "d1-fc-037",
+      "objectiveCode": "1.12",
+      "question": "What happens when a switch receives a frame with an unknown destination MAC address?",
+      "answer": "The switch floods the frame out all ports in the same VLAN except the port it was received on (unknown unicast flooding).",
+      "explanation": "When the destination MAC is not in the MAC address table, the switch cannot determine which port to forward the frame to. It floods the frame to all active ports in the same VLAN (except the ingress port). When the destination device replies, the switch learns its MAC address and subsequent frames are forwarded only to that specific port (unicast). Broadcast frames (destination FF:FF:FF:FF:FF:FF) are always flooded to all ports in the VLAN.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg.html",
+      "difficulty": "medium",
+      "tags": ["switching", "unknown-unicast", "flooding", "frame-forwarding"]
+    },
+    {
+      "id": "d1-fc-038",
+      "objectiveCode": "1.13",
+      "question": "What are the key differences between a collision domain and a broadcast domain?",
+      "answer": "A collision domain is a network segment where simultaneous transmissions collide (separated by switches/bridges). A broadcast domain is a set of devices that receive each other's broadcasts (separated by routers).",
+      "explanation": "Each port on a switch is its own collision domain (full-duplex eliminates collisions). However, all ports in the same VLAN share a broadcast domain. Routers separate broadcast domains -- broadcasts do not cross router interfaces. A hub creates one large collision domain for all connected devices. Understanding these concepts helps determine where to place switches, routers, and VLANs to optimize network performance.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/lan-switching/ethernet/10561-3.html",
+      "difficulty": "medium",
+      "tags": ["collision-domain", "broadcast-domain", "switching", "routing"]
+    },
+    {
+      "id": "d1-fc-039",
+      "objectiveCode": "1.13",
+      "question": "What is ARP and how does it work?",
+      "answer": "ARP (Address Resolution Protocol) maps a known IP address to an unknown MAC address by broadcasting an ARP request on the local network.",
+      "explanation": "When Host A wants to communicate with Host B on the same subnet, it knows Host B's IP but needs the MAC address. Host A broadcasts an ARP Request (Who has 192.168.1.2? Tell 192.168.1.1). Host B replies with a unicast ARP Reply containing its MAC address. Host A caches this mapping in its ARP table. ARP operates at Layer 2/3 boundary. Use 'show ip arp' on a router or 'arp -a' on a PC to view the ARP cache. ARP entries time out after a configurable period.",
+      "sourceUrl": "https://www.ietf.org/rfc/rfc826.txt",
+      "difficulty": "easy",
+      "tags": ["ARP", "MAC-address", "IP-address", "layer-2"]
+    },
+    {
+      "id": "d1-fc-040",
+      "objectiveCode": "1.13",
+      "question": "What is the purpose of the 'ip helper-address' command and what protocols does it forward beyond DHCP?",
+      "answer": "It relays broadcast packets as unicast to a specified server. By default it forwards DHCP/BOOTP, TFTP, DNS, TACACS, NetBIOS, and Time Service broadcasts.",
+      "explanation": "The 'ip helper-address' command is configured on a router interface to relay specific UDP broadcast traffic to a remote server. By default, it forwards eight UDP port broadcasts: TFTP (69), DNS (53), Time (37), NetBIOS Name (137), NetBIOS Datagram (138), BOOTP/DHCP client (68), BOOTP/DHCP server (67), and TACACS (49). You can control which services are forwarded using 'no ip forward-protocol udp <port>' to disable specific protocols or 'ip forward-protocol udp <port>' to add custom ones.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/xe-16/dhcp-xe-16-book.html",
+      "difficulty": "hard",
+      "tags": ["ip-helper-address", "DHCP-relay", "broadcast", "IOS-command"]
+    }
+  ]
+}

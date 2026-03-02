@@ -1,0 +1,306 @@
+{
+  "domain": 4,
+  "domainName": "IP Services",
+  "flashcards": [
+    {
+      "id": "d4-fc-001",
+      "objectiveCode": "4.1",
+      "question": "What are the three types of NAT defined in Cisco IOS?",
+      "answer": "Static NAT, Dynamic NAT, and PAT (Port Address Translation, also called NAT overload).",
+      "explanation": "Static NAT maps a single private IP to a single public IP one-to-one. Dynamic NAT maps private IPs to a pool of public IPs on a first-come, first-served basis. PAT (overload) maps multiple private IPs to a single public IP by using unique source port numbers to distinguish sessions.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_nat/configuration/xe-16/nat-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["NAT", "PAT", "IP services"]
+    },
+    {
+      "id": "d4-fc-002",
+      "objectiveCode": "4.1",
+      "question": "Which IOS command configures a static NAT translation mapping inside local address 10.1.1.5 to inside global address 203.0.113.5?",
+      "answer": "ip nat inside source static 10.1.1.5 203.0.113.5",
+      "explanation": "The 'ip nat inside source static' command creates a permanent one-to-one mapping between an inside local address and an inside global address. You must also designate interfaces as 'ip nat inside' or 'ip nat outside' for translations to occur.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_nat/configuration/xe-16/nat-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["NAT", "static NAT", "IOS commands"]
+    },
+    {
+      "id": "d4-fc-003",
+      "objectiveCode": "4.1",
+      "question": "What keyword is added to a dynamic NAT configuration to enable PAT (NAT overload)?",
+      "answer": "The 'overload' keyword.",
+      "explanation": "The command 'ip nat inside source list <ACL> pool <POOL> overload' or 'ip nat inside source list <ACL> interface <INTF> overload' enables PAT. The overload keyword tells the router to use port numbers to multiplex multiple inside hosts through a single or small pool of outside addresses.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_nat/configuration/xe-16/nat-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["NAT", "PAT", "overload", "IOS commands"]
+    },
+    {
+      "id": "d4-fc-004",
+      "objectiveCode": "4.1",
+      "question": "Which command displays the current active NAT translations on a Cisco router?",
+      "answer": "show ip nat translations",
+      "explanation": "This command displays the NAT translation table, showing inside local, inside global, outside local, and outside global addresses for each active translation. The 'show ip nat statistics' command can be used to view NAT hit counts and configuration summary.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_nat/configuration/xe-16/nat-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["NAT", "verification", "IOS commands"]
+    },
+    {
+      "id": "d4-fc-005",
+      "objectiveCode": "4.2",
+      "question": "What is the purpose of NTP (Network Time Protocol) in a network?",
+      "answer": "NTP synchronizes clocks across network devices to ensure consistent and accurate timekeeping.",
+      "explanation": "Accurate time synchronization is critical for correlating syslog messages across devices, validating digital certificates, troubleshooting events in order, and meeting compliance requirements. NTP uses UDP port 123 and can achieve millisecond-level accuracy across a LAN.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/bsm/configuration/xe-16/bsm-xe-16-book/bsm-time-calendar-set.html",
+      "difficulty": "easy",
+      "tags": ["NTP", "time synchronization"]
+    },
+    {
+      "id": "d4-fc-006",
+      "objectiveCode": "4.2",
+      "question": "Which IOS command configures a Cisco device to synchronize its clock with an NTP server at 10.1.1.1?",
+      "answer": "ntp server 10.1.1.1",
+      "explanation": "The 'ntp server' command is configured in global configuration mode and points the device to an NTP server. You can optionally add 'prefer' to make one server the preferred source. Use 'show ntp status' and 'show ntp associations' to verify synchronization.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/bsm/configuration/xe-16/bsm-xe-16-book/bsm-time-calendar-set.html",
+      "difficulty": "easy",
+      "tags": ["NTP", "IOS commands", "configuration"]
+    },
+    {
+      "id": "d4-fc-007",
+      "objectiveCode": "4.3",
+      "question": "What does the acronym DORA stand for in the DHCP process?",
+      "answer": "Discover, Offer, Request, Acknowledge.",
+      "explanation": "DORA describes the four-step process a DHCP client uses to obtain an IP address: (1) Discover - client broadcasts to find servers, (2) Offer - server proposes an IP address, (3) Request - client formally requests the offered address, (4) Acknowledge - server confirms the lease. Discover and Request are sent by the client; Offer and Acknowledge are sent by the server.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/xe-16/dhcp-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["DHCP", "DORA", "IP addressing"]
+    },
+    {
+      "id": "d4-fc-008",
+      "objectiveCode": "4.3",
+      "question": "What is the purpose of a DHCP relay agent, and which IOS command configures it on a router interface?",
+      "answer": "A DHCP relay agent forwards DHCP broadcast messages from clients to a remote DHCP server. The command is 'ip helper-address <server-IP>' on the client-facing interface.",
+      "explanation": "Because DHCP Discover messages are broadcasts, they do not cross router boundaries by default. The 'ip helper-address' command on the router's interface facing the client subnet converts the broadcast into a unicast directed at the specified DHCP server IP, enabling DHCP across multiple subnets.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/xe-16/dhcp-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["DHCP", "relay agent", "ip helper-address", "IOS commands"]
+    },
+    {
+      "id": "d4-fc-009",
+      "objectiveCode": "4.3",
+      "question": "Which IOS command excludes addresses 10.1.1.1 through 10.1.1.10 from a DHCP pool on a Cisco router?",
+      "answer": "ip dhcp excluded-address 10.1.1.1 10.1.1.10",
+      "explanation": "This global configuration command prevents the router's DHCP server from assigning the specified range of addresses. It is commonly used to reserve addresses for routers, switches, servers, and other devices that require static IP assignments within the DHCP scope.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/xe-16/dhcp-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["DHCP", "excluded address", "IOS commands"]
+    },
+    {
+      "id": "d4-fc-010",
+      "objectiveCode": "4.4",
+      "question": "What is the role of DNS in IP networking?",
+      "answer": "DNS resolves human-readable domain names (e.g., www.cisco.com) into IP addresses that devices use to communicate.",
+      "explanation": "The Domain Name System is a hierarchical, distributed database. Clients send queries to recursive resolvers, which traverse the DNS hierarchy (root servers, TLD servers, authoritative servers) to resolve names. DNS primarily uses UDP port 53 for queries and TCP port 53 for zone transfers and large responses.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dns/configuration/xe-16/dns-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["DNS", "name resolution"]
+    },
+    {
+      "id": "d4-fc-011",
+      "objectiveCode": "4.4",
+      "question": "What is the difference between a DNS A record and a DNS AAAA record?",
+      "answer": "An A record maps a hostname to an IPv4 address. An AAAA record maps a hostname to an IPv6 address.",
+      "explanation": "A records store 32-bit IPv4 addresses (e.g., 192.168.1.1), while AAAA records store 128-bit IPv6 addresses (e.g., 2001:db8::1). Other common record types include CNAME (alias), MX (mail exchange), PTR (reverse lookup), and NS (name server).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dns/configuration/xe-16/dns-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["DNS", "record types", "IPv4", "IPv6"]
+    },
+    {
+      "id": "d4-fc-012",
+      "objectiveCode": "4.5",
+      "question": "What are the three main components of an SNMP-managed network?",
+      "answer": "SNMP Manager (NMS), SNMP Agent, and MIB (Management Information Base).",
+      "explanation": "The SNMP Manager (Network Management Station) sends requests and receives notifications. The SNMP Agent is software running on the managed device that responds to manager queries and sends traps. The MIB is a structured database of objects (OIDs) that define what can be monitored and managed on the device.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/snmp/configuration/xe-16/snmp-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["SNMP", "NMS", "MIB", "agent"]
+    },
+    {
+      "id": "d4-fc-013",
+      "objectiveCode": "4.5",
+      "question": "What is the key security improvement of SNMPv3 compared to SNMPv1 and SNMPv2c?",
+      "answer": "SNMPv3 provides authentication (verifying user identity) and encryption (privacy of data), whereas SNMPv1 and SNMPv2c use only community strings sent in plaintext.",
+      "explanation": "SNMPv3 defines three security levels: noAuthNoPriv (username only, no encryption), authNoPriv (authentication with MD5/SHA but no encryption), and authPriv (authentication plus encryption with DES/AES). SNMPv1 and v2c rely on community strings that are transmitted unencrypted, making them vulnerable to interception.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/snmp/configuration/xe-16/snmp-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["SNMP", "SNMPv3", "security", "encryption"]
+    },
+    {
+      "id": "d4-fc-014",
+      "objectiveCode": "4.6",
+      "question": "List the eight syslog severity levels from most severe (0) to least severe (7).",
+      "answer": "0-Emergency, 1-Alert, 2-Critical, 3-Error, 4-Warning, 5-Notification, 6-Informational, 7-Debugging.",
+      "explanation": "A common mnemonic is 'Every Awesome Cisco Engineer Will Need Ice-cream Daily.' When you configure logging at a given level, the device logs all messages at that level and lower (more severe). For example, setting level 4 (Warning) captures levels 0 through 4.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/esm/configuration/xe-16/esm-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["syslog", "severity levels", "logging"]
+    },
+    {
+      "id": "d4-fc-015",
+      "objectiveCode": "4.6",
+      "question": "Which IOS command sends syslog messages to an external syslog server at 10.1.1.100?",
+      "answer": "logging host 10.1.1.100 (or logging 10.1.1.100).",
+      "explanation": "The 'logging host' or simply 'logging <IP>' command in global configuration mode directs the device to send syslog messages to the specified server. You can also set the severity level with 'logging trap <level>' and enable timestamps with 'service timestamps log datetime msec'.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/esm/configuration/xe-16/esm-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["syslog", "logging", "IOS commands"]
+    },
+    {
+      "id": "d4-fc-016",
+      "objectiveCode": "4.6",
+      "question": "What syslog severity level corresponds to 'Warning' and what numeric value does it have?",
+      "answer": "Warning is severity level 4.",
+      "explanation": "Level 4 (Warning) indicates a condition that is not an error but may require attention. If you configure 'logging trap warnings' or 'logging trap 4', the device will send all messages of severity 0 (Emergency) through 4 (Warning) to the syslog server.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/esm/configuration/xe-16/esm-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["syslog", "severity levels"]
+    },
+    {
+      "id": "d4-fc-017",
+      "objectiveCode": "4.7",
+      "question": "What are the three categories of QoS mechanisms used in managing network traffic?",
+      "answer": "Classification and marking, congestion management (queuing), and congestion avoidance.",
+      "explanation": "Classification identifies traffic types (using ACLs, DSCP, CoS, etc.). Marking sets QoS fields in packet headers so downstream devices can apply appropriate treatment. Congestion management uses queuing algorithms (FIFO, WFQ, CBWFQ, LLQ) to prioritize traffic. Congestion avoidance techniques like WRED proactively drop packets before queues overflow.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/qos/configuration/xe-16/qos-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["QoS", "classification", "marking", "queuing"]
+    },
+    {
+      "id": "d4-fc-018",
+      "objectiveCode": "4.7",
+      "question": "What DSCP value is commonly used for voice (EF - Expedited Forwarding), and what is its decimal value?",
+      "answer": "DSCP EF has a decimal value of 46.",
+      "explanation": "Expedited Forwarding (EF, DSCP 46) is used for low-latency, low-jitter traffic like VoIP. In binary it is 101110. Other well-known DSCP values include AF (Assured Forwarding) classes and CS (Class Selector) values. DSCP uses the first 6 bits of the ToS byte in the IP header, allowing 64 possible values (0-63).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/qos/configuration/xe-16/qos-xe-16-book.html",
+      "difficulty": "hard",
+      "tags": ["QoS", "DSCP", "EF", "voice"]
+    },
+    {
+      "id": "d4-fc-019",
+      "objectiveCode": "4.7",
+      "question": "In QoS, what is the difference between classification and marking?",
+      "answer": "Classification identifies and categorizes traffic into classes; marking writes a QoS value into the packet header so other devices can recognize its class.",
+      "explanation": "Classification examines packet fields (source/destination IP, port numbers, protocols, DSCP) to assign traffic to a class. Marking modifies a field in the frame or packet header (such as CoS in an 802.1Q tag or DSCP in the IP header) to indicate the assigned class. Marking should be done as close to the source as possible (trust boundary).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/qos/configuration/xe-16/qos-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["QoS", "classification", "marking"]
+    },
+    {
+      "id": "d4-fc-020",
+      "objectiveCode": "4.8",
+      "question": "What is the first step when configuring SSH on a Cisco IOS device?",
+      "answer": "Configure a hostname and domain name, then generate RSA keys with 'crypto key generate rsa'.",
+      "explanation": "SSH requires an RSA key pair. Before generating keys, IOS requires a hostname (other than the default) and a domain name. The sequence is: (1) hostname <name>, (2) ip domain-name <domain>, (3) crypto key generate rsa modulus 2048, (4) configure local user accounts or AAA, (5) apply 'transport input ssh' on VTY lines.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_usr_ssh/configuration/xe-16/sec-usr-ssh-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["SSH", "crypto key", "IOS commands", "remote access"]
+    },
+    {
+      "id": "d4-fc-021",
+      "objectiveCode": "4.8",
+      "question": "Which IOS command restricts VTY line access to SSH only, disabling Telnet?",
+      "answer": "transport input ssh",
+      "explanation": "Configured under the VTY line configuration (e.g., line vty 0 15), 'transport input ssh' ensures only SSH connections are accepted. Without this command, both Telnet and SSH may be permitted. Combine with 'login local' and a local username/password to complete the SSH configuration.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_usr_ssh/configuration/xe-16/sec-usr-ssh-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["SSH", "VTY", "transport input", "IOS commands"]
+    },
+    {
+      "id": "d4-fc-022",
+      "objectiveCode": "4.9",
+      "question": "What are the key differences between TFTP and FTP?",
+      "answer": "TFTP uses UDP port 69, has no authentication, and supports only simple file transfers. FTP uses TCP ports 20 (data) and 21 (control), supports authentication with username/password, and offers directory listing and other features.",
+      "explanation": "TFTP (Trivial File Transfer Protocol) is a lightweight protocol ideal for transferring IOS images and configurations in trusted environments. FTP (File Transfer Protocol) is more feature-rich, supporting directory navigation, file renaming, and authentication, but transmits credentials in plaintext unless secured with FTPS or SFTP.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/tftp/configuration/xe-16/tftp-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["TFTP", "FTP", "file transfer"]
+    },
+    {
+      "id": "d4-fc-023",
+      "objectiveCode": "4.9",
+      "question": "Which IOS command copies the running configuration to a TFTP server at 10.1.1.200?",
+      "answer": "copy running-config tftp://10.1.1.200/<filename>  (or 'copy running-config tftp' and follow the prompts).",
+      "explanation": "The 'copy' command in privileged EXEC mode is used to transfer files between local storage and network servers. The router will prompt for the remote server address and destination filename if not specified. TFTP is commonly used for backing up configurations and uploading new IOS images.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/tftp/configuration/xe-16/tftp-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["TFTP", "copy command", "IOS commands", "backup"]
+    },
+    {
+      "id": "d4-fc-024",
+      "objectiveCode": "4.1",
+      "question": "In NAT terminology, what is the difference between 'inside local' and 'inside global' addresses?",
+      "answer": "Inside local is the private IP address assigned to an inside host. Inside global is the public IP address that represents the inside host to the outside network.",
+      "explanation": "NAT uses four address types: Inside Local (private IP on the internal network), Inside Global (public IP representing the internal host externally), Outside Local (IP of the external host as seen from the inside), and Outside Global (actual public IP of the external host). In most scenarios, Outside Local and Outside Global are the same.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_nat/configuration/xe-16/nat-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["NAT", "inside local", "inside global", "terminology"]
+    },
+    {
+      "id": "d4-fc-025",
+      "objectiveCode": "4.3",
+      "question": "During the DHCP DORA process, which messages are broadcast and which are unicast?",
+      "answer": "Discover is broadcast, Offer is typically broadcast (or unicast), Request is broadcast, and Acknowledge is typically broadcast (or unicast).",
+      "explanation": "The DHCP Discover is always broadcast (255.255.255.255) because the client has no IP yet. The Offer can be broadcast or unicast depending on implementation. The Request is broadcast so all DHCP servers know which offer was accepted. The Acknowledge can be broadcast or unicast. After a relay agent is involved, messages between the relay and server are unicast.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/xe-16/dhcp-xe-16-book.html",
+      "difficulty": "hard",
+      "tags": ["DHCP", "DORA", "broadcast", "unicast"]
+    },
+    {
+      "id": "d4-fc-026",
+      "objectiveCode": "4.5",
+      "question": "What is the difference between an SNMP 'get' request and an SNMP 'trap'?",
+      "answer": "A 'get' is a poll initiated by the NMS to retrieve data from an agent. A 'trap' is an unsolicited notification sent by the agent to the NMS when a significant event occurs.",
+      "explanation": "SNMP uses a pull model (get, get-next, get-bulk) where the manager queries agents, and a push model (trap, inform) where agents proactively notify the manager. Traps are unreliable (no acknowledgment), while informs (SNMPv2c/v3) are acknowledged by the manager.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/snmp/configuration/xe-16/snmp-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["SNMP", "get", "trap", "polling"]
+    },
+    {
+      "id": "d4-fc-027",
+      "objectiveCode": "4.2",
+      "question": "What is NTP stratum, and what stratum value does an authoritative time source (atomic clock, GPS) have?",
+      "answer": "Stratum indicates the distance from the reference clock. An authoritative time source is stratum 0; the server directly connected to it is stratum 1.",
+      "explanation": "NTP uses a hierarchical system of strata. Stratum 0 devices (atomic clocks, GPS receivers) are reference clocks not directly on the network. Stratum 1 servers are directly connected to stratum 0 sources. Each subsequent level adds 1 to the stratum. The maximum is stratum 15; stratum 16 means unsynchronized. Lower stratum values indicate higher accuracy.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/bsm/configuration/xe-16/bsm-xe-16-book/bsm-time-calendar-set.html",
+      "difficulty": "medium",
+      "tags": ["NTP", "stratum", "time synchronization"]
+    },
+    {
+      "id": "d4-fc-028",
+      "objectiveCode": "4.8",
+      "question": "What is the minimum recommended RSA key modulus size for SSH version 2 on Cisco IOS?",
+      "answer": "768 bits is the minimum for SSHv2, but 2048 bits or higher is recommended.",
+      "explanation": "When generating RSA keys with 'crypto key generate rsa', the modulus size determines key strength. SSHv2 requires at least 768 bits. Best practice is 2048 bits or higher for adequate security. Use 'ip ssh version 2' to force SSHv2 only, as SSHv1 has known vulnerabilities.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_usr_ssh/configuration/xe-16/sec-usr-ssh-xe-16-book.html",
+      "difficulty": "hard",
+      "tags": ["SSH", "RSA", "crypto key", "security"]
+    },
+    {
+      "id": "d4-fc-029",
+      "objectiveCode": "4.7",
+      "question": "What Layer 2 QoS marking field is found in an 802.1Q frame header, and how many priority levels does it provide?",
+      "answer": "Class of Service (CoS), which uses a 3-bit field providing 8 priority levels (0-7).",
+      "explanation": "The 802.1Q tag includes a 3-bit Priority Code Point (PCP) field, commonly referred to as CoS. Values range from 0 (best effort) to 7 (highest priority). CoS only exists in tagged (trunked) frames and is lost when a frame traverses a Layer 3 device, so DSCP marking in the IP header is preferred for end-to-end QoS.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/qos/configuration/xe-16/qos-xe-16-book.html",
+      "difficulty": "hard",
+      "tags": ["QoS", "CoS", "802.1Q", "Layer 2"]
+    },
+    {
+      "id": "d4-fc-030",
+      "objectiveCode": "4.9",
+      "question": "Which transport layer protocol does TFTP use and why?",
+      "answer": "TFTP uses UDP (port 69) because it is designed to be a simple, lightweight file transfer protocol with minimal overhead.",
+      "explanation": "TFTP uses UDP to keep the protocol simple and reduce overhead. It implements its own reliability mechanism using acknowledgments and retransmissions at the application layer. Each data block is 512 bytes (by default) and must be acknowledged before the next block is sent, providing a simple stop-and-wait flow control.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/tftp/configuration/xe-16/tftp-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["TFTP", "UDP", "file transfer"]
+    }
+  ]
+}

@@ -1,0 +1,213 @@
+{
+  "examId": "domain-3-quiz",
+  "title": "Domain 3: IP Connectivity Quiz",
+  "description": "Focused quiz on IP Connectivity objectives covering routing tables, forwarding decisions, static routing, OSPFv2, and first hop redundancy",
+  "totalQuestions": 12,
+  "timeLimit": 24,
+  "questions": [
+    {
+      "id": "dq3-q1",
+      "objectiveCode": "3.1",
+      "type": "multiple_choice",
+      "question": "In a routing table entry 'O 10.1.1.0/24 [110/20] via 192.168.1.2', what does the value 110 represent?",
+      "options": [
+        "A. The OSPF metric (cost) to reach the network",
+        "B. The administrative distance assigned to the OSPF routing protocol",
+        "C. The OSPF area ID where the route was learned",
+        "D. The hop count to the destination network"
+      ],
+      "correctAnswer": "B",
+      "explanation": "In a routing table entry, the first number in brackets is the administrative distance (AD). OSPF has a default AD of 110. The second number (20) is the metric. The 'O' code indicates the route was learned via OSPF.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/ip-routed-protocols/1-5882-route-table.html",
+      "difficulty": "easy",
+      "tags": ["routing-table", "administrative-distance", "ospf"]
+    },
+    {
+      "id": "dq3-q2",
+      "objectiveCode": "3.1",
+      "type": "multiple_choice",
+      "question": "Which routing table code indicates a directly connected network?",
+      "options": [
+        "A. S - Static",
+        "B. O - OSPF",
+        "C. C - Connected",
+        "D. L - Local"
+      ],
+      "correctAnswer": "C",
+      "explanation": "The 'C' code in the routing table indicates a directly connected network. 'L' indicates a local route (the interface's own IP address with a /32 mask), 'S' indicates a static route, and 'O' indicates an OSPF-learned route.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/ip-routed-protocols/1-5882-route-table.html",
+      "difficulty": "easy",
+      "tags": ["routing-table", "connected-routes", "routing-codes"]
+    },
+    {
+      "id": "dq3-q3",
+      "objectiveCode": "3.1",
+      "type": "multiple_choice",
+      "question": "What is the purpose of the gateway of last resort in a routing table?",
+      "options": [
+        "A. It identifies the fastest path to all networks in the routing domain",
+        "B. It specifies the next-hop address used when no specific route matches the destination",
+        "C. It defines the backup OSPF designated router for the network segment",
+        "D. It lists all directly connected interfaces on the router"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The gateway of last resort is a default route (0.0.0.0/0) that the router uses when it has no more specific route matching the destination IP address. It acts as a catch-all route, typically pointing toward the Internet or an upstream router.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/ip-routed-protocols/16448-default.html",
+      "difficulty": "easy",
+      "tags": ["routing-table", "default-route", "gateway-of-last-resort"]
+    },
+    {
+      "id": "dq3-q4",
+      "objectiveCode": "3.2",
+      "type": "multiple_choice",
+      "question": "A router has the following routes in its routing table: 10.0.0.0/8, 10.1.0.0/16, and 10.1.1.0/24. A packet arrives destined for 10.1.1.50. Which route will the router use to forward the packet?",
+      "options": [
+        "A. 10.0.0.0/8 because it was installed first",
+        "B. 10.1.0.0/16 because it has the best metric",
+        "C. 10.1.1.0/24 because it is the longest prefix match",
+        "D. The router will load-balance across all three routes"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Routers use the longest prefix match algorithm to select the best route. The /24 route is the most specific match for 10.1.1.50, as it matches the first 24 bits of the destination address. Longer prefix matches always take priority over shorter ones, regardless of when routes were installed or their metrics.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/ip-routed-protocols/1-5882-route-table.html",
+      "difficulty": "medium",
+      "tags": ["forwarding-decision", "longest-prefix-match", "route-selection"]
+    },
+    {
+      "id": "dq3-q5",
+      "objectiveCode": "3.2",
+      "type": "multiple_choice",
+      "question": "A router learns a route to 172.16.0.0/16 via both OSPF (AD 110) and EIGRP (AD 90). Which route will be installed in the routing table?",
+      "options": [
+        "A. The OSPF route because OSPF is a link-state protocol",
+        "B. The EIGRP route because it has a lower administrative distance",
+        "C. Both routes will be installed for load balancing",
+        "D. The route with the lower metric regardless of the routing protocol"
+      ],
+      "correctAnswer": "B",
+      "explanation": "When the same route is learned from multiple routing protocols, the router prefers the route with the lowest administrative distance (AD). EIGRP has an AD of 90, which is lower than OSPF's AD of 110, so the EIGRP route will be installed. Metric comparison only occurs between routes from the same routing protocol.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/ip-routed-protocols/1-5882-route-table.html",
+      "difficulty": "medium",
+      "tags": ["forwarding-decision", "administrative-distance", "route-selection"]
+    },
+    {
+      "id": "dq3-q6",
+      "objectiveCode": "3.3",
+      "type": "multiple_choice",
+      "question": "Which command configures a floating static route on a Cisco router?",
+      "options": [
+        "A. ip route 10.1.1.0 255.255.255.0 192.168.1.1",
+        "B. ip route 10.1.1.0 255.255.255.0 192.168.1.1 130",
+        "C. ip route 10.1.1.0 255.255.255.0 192.168.1.1 permanent",
+        "D. ip route 10.1.1.0 255.255.255.0 192.168.1.1 name BACKUP"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A floating static route is configured by specifying a higher administrative distance than the primary route. The number 130 at the end of the command sets the AD to 130, which is higher than OSPF (110) or EIGRP (90), so this route will only be used if the dynamically learned route is lost. A normal static route has an AD of 1.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/iri-xe-16-book/iri-static-route.html",
+      "difficulty": "medium",
+      "tags": ["static-routing", "floating-static", "administrative-distance"]
+    },
+    {
+      "id": "dq3-q7",
+      "objectiveCode": "3.3",
+      "type": "multiple_select",
+      "question": "Which of the following are valid types of static routes? (Choose three)",
+      "options": [
+        "A. Default route (0.0.0.0/0)",
+        "B. Network route to a specific subnet",
+        "C. Host route with a /32 mask",
+        "D. Multicast route (224.0.0.0/4)"
+      ],
+      "correctAnswer": ["A", "B", "C"],
+      "explanation": "The three types of static routes covered in the CCNA blueprint are: default routes (0.0.0.0/0) which match all destinations, network routes that point to specific subnets, and host routes that use a /32 mask to reach a single host. Multicast routing uses different protocols (like PIM) and is not configured as a static route.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/iri-xe-16-book/iri-static-route.html",
+      "difficulty": "easy",
+      "tags": ["static-routing", "default-route", "host-route", "network-route"]
+    },
+    {
+      "id": "dq3-q8",
+      "objectiveCode": "3.4",
+      "type": "multiple_choice",
+      "question": "What is the OSPF router ID selection order of preference on a Cisco router?",
+      "options": [
+        "A. Highest loopback IP → highest physical IP → manual configuration",
+        "B. Manual configuration → highest loopback IP → highest physical IP",
+        "C. Lowest loopback IP → lowest physical IP → manual configuration",
+        "D. Manual configuration → lowest loopback IP → lowest physical IP"
+      ],
+      "correctAnswer": "B",
+      "explanation": "OSPF selects the router ID in this order: (1) manually configured router ID using the 'router-id' command, (2) highest IP address on any active loopback interface, (3) highest IP address on any active physical interface. Manual configuration always takes priority.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13689-17.html",
+      "difficulty": "medium",
+      "tags": ["ospf", "router-id", "configuration"]
+    },
+    {
+      "id": "dq3-q9",
+      "objectiveCode": "3.4",
+      "type": "multiple_choice",
+      "question": "On a broadcast network segment, what role does the Designated Router (DR) play in OSPF?",
+      "options": [
+        "A. It forwards all data packets on behalf of other routers on the segment",
+        "B. It reduces the number of adjacencies by acting as the central point for LSA exchange",
+        "C. It assigns IP addresses to all routers on the segment via DHCP",
+        "D. It acts as the root bridge for spanning tree on the segment"
+      ],
+      "correctAnswer": "B",
+      "explanation": "On OSPF broadcast networks, the DR reduces the number of OSPF adjacencies needed. Instead of every router forming a full adjacency with every other router (n*(n-1)/2), all routers form adjacencies only with the DR and BDR. The DR collects and distributes LSAs to all other routers on the segment, significantly reducing OSPF overhead.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html",
+      "difficulty": "medium",
+      "tags": ["ospf", "dr-bdr", "broadcast-network", "adjacency"]
+    },
+    {
+      "id": "dq3-q10",
+      "objectiveCode": "3.4",
+      "type": "multiple_select",
+      "question": "Which two conditions must be met for two OSPF routers to form a neighbor adjacency? (Choose two)",
+      "options": [
+        "A. Matching OSPF area IDs",
+        "B. Matching router IDs",
+        "C. Matching hello and dead timer intervals",
+        "D. Matching OSPF process IDs"
+      ],
+      "correctAnswer": ["A", "C"],
+      "explanation": "For OSPF routers to become neighbors, they must share the same area ID and have matching hello/dead timer intervals (plus matching subnet, authentication, and stub area flags). Router IDs must be unique (not matching), and OSPF process IDs are locally significant and do not need to match between routers.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13684-12.html",
+      "difficulty": "hard",
+      "tags": ["ospf", "neighbor-adjacency", "hello-dead-timers", "area-id"]
+    },
+    {
+      "id": "dq3-q11",
+      "objectiveCode": "3.5",
+      "type": "multiple_choice",
+      "question": "What is the primary purpose of First Hop Redundancy Protocols (FHRPs) such as HSRP?",
+      "options": [
+        "A. To load balance traffic across multiple WAN links",
+        "B. To provide default gateway redundancy for hosts on a LAN segment",
+        "C. To enable dynamic routing protocol failover between OSPF areas",
+        "D. To encrypt traffic between the host and its default gateway"
+      ],
+      "correctAnswer": "B",
+      "explanation": "First Hop Redundancy Protocols like HSRP (Hot Standby Router Protocol), VRRP, and GLBP provide default gateway redundancy. They allow multiple routers to share a virtual IP address that hosts use as their default gateway. If the active router fails, the standby router takes over the virtual IP, ensuring hosts maintain connectivity without reconfiguration.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipapp_fhrp/configuration/xe-16/fhp-xe-16-book/fhp-hsrp.html",
+      "difficulty": "easy",
+      "tags": ["fhrp", "hsrp", "gateway-redundancy", "high-availability"]
+    },
+    {
+      "id": "dq3-q12",
+      "objectiveCode": "3.5",
+      "type": "multiple_choice",
+      "question": "Which FHRP is a Cisco-proprietary protocol that allows one active router and one or more standby routers to share a virtual IP address?",
+      "options": [
+        "A. VRRP (Virtual Router Redundancy Protocol)",
+        "B. HSRP (Hot Standby Router Protocol)",
+        "C. GLBP (Gateway Load Balancing Protocol)",
+        "D. STP (Spanning Tree Protocol)"
+      ],
+      "correctAnswer": "B",
+      "explanation": "HSRP (Hot Standby Router Protocol) is Cisco-proprietary and uses an active/standby model where one router actively forwards traffic and one or more standby routers are ready to take over. VRRP is the IEEE standard equivalent (master/backup model). GLBP is also Cisco-proprietary but differs by providing load balancing across multiple gateways. STP is not an FHRP.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipapp_fhrp/configuration/xe-16/fhp-xe-16-book/fhp-hsrp.html",
+      "difficulty": "easy",
+      "tags": ["fhrp", "hsrp", "vrrp", "glbp"]
+    }
+  ]
+}

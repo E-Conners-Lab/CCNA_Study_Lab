@@ -1,0 +1,179 @@
+{
+  "examId": "domain-4-quiz",
+  "title": "Domain 4: IP Services Quiz",
+  "description": "Focused quiz on IP Services objectives 4.2, 4.7, 4.8, and 4.9",
+  "totalQuestions": 10,
+  "timeLimit": 20,
+  "questions": [
+    {
+      "id": "dq4-q1",
+      "objectiveCode": "4.2",
+      "type": "multiple_choice",
+      "question": "Which Cisco IOS command configures a router to synchronize its clock with an NTP server at 10.1.1.1?",
+      "options": [
+        "A. ntp server 10.1.1.1",
+        "B. ntp master 10.1.1.1",
+        "C. clock set 10.1.1.1",
+        "D. ntp peer 10.1.1.1"
+      ],
+      "correctAnswer": "A",
+      "explanation": "The command 'ntp server <ip-address>' configures a device as an NTP client that synchronizes its clock from the specified NTP server. The command 'ntp master' configures the local device to act as an NTP server (authoritative clock source), not a client. 'ntp peer' sets up a symmetric NTP peering relationship where both devices can synchronize with each other. 'clock set' manually sets the time and is not related to NTP.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/bsm/configuration/xe-16/bsm-xe-16-book/bsm-time-calendar-set.html",
+      "difficulty": "easy",
+      "tags": ["NTP", "time synchronization", "IOS commands"]
+    },
+    {
+      "id": "dq4-q2",
+      "objectiveCode": "4.2",
+      "type": "multiple_choice",
+      "question": "A network administrator needs to verify that a Cisco router is successfully synchronizing time with an NTP server. Which command displays the NTP synchronization status including stratum level and reference clock?",
+      "options": [
+        "A. show clock",
+        "B. show ntp status",
+        "C. show ntp peers",
+        "D. show time"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The 'show ntp status' command displays the NTP synchronization status, including whether the clock is synchronized, the stratum level, the reference clock source, and the precision. 'show clock' displays the current time but does not show NTP synchronization details. 'show ntp associations' (not 'show ntp peers') shows configured NTP servers and their status. A stratum value of 1 indicates a primary time source, and each subsequent level adds one to the stratum.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/bsm/configuration/xe-16/bsm-xe-16-book/bsm-time-calendar-set.html",
+      "difficulty": "medium",
+      "tags": ["NTP", "verification", "show commands", "stratum"]
+    },
+    {
+      "id": "dq4-q3",
+      "objectiveCode": "4.2",
+      "type": "multiple_choice",
+      "question": "What does the 'ntp master 3' command configure on a Cisco router?",
+      "options": [
+        "A. The router will synchronize with an NTP server at stratum 3",
+        "B. The router will act as an NTP server with a stratum level of 3",
+        "C. The router will accept NTP updates only from stratum 3 or lower servers",
+        "D. The router will send NTP updates every 3 seconds"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The 'ntp master <stratum>' command configures the local router to act as an authoritative NTP server at the specified stratum level. In this case, 'ntp master 3' makes the router an NTP server at stratum 3. Other devices configured with 'ntp server <this-router-ip>' will synchronize their clocks from this router and operate at stratum 4 (one level higher). Stratum 0 devices are atomic clocks; stratum 1 servers connect directly to stratum 0 sources.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/bsm/configuration/xe-16/bsm-xe-16-book/bsm-time-calendar-set.html",
+      "difficulty": "medium",
+      "tags": ["NTP", "NTP master", "stratum", "server mode"]
+    },
+    {
+      "id": "dq4-q4",
+      "objectiveCode": "4.7",
+      "type": "multiple_choice",
+      "question": "What is the primary function of SNMP (Simple Network Management Protocol) in network operations?",
+      "options": [
+        "A. To provide encrypted remote access to network device CLI",
+        "B. To collect and organize information about managed devices on the network and allow administrators to modify device configurations",
+        "C. To synchronize time across all network devices",
+        "D. To authenticate users accessing network resources"
+      ],
+      "correctAnswer": "B",
+      "explanation": "SNMP is used for network monitoring and management. It allows network management systems (NMS) to collect information from managed devices (routers, switches, servers) using GET operations and to modify configurations using SET operations. SNMP uses a manager-agent model where agents on managed devices respond to queries from the NMS. SNMP uses MIBs (Management Information Bases) to define the data structure of managed objects. SSH provides encrypted CLI access, NTP handles time synchronization, and RADIUS/TACACS+ handle user authentication.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/snmp/configuration/xe-16/snmp-xe-16-book/nm-snmp-cfg-snmp-support.html",
+      "difficulty": "easy",
+      "tags": ["SNMP", "network management", "monitoring"]
+    },
+    {
+      "id": "dq4-q5",
+      "objectiveCode": "4.7",
+      "type": "multiple_choice",
+      "question": "Which version of SNMP provides authentication using usernames and passwords, encryption for privacy, and message integrity, making it suitable for secure network management?",
+      "options": [
+        "A. SNMPv1",
+        "B. SNMPv2c",
+        "C. SNMPv3",
+        "D. SNMPv2"
+      ],
+      "correctAnswer": "C",
+      "explanation": "SNMPv3 provides significant security enhancements over previous versions, including authentication (verifying the message sender using MD5 or SHA), encryption (protecting message content using DES or AES for privacy), and message integrity (ensuring data is not tampered with in transit). SNMPv1 and SNMPv2c rely on community strings sent in cleartext, which provide minimal security. SNMPv3 supports three security levels: noAuthNoPriv, authNoPriv, and authPriv.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/snmp/configuration/xe-16/snmp-xe-16-book/nm-snmp-cfg-snmp-support.html",
+      "difficulty": "medium",
+      "tags": ["SNMPv3", "security", "authentication", "encryption"]
+    },
+    {
+      "id": "dq4-q6",
+      "objectiveCode": "4.8",
+      "type": "multiple_choice",
+      "question": "In the syslog severity level system, which severity level represents an 'Error' condition and uses the numerical value 3?",
+      "options": [
+        "A. Level 3 - Error",
+        "B. Level 4 - Warning",
+        "C. Level 3 - Critical",
+        "D. Level 2 - Critical"
+      ],
+      "correctAnswer": "A",
+      "explanation": "The syslog severity levels from most severe to least severe are: 0-Emergency, 1-Alert, 2-Critical, 3-Error, 4-Warning, 5-Notification, 6-Informational, 7-Debugging. Level 3 corresponds to Error conditions. A common mnemonic is 'Every Awesome Cisco Engineer Will Need Ice-cream Daily.' When configuring syslog on a Cisco device, specifying a level includes all messages at that level and more severe (lower number) levels.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/routers/access/wireless/software/guide/SysslogMsgsBook/sysmsg1.html",
+      "difficulty": "easy",
+      "tags": ["syslog", "severity levels", "logging"]
+    },
+    {
+      "id": "dq4-q7",
+      "objectiveCode": "4.8",
+      "type": "multiple_choice",
+      "question": "A network administrator configures 'logging trap 4' on a Cisco router that sends syslog messages to an external syslog server. Which severity levels of messages will be sent to the syslog server?",
+      "options": [
+        "A. Only level 4 (Warning) messages",
+        "B. Levels 0 through 4 (Emergency, Alert, Critical, Error, Warning)",
+        "C. Levels 4 through 7 (Warning, Notification, Informational, Debugging)",
+        "D. All levels 0 through 7"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The 'logging trap <level>' command specifies the maximum severity level to send to the syslog server. When set to 4 (Warning), all messages at that level and more severe (lower numbers) are sent: 0-Emergency, 1-Alert, 2-Critical, 3-Error, and 4-Warning. Messages at levels 5 (Notification), 6 (Informational), and 7 (Debugging) are not sent. The term 'trap' in this context refers to the logging severity filter, not SNMP traps.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/esm/configuration/xe-16/esm-xe-16-book/esm-syslog-external.html",
+      "difficulty": "medium",
+      "tags": ["syslog", "logging trap", "severity levels", "syslog server"]
+    },
+    {
+      "id": "dq4-q8",
+      "objectiveCode": "4.8",
+      "type": "multiple_choice",
+      "question": "In syslog messages, what does the 'facility' code indicate?",
+      "options": [
+        "A. The severity of the message",
+        "B. The source process or module that generated the message",
+        "C. The destination syslog server address",
+        "D. The timestamp format of the message"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The syslog facility code identifies the source process, module, or subsystem that generated the message. For example, on Cisco devices, facility codes like %LINEPROTO, %SYS, %OSPF, and %LINK indicate which component produced the message. The facility helps administrators filter and categorize messages from different sources. The severity level (0-7) indicates the seriousness of the message, which is a separate field from the facility.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/routers/access/wireless/software/guide/SysMsgGuide/sys_msgs.html",
+      "difficulty": "medium",
+      "tags": ["syslog", "facility", "logging", "message format"]
+    },
+    {
+      "id": "dq4-q9",
+      "objectiveCode": "4.9",
+      "type": "multiple_choice",
+      "question": "A client device connects to a network and needs to automatically obtain an IP address, subnet mask, default gateway, and DNS server address. Which protocol provides this functionality?",
+      "options": [
+        "A. DNS",
+        "B. ARP",
+        "C. DHCP",
+        "D. NAT"
+      ],
+      "correctAnswer": "C",
+      "explanation": "DHCP (Dynamic Host Configuration Protocol) automatically assigns IP configuration parameters to client devices. The DHCP process uses four messages known as DORA: Discover (client broadcasts to find servers), Offer (server proposes an address), Request (client accepts the offer), and Acknowledge (server confirms the lease). DHCP provides the IP address, subnet mask, default gateway, DNS server addresses, and lease duration. DNS resolves domain names to IP addresses, ARP maps IP addresses to MAC addresses, and NAT translates between private and public addresses.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/xe-16/dhcp-xe-16-book/dhcp-prt-bsd-aa.html",
+      "difficulty": "easy",
+      "tags": ["DHCP", "DORA", "IP addressing", "automatic configuration"]
+    },
+    {
+      "id": "dq4-q10",
+      "objectiveCode": "4.9",
+      "type": "multiple_choice",
+      "question": "When a host needs to access the website www.cisco.com, it must first resolve the domain name to an IP address. Which statement correctly describes how DNS resolution works?",
+      "options": [
+        "A. The host broadcasts a DNS request to all devices on the local subnet to find the IP address",
+        "B. The host sends a DNS query to its configured DNS server, which may recursively query other DNS servers to resolve the fully qualified domain name to an IP address",
+        "C. The host checks its ARP cache to translate the domain name to a MAC address",
+        "D. The DNS server pushes IP-to-hostname mappings to all clients on the network proactively"
+      ],
+      "correctAnswer": "B",
+      "explanation": "DNS (Domain Name System) is a hierarchical, client-server system. When a host needs to resolve a domain name, it sends a DNS query (typically UDP port 53) to its configured DNS server (often obtained via DHCP). If the DNS server does not have the answer cached, it performs recursive queries to root servers, TLD servers, and authoritative servers to resolve the name. DNS does not use broadcasts, does not involve ARP, and operates on a query-response model rather than proactively pushing data to clients.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dns/configuration/xe-16/dns-xe-16-book/dns-config-dns.html",
+      "difficulty": "medium",
+      "tags": ["DNS", "name resolution", "client-server", "UDP port 53"]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "slug": "vlan-config",
+  "title": "VLAN Configuration",
+  "description": "Configure VLANs on a Cisco switch, assign access ports to specific VLANs, and set up a trunk port with a native VLAN.",
+  "domain": "Network Access",
+  "domainSlug": "network-access",
+  "objectiveCode": "2.1",
+  "difficulty": "medium",
+  "estimatedMinutes": 25,
+  "type": "ios-cli",
+  "tags": ["vlan", "switching", "trunk", "access-port", "native-vlan"],
+  "instructions": "## VLAN Configuration Lab\n\nIn this lab you will configure VLANs on a Cisco switch, assign interfaces to VLANs as access ports, and configure a trunk port.\n\n### Topology\n\n- **Switch1** with the following interfaces:\n  - Gi0/1 - connected to a Sales department host\n  - Gi0/2 - connected to an Engineering department host\n  - Gi0/3 - connected to a Management department host\n  - Gi0/24 - uplink to another switch (trunk)\n\n### Requirements\n\n1. **Create VLANs**\n   - VLAN 10 with the name `Sales`\n   - VLAN 20 with the name `Engineering`\n   - VLAN 30 with the name `Management`\n   - VLAN 99 (to be used as the native VLAN on the trunk)\n\n2. **Assign Access Ports**\n   - Configure Gi0/1 as an access port in VLAN 10\n   - Configure Gi0/2 as an access port in VLAN 20\n   - Configure Gi0/3 as an access port in VLAN 30\n\n3. **Configure Trunk Port**\n   - Configure Gi0/24 as a trunk port using 802.1Q encapsulation\n   - Set the native VLAN to 99 on the trunk\n\n### Steps\n\n1. Enter global configuration mode.\n2. Create each VLAN and assign its name.\n3. Enter each interface and configure it as an access port with the correct VLAN.\n4. Configure the trunk port on Gi0/24.\n5. Verify your configuration with `show vlan brief` and `show interfaces trunk`.",
+  "starterCode": "! Enter your IOS commands below\n! Start in privileged EXEC mode\nenable\nconfigure terminal\n!\n! Step 1: Create VLANs\n!\n!\n! Step 2: Assign access ports\n!\n!\n! Step 3: Configure trunk port\n!\n!",
+  "solutionCode": "enable\nconfigure terminal\n!\nvlan 10\n name Sales\nvlan 20\n name Engineering\nvlan 30\n name Management\nvlan 99\n exit\n!\ninterface GigabitEthernet0/1\n switchport mode access\n switchport access vlan 10\n no shutdown\n!\ninterface GigabitEthernet0/2\n switchport mode access\n switchport access vlan 20\n no shutdown\n!\ninterface GigabitEthernet0/3\n switchport mode access\n switchport access vlan 30\n no shutdown\n!\ninterface GigabitEthernet0/24\n switchport trunk encapsulation dot1q\n switchport mode trunk\n switchport trunk native vlan 99\n no shutdown\n!\nend",
+  "expectedOutput": "VLAN Name                             Status    Ports\n---- -------------------------------- --------- -------------------------------\n1    default                          active\n10   Sales                            active    Gi0/1\n20   Engineering                      active    Gi0/2\n30   Management                       active    Gi0/3\n99   VLAN0099                         active\n\nPort        Mode         Encapsulation  Status        Native vlan\nGi0/24      on           802.1q         trunking      99",
+  "hints": [
+    "To create a VLAN, use the global configuration command 'vlan <id>' followed by 'name <vlan-name>'. You do not need to be inside an interface to create VLANs.",
+    "For access ports, enter the interface configuration, then use 'switchport mode access' followed by 'switchport access vlan <id>'. Make sure to set the mode before assigning the VLAN.",
+    "For the trunk port, you may need 'switchport trunk encapsulation dot1q' before 'switchport mode trunk' on some switch models. Set the native VLAN with 'switchport trunk native vlan 99'."
+  ],
+  "learningObjectives": [
+    "Create VLANs and assign descriptive names on a Cisco switch",
+    "Configure switch interfaces as access ports and assign them to specific VLANs",
+    "Configure a trunk port with 802.1Q encapsulation and a non-default native VLAN"
+  ]
+}

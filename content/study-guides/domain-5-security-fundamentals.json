@@ -1,0 +1,279 @@
+{
+  "domain": 5,
+  "slug": "security-fundamentals",
+  "name": "Security Fundamentals",
+  "weight": 15,
+  "overview": "Security Fundamentals is one of the most heavily weighted domains on the CCNA exam, covering threat mitigation, access control, VPNs, wireless security, and Layer 2 protection mechanisms. This domain requires understanding both theoretical security concepts and practical configuration of ACLs, port security, DHCP snooping, and wireless security on Cisco devices. Success in this domain demands knowledge of how security controls work together to create a defense-in-depth strategy.",
+  "keyTopics": [
+    {
+      "objectiveCode": "5.1",
+      "title": "Define key security concepts (threats, vulnerabilities, exploits, and mitigation techniques)",
+      "summary": "Understanding fundamental security terminology is essential for identifying and addressing network risks. Threats are potential dangers, vulnerabilities are weaknesses that can be exploited, and exploits are the actual mechanisms used to take advantage of vulnerabilities. Mitigation techniques reduce or eliminate the risk posed by these threats.",
+      "keyPoints": [
+        "A threat is any potential danger to an asset, a vulnerability is a weakness in a system, and an exploit is code or technique that takes advantage of a vulnerability",
+        "Common threat types include malware (viruses, worms, trojans, ransomware), social engineering (phishing, pretexting), denial-of-service (DoS/DDoS), and man-in-the-middle attacks",
+        "Mitigation techniques include firewalls, IDS/IPS, ACLs, encryption, authentication, patching, and network segmentation",
+        "Defense-in-depth is a layered security approach that uses multiple security controls at different network layers to protect assets"
+      ],
+      "examTips": [
+        "Be able to differentiate between types of malware: viruses need a host file, worms self-replicate across networks, trojans disguise themselves as legitimate software, and ransomware encrypts data for payment",
+        "Know that a zero-day exploit targets a vulnerability that has no available patch, making it particularly dangerous"
+      ],
+      "resources": [
+        {
+          "title": "Cisco Network Security Fundamentals",
+          "url": "https://www.cisco.com/c/en/us/products/security/what-is-network-security.html"
+        },
+        {
+          "title": "Cisco Threat Landscape Overview",
+          "url": "https://www.cisco.com/c/en/us/products/security/common-cyberattacks.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "5.2",
+      "title": "Describe security program elements (user awareness, training, and physical access control)",
+      "summary": "A comprehensive security program extends beyond technical controls to include user education, policies, and physical safeguards. User awareness training is one of the most effective defenses against social engineering attacks, while physical access controls prevent unauthorized persons from reaching network infrastructure.",
+      "keyPoints": [
+        "User awareness programs educate employees about phishing, social engineering, password hygiene, and acceptable use policies",
+        "Security training should be recurring and updated to address evolving threats, not a one-time event",
+        "Physical access controls include locked server rooms, badge readers, security cameras, biometric scanners, and mantrap entrances",
+        "Administrative controls include security policies, incident response plans, background checks, and separation of duties"
+      ],
+      "examTips": [
+        "Remember that the human element is often the weakest link in security; social engineering attacks target people rather than technology",
+        "Understand that security programs combine administrative controls (policies), technical controls (firewalls, ACLs), and physical controls (locks, cameras) for comprehensive protection"
+      ],
+      "resources": [
+        {
+          "title": "Cisco Security Awareness",
+          "url": "https://www.cisco.com/c/en/us/products/security/what-is-cybersecurity.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "5.3",
+      "title": "Configure and verify device access control using local passwords",
+      "summary": "Securing access to network device management interfaces is a fundamental security practice. Cisco devices support multiple methods of password protection for console, VTY, and privileged EXEC access, with varying levels of encryption strength.",
+      "keyPoints": [
+        "Console access is secured with 'line console 0', 'password <pass>', and 'login'; or with 'login local' to use the local username database",
+        "VTY (Telnet/SSH) access is secured with 'line vty 0 15', a password, and 'login' or 'login local' for local database authentication",
+        "Privileged EXEC mode is protected with 'enable secret <password>' which uses MD5 hashing, preferred over 'enable password' which stores in cleartext",
+        "The 'service password-encryption' command applies Type 7 weak encryption to all plaintext passwords in the configuration, but this is easily reversible",
+        "Use 'username <name> secret <password>' to create local accounts with MD5-hashed (Type 5) passwords"
+      ],
+      "examTips": [
+        "Always use 'enable secret' over 'enable password' because 'enable secret' uses a stronger hash; if both are configured, 'enable secret' takes precedence",
+        "Remember that 'service password-encryption' only provides Type 7 obfuscation which is trivially reversible; it is not a substitute for strong password types"
+      ],
+      "resources": [
+        {
+          "title": "Cisco Password Configuration Best Practices",
+          "url": "https://www.cisco.com/c/en/us/support/docs/security-vpn/remote-authentication-dial-user-service-radius/107614-64.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "5.4",
+      "title": "Describe security password policies elements",
+      "summary": "Strong password policies are a critical component of any security framework, encompassing complexity requirements, multi-factor authentication, and alternative authentication methods. Understanding these elements helps organizations balance security with usability.",
+      "keyPoints": [
+        "Password complexity policies enforce minimum length, character variety (uppercase, lowercase, numbers, special characters), and prohibit common or previously used passwords",
+        "Multi-factor authentication (MFA) combines two or more factors: something you know (password), something you have (token/phone), and something you are (biometrics)",
+        "Digital certificates use public key infrastructure (PKI) to verify identity without passwords and are used in 802.1X, VPNs, and SSL/TLS",
+        "Biometric authentication uses unique physical characteristics like fingerprints, facial recognition, or iris scans as an authentication factor",
+        "Password management includes regular rotation schedules, account lockout after failed attempts, and secure password storage using hashing"
+      ],
+      "examTips": [
+        "Know the three MFA factors and be able to classify examples: a PIN is 'something you know', a smart card is 'something you have', and a fingerprint is 'something you are'",
+        "Understand that certificates provide non-repudiation (proof of identity) in addition to authentication and encryption"
+      ],
+      "resources": [
+        {
+          "title": "Cisco Identity Services Engine (ISE) Overview",
+          "url": "https://www.cisco.com/c/en/us/products/security/identity-services-engine/index.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "5.5",
+      "title": "Describe IPsec remote access and site-to-site VPNs",
+      "summary": "Virtual Private Networks (VPNs) create secure encrypted tunnels over untrusted networks like the internet. IPsec is the primary protocol suite used for both site-to-site VPNs connecting branch offices and remote access VPNs for individual users connecting to corporate resources.",
+      "keyPoints": [
+        "Site-to-site VPNs create a permanent encrypted tunnel between two network devices (typically routers or firewalls) to connect entire networks together",
+        "Remote access VPNs allow individual users to connect securely to the corporate network from any location using VPN client software",
+        "IPsec provides confidentiality (encryption via AES or DES), integrity (hashing via SHA or MD5), authentication (pre-shared keys or certificates), and anti-replay protection",
+        "IPsec operates in two modes: tunnel mode (encrypts entire original packet, used in site-to-site) and transport mode (encrypts only the payload, used in host-to-host)",
+        "IKE (Internet Key Exchange) establishes the IPsec security association (SA) in two phases: Phase 1 creates a secure management tunnel, Phase 2 negotiates the data tunnel parameters"
+      ],
+      "examTips": [
+        "Know that IPsec uses two main protocols: AH (Authentication Header, protocol 51) provides integrity and authentication but no encryption, while ESP (Encapsulating Security Payload, protocol 50) provides encryption, integrity, and authentication",
+        "Understand the difference between tunnel mode (entire packet encrypted, new IP header added) and transport mode (only payload encrypted, original IP header preserved)"
+      ],
+      "resources": [
+        {
+          "title": "Cisco IPsec VPN Overview",
+          "url": "https://www.cisco.com/c/en/us/support/docs/security-vpn/ipsec-negotiation-ike-protocols/17706-ipsec-overview.html"
+        },
+        {
+          "title": "Cisco VPN Solutions",
+          "url": "https://www.cisco.com/c/en/us/products/security/vpn-endpoint-security-clients/index.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "5.6",
+      "title": "Configure and verify access control lists",
+      "summary": "Access Control Lists (ACLs) filter network traffic based on defined criteria and are one of the most important security tools available on Cisco devices. ACLs can be applied to interfaces to control traffic flow, to VTY lines to restrict management access, and to NAT and route maps for traffic identification.",
+      "keyPoints": [
+        "Standard ACLs (1-99, 1300-1999) filter based on source IP address only and should be placed close to the destination",
+        "Extended ACLs (100-199, 2000-2699) filter based on source/destination IP, protocol, and port numbers and should be placed close to the source",
+        "Named ACLs use descriptive names instead of numbers and support editing individual entries with sequence numbers",
+        "ACLs are processed top-down; once a match is found, the action is taken and no further entries are evaluated. An implicit 'deny any' exists at the end of every ACL",
+        "Apply ACLs to interfaces with 'ip access-group <name/number> in|out' and to VTY lines with 'access-class <name/number> in'"
+      ],
+      "examTips": [
+        "Remember the wildcard mask is the inverse of the subnet mask: a subnet mask of 255.255.255.0 has a wildcard mask of 0.0.0.255; wildcard 0.0.0.0 matches a single host",
+        "Always account for the implicit 'deny any' at the end of every ACL; if you only have deny statements, all traffic will be blocked since there is no explicit permit"
+      ],
+      "resources": [
+        {
+          "title": "Cisco ACL Configuration Guide",
+          "url": "https://www.cisco.com/c/en/us/support/docs/security/ios-firewall/23602-confaccesslists.html"
+        },
+        {
+          "title": "Cisco ACL Overview and Guidelines",
+          "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_data_acl/configuration/xe-16/sec-data-acl-xe-16-book.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "5.7",
+      "title": "Configure and verify Layer 2 security features",
+      "summary": "Layer 2 security features protect the switching infrastructure from common attacks such as DHCP spoofing, ARP poisoning, and MAC flooding. DHCP snooping, Dynamic ARP Inspection (DAI), and port security work together to create a secure Layer 2 environment.",
+      "keyPoints": [
+        "DHCP snooping builds a binding table of legitimate MAC-to-IP mappings by inspecting DHCP messages; untrusted ports drop DHCP server messages (Offer, ACK) to prevent rogue DHCP servers",
+        "Dynamic ARP Inspection (DAI) validates ARP packets against the DHCP snooping binding table to prevent ARP spoofing and man-in-the-middle attacks",
+        "Port security limits the number of MAC addresses allowed on a switch port and can take violation actions: protect (drop), restrict (drop and log), or shutdown (err-disable the port)",
+        "DHCP snooping designates ports as trusted (connecting to legitimate DHCP servers) or untrusted (connecting to clients); uplinks to DHCP servers must be trusted",
+        "DAI requires DHCP snooping to be enabled first since it uses the snooping binding table for validation"
+      ],
+      "examTips": [
+        "Know the three port security violation modes: protect silently drops traffic, restrict drops and generates a syslog message, and shutdown (default) places the port in err-disabled state",
+        "Remember that DHCP snooping must be enabled globally AND on each VLAN: 'ip dhcp snooping' and 'ip dhcp snooping vlan <id>'; trunk ports to DHCP servers must be configured as trusted"
+      ],
+      "resources": [
+        {
+          "title": "Cisco DHCP Snooping Configuration",
+          "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-3/configuration_guide/sec/b-173-sec-9300-cg/configuring-dhcp-snooping.html"
+        },
+        {
+          "title": "Cisco Port Security Configuration",
+          "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-3/configuration_guide/sec/b-173-sec-9300-cg/configuring-port-security.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "5.8",
+      "title": "Compare authentication, authorization, and accounting concepts",
+      "summary": "AAA (Authentication, Authorization, and Accounting) is a framework for controlling access to network resources, enforcing policies, and auditing usage. Understanding the distinct role of each component and the protocols that implement AAA (RADIUS and TACACS+) is essential for enterprise network security.",
+      "keyPoints": [
+        "Authentication verifies user identity (who are you?), authorization determines permitted actions (what can you do?), and accounting records user activities (what did you do?)",
+        "TACACS+ is Cisco-proprietary, uses TCP port 49, encrypts the entire packet body, and separates AAA functions for granular control",
+        "RADIUS is an open standard, uses UDP ports 1812/1813 (or legacy 1645/1646), encrypts only the password field, and combines authentication and authorization",
+        "TACACS+ is preferred for device administration (managing routers/switches) due to its command-level authorization capabilities",
+        "RADIUS is commonly used for network access (802.1X, VPN) and is required for certain Cisco solutions like ISE"
+      ],
+      "examTips": [
+        "Know the key differences: TACACS+ uses TCP and encrypts the full payload while RADIUS uses UDP and only encrypts the password; TACACS+ separates AAA functions while RADIUS combines authentication and authorization",
+        "Remember that 'authentication' happens first (verify identity), then 'authorization' (grant permissions), and 'accounting' runs throughout the session (log activities)"
+      ],
+      "resources": [
+        {
+          "title": "Cisco AAA Overview",
+          "url": "https://www.cisco.com/c/en/us/support/docs/security-vpn/remote-authentication-dial-user-service-radius/13838-10.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "5.9",
+      "title": "Describe wireless security protocols (WPA, WPA2, and WPA3)",
+      "summary": "Wireless security protocols have evolved significantly from the original WEP standard to address increasingly sophisticated attacks. WPA, WPA2, and WPA3 each introduced stronger encryption and authentication mechanisms to protect wireless communications.",
+      "keyPoints": [
+        "WEP (Wired Equivalent Privacy) is deprecated due to fundamental flaws in its RC4 encryption implementation with static keys that can be cracked in minutes",
+        "WPA (Wi-Fi Protected Access) introduced TKIP (Temporal Key Integrity Protocol) as a temporary improvement over WEP, using per-packet key mixing",
+        "WPA2 replaced TKIP with AES-CCMP encryption, providing significantly stronger security; WPA2 is the current minimum recommended standard",
+        "WPA3 introduces SAE (Simultaneous Authentication of Equals) replacing the PSK 4-way handshake, providing protection against offline dictionary attacks and forward secrecy",
+        "Enterprise mode (802.1X) uses a RADIUS server for individual user authentication, while Personal mode uses a pre-shared key (PSK) for simpler deployments"
+      ],
+      "examTips": [
+        "Know the encryption methods for each standard: WEP uses RC4, WPA uses TKIP/RC4, WPA2 uses AES-CCMP, and WPA3 uses AES-GCMP with SAE",
+        "Understand that WPA3 Personal uses SAE (Dragonfly handshake) which prevents offline dictionary attacks even if the handshake is captured, unlike WPA2-PSK"
+      ],
+      "resources": [
+        {
+          "title": "Cisco Wireless Security Overview",
+          "url": "https://www.cisco.com/c/en/us/products/wireless/what-is-wifi-security.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "5.10",
+      "title": "Configure and verify WLAN within the GUI using WPA2 PSK",
+      "summary": "Configuring a WLAN with WPA2-PSK through a wireless LAN controller (WLC) GUI is a practical skill tested on the CCNA exam. This involves creating a WLAN profile, selecting the appropriate security settings, and mapping it to an interface and VLAN.",
+      "keyPoints": [
+        "In the WLC GUI, WLANs are created under the WLANs menu by specifying a Profile Name and SSID, then assigning a WLAN ID",
+        "Security settings are configured under the WLAN Security tab: set Layer 2 Security to WPA+WPA2, enable WPA2 Policy, select AES encryption, and set Auth Key Mgmt to PSK",
+        "The pre-shared key is entered in the PSK format field (typically ASCII) under the Layer 2 security settings",
+        "The WLAN must be mapped to an interface/interface group which corresponds to a specific VLAN for client traffic segmentation",
+        "The WLAN must be enabled (Status: Enabled) for clients to see and connect to the SSID"
+      ],
+      "examTips": [
+        "The exam may show WLC GUI screenshots; know where each setting is found: WLAN creation under WLANs tab, security under the Security tab of the WLAN, and interface mapping under the General tab",
+        "Remember to enable the WLAN after configuration; a common exam trap is a correctly configured but disabled WLAN",
+        "Know that WPA2-PSK uses AES encryption by default and that the PSK is configured on the WLC, not on individual access points in a centralized deployment"
+      ],
+      "resources": [
+        {
+          "title": "Cisco WLC Configuration Guide",
+          "url": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-3/config-guide/b_wl_17_3_cg.html"
+        }
+      ]
+    }
+  ],
+  "practiceScenarios": [
+    {
+      "scenario": "A network administrator needs to restrict SSH access to a router so that only the IT management subnet (172.16.50.0/24) can connect remotely. The router has VTY lines 0 through 15 configured for SSH access.",
+      "question": "What type of ACL should be used, and what commands are needed to implement this restriction?",
+      "answer": "A standard named or numbered ACL should be used since only the source IP needs to be evaluated. Commands: (1) Create the ACL: 'access-list 10 permit 172.16.50.0 0.0.0.255'. (2) Apply to VTY lines: 'line vty 0 15', 'access-class 10 in', 'transport input ssh'. The implicit 'deny any' at the end of ACL 10 blocks all other sources. Note that 'access-class' is used for VTY lines instead of 'ip access-group' which is used for interfaces. The wildcard mask 0.0.0.255 permits all hosts in the /24 subnet."
+    },
+    {
+      "scenario": "After a security audit, several rogue DHCP servers were discovered on the network providing incorrect gateway and DNS information to clients. The network uses Catalyst switches with a legitimate DHCP server connected to port GigabitEthernet1/0/1 on the distribution switch.",
+      "question": "What Layer 2 security features should be implemented to prevent rogue DHCP servers, and what is the configuration?",
+      "answer": "DHCP snooping should be enabled to prevent rogue DHCP servers. Configuration: (1) Enable globally: 'ip dhcp snooping'. (2) Enable on the relevant VLANs: 'ip dhcp snooping vlan 10,20,30'. (3) Trust the port connected to the legitimate DHCP server: 'interface GigabitEthernet1/0/1', 'ip dhcp snooping trust'. (4) Also trust uplink ports to other infrastructure switches that forward legitimate DHCP traffic. All access ports are untrusted by default and will drop any DHCP server messages (Offer, ACK). Additionally, enable DAI on the VLANs ('ip arp inspection vlan 10,20,30') to use the DHCP snooping binding table to prevent ARP spoofing attacks that often accompany rogue DHCP attacks."
+    },
+    {
+      "scenario": "A company wants to prevent unauthorized devices from connecting to switch ports in the accounting department. Each port should allow only one device, and if a violation occurs, the port should be disabled and an alert generated.",
+      "question": "How should port security be configured on the accounting department switch ports (e.g., GigabitEthernet1/0/10)?",
+      "answer": "Configure port security with shutdown violation mode. Commands: 'interface GigabitEthernet1/0/10', 'switchport mode access', 'switchport port-security', 'switchport port-security maximum 1', 'switchport port-security violation shutdown', 'switchport port-security mac-address sticky'. The 'maximum 1' limits each port to one MAC address. The 'shutdown' violation mode (which is the default) places the port into err-disabled state when a second MAC is detected. The 'sticky' option dynamically learns and saves the first MAC address to the running configuration. To recover an err-disabled port, use 'shutdown' then 'no shutdown', or configure automatic recovery with 'errdisable recovery cause psecure-violation' and 'errdisable recovery interval 300'."
+    }
+  ],
+  "commonMistakes": [
+    {
+      "mistake": "Applying a standard ACL close to the source instead of close to the destination",
+      "correction": "Standard ACLs filter only on source IP address, so placing them near the source would block that traffic to all destinations, not just the intended one. Standard ACLs should be placed close to the destination to minimize unintended traffic blocking. Extended ACLs, which can match on both source and destination, should be placed close to the source to stop unwanted traffic as early as possible."
+    },
+    {
+      "mistake": "Forgetting the implicit 'deny any' at the end of an ACL and accidentally blocking all traffic",
+      "correction": "Every ACL has an invisible 'deny any' (standard) or 'deny ip any any' (extended) as the last entry. If you create an ACL with only deny statements, all traffic is blocked because nothing is explicitly permitted. Always include at least one permit statement, and consider adding an explicit 'permit ip any any' at the end if you only want to block specific traffic."
+    },
+    {
+      "mistake": "Confusing TACACS+ and RADIUS protocols, particularly their transport protocols and encryption scope",
+      "correction": "TACACS+ uses TCP port 49 and encrypts the entire packet body, while RADIUS uses UDP ports 1812/1813 and encrypts only the password field. TACACS+ separates authentication, authorization, and accounting into independent functions, making it more flexible for device administration. RADIUS combines authentication and authorization into a single process."
+    },
+    {
+      "mistake": "Not trusting the uplink ports when configuring DHCP snooping, causing legitimate DHCP traffic to be dropped",
+      "correction": "When enabling DHCP snooping, you must configure all ports that carry legitimate DHCP server responses as trusted. This includes not only the port directly connected to the DHCP server but also all uplink/trunk ports between the access switch and the DHCP server. Untrusted ports drop all DHCP server messages (Offer, ACK), so failing to trust the correct uplink will block legitimate DHCP responses."
+    }
+  ]
+}

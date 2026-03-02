@@ -1,0 +1,146 @@
+{
+  "examId": "domain-2-quiz",
+  "title": "Domain 2: Network Access Quiz",
+  "description": "Focused quiz on Network Access objectives 2.7, 2.8, and 2.9",
+  "totalQuestions": 8,
+  "timeLimit": 16,
+  "questions": [
+    {
+      "id": "dq2-q1",
+      "objectiveCode": "2.7",
+      "type": "multiple_choice",
+      "question": "Which management access protocol provides encrypted CLI access to a Cisco Wireless LAN Controller (WLC) and is recommended over Telnet for security reasons?",
+      "options": [
+        "A. Telnet",
+        "B. HTTP",
+        "C. SSH",
+        "D. SNMP"
+      ],
+      "correctAnswer": "C",
+      "explanation": "SSH (Secure Shell) provides encrypted CLI access to network devices including WLCs and APs. Unlike Telnet, which transmits data in cleartext (including passwords), SSH encrypts the entire session. Cisco recommends disabling Telnet and HTTP on WLCs in production environments and using SSH and HTTPS instead for secure management access.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-6/config-guide/b_wl_17_6_cg/m_management_interface.html",
+      "difficulty": "easy",
+      "tags": ["WLC", "SSH", "management access", "wireless"]
+    },
+    {
+      "id": "dq2-q2",
+      "objectiveCode": "2.7",
+      "type": "multiple_select",
+      "question": "Which of the following are valid methods for management access to a Cisco access point (AP) or wireless LAN controller (WLC)? (Choose three.)",
+      "options": [
+        "A. Console port connection",
+        "B. HTTPS through a web browser",
+        "C. TACACS+ direct login",
+        "D. SSH from a remote workstation",
+        "E. RADIUS direct login"
+      ],
+      "correctAnswer": ["A", "B", "D"],
+      "explanation": "Console, HTTPS, and SSH are all direct management access methods for APs and WLCs. The console port provides local out-of-band access, HTTPS provides encrypted web-based GUI management, and SSH provides encrypted CLI access. TACACS+ and RADIUS are AAA (Authentication, Authorization, and Accounting) protocols that authenticate management users but are not themselves direct access methods. They work in conjunction with SSH, HTTPS, or console to verify credentials against a central server.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-6/config-guide/b_wl_17_6_cg/m_management_interface.html",
+      "difficulty": "medium",
+      "tags": ["AP", "WLC", "management access", "TACACS+", "RADIUS"]
+    },
+    {
+      "id": "dq2-q3",
+      "objectiveCode": "2.8",
+      "type": "multiple_choice",
+      "question": "When creating a new WLAN on a Cisco WLC through the GUI, which parameter uniquely identifies the wireless network to client devices and is broadcast in beacon frames?",
+      "options": [
+        "A. WLAN ID",
+        "B. Profile name",
+        "C. SSID",
+        "D. Interface group"
+      ],
+      "correctAnswer": "C",
+      "explanation": "The SSID (Service Set Identifier) is the name that uniquely identifies a wireless network to client devices. It is broadcast in beacon frames (unless hidden) and is what users see when scanning for available Wi-Fi networks. The WLAN ID is an internal identifier used by the WLC for management purposes, the profile name is an administrative label, and the interface group maps the WLAN to a VLAN or set of interfaces.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-6/config-guide/b_wl_17_6_cg/m_wlan.html",
+      "difficulty": "easy",
+      "tags": ["WLAN", "SSID", "WLC GUI", "wireless configuration"]
+    },
+    {
+      "id": "dq2-q4",
+      "objectiveCode": "2.8",
+      "type": "multiple_choice",
+      "question": "A network administrator is configuring a WLAN on a Cisco WLC and needs to set the security method to WPA2 with 802.1X authentication for enterprise users. Under which tab in the WLC GUI would this security configuration typically be found?",
+      "options": [
+        "A. General tab",
+        "B. Security tab (Layer 2 security settings)",
+        "C. QoS tab",
+        "D. Advanced tab"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Wireless security settings such as WPA2, authentication methods (PSK or 802.1X), and encryption types (AES/TKIP) are configured under the Security tab of the WLAN settings on a Cisco WLC. The General tab contains basic settings like SSID and status. The QoS tab controls quality of service policies for the WLAN. The Advanced tab contains additional options like session timeout, client exclusion, and load balancing.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-6/config-guide/b_wl_17_6_cg/m_wlan.html",
+      "difficulty": "medium",
+      "tags": ["WLC GUI", "WLAN security", "WPA2", "802.1X"]
+    },
+    {
+      "id": "dq2-q5",
+      "objectiveCode": "2.8",
+      "type": "multiple_choice",
+      "question": "On a Cisco WLC, QoS profiles can be applied to WLANs to control traffic priority. Which QoS level would be most appropriate for a WLAN dedicated to voice-over-Wi-Fi traffic?",
+      "options": [
+        "A. Bronze (background)",
+        "B. Silver (best effort)",
+        "C. Gold (video)",
+        "D. Platinum (voice)"
+      ],
+      "correctAnswer": "D",
+      "explanation": "Cisco WLCs provide four QoS profile levels that map to 802.11e/WMM access categories: Platinum maps to Voice (AC_VO), Gold maps to Video (AC_VI), Silver maps to Best Effort (AC_BE), and Bronze maps to Background (AC_BK). For voice-over-Wi-Fi traffic, Platinum provides the highest priority, lowest latency, and smallest jitter, which are critical requirements for real-time voice communications.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-6/config-guide/b_wl_17_6_cg/m_qos.html",
+      "difficulty": "medium",
+      "tags": ["QoS", "WLC", "voice", "WMM", "wireless"]
+    },
+    {
+      "id": "dq2-q6",
+      "objectiveCode": "2.9",
+      "type": "multiple_choice",
+      "question": "In a Cisco unified wireless deployment, what is the primary role of the Wireless LAN Controller (WLC)?",
+      "options": [
+        "A. To provide direct wireless radio frequency coverage to client devices",
+        "B. To centrally manage, configure, and control lightweight access points and enforce wireless policies",
+        "C. To serve as the DHCP server for all wireless clients on the network",
+        "D. To physically connect wireless clients to the wired network through Ethernet ports"
+      ],
+      "correctAnswer": "B",
+      "explanation": "In a Cisco unified (centralized) wireless architecture, the WLC centrally manages lightweight access points (LAPs) using the CAPWAP protocol. The WLC handles configuration, firmware management, security policies, client authentication, roaming, and RF management. The APs provide the actual radio coverage and forward traffic to the WLC through CAPWAP tunnels. The WLC does not directly provide RF coverage or function as a DHCP server.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-6/config-guide/b_wl_17_6_cg/m_ap-join.html",
+      "difficulty": "easy",
+      "tags": ["WLC", "wireless architecture", "CAPWAP", "lightweight AP"]
+    },
+    {
+      "id": "dq2-q7",
+      "objectiveCode": "2.9",
+      "type": "multiple_choice",
+      "question": "A network administrator is connecting a Cisco lightweight access point to the network. The switch port connecting the AP must provide both data connectivity and electrical power. Which two features must the switch port support?",
+      "options": [
+        "A. Trunk mode and LACP",
+        "B. Access mode and PoE (Power over Ethernet)",
+        "C. Trunk mode and PoE (Power over Ethernet)",
+        "D. EtherChannel and port security"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Cisco lightweight APs are typically connected to switch ports configured as access ports (assigned to the appropriate VLAN) with PoE enabled. PoE (IEEE 802.3af/at/bt) delivers electrical power over the Ethernet cable, eliminating the need for a separate power adapter at each AP location. The switch port is configured as an access port because the AP uses CAPWAP tunnels to the WLC rather than requiring VLAN trunking. Trunk ports are used for WLC uplinks, not AP connections.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/poe/b_176_poe_9300_cg/configuring_poe.html",
+      "difficulty": "medium",
+      "tags": ["PoE", "access port", "AP deployment", "wireless infrastructure"]
+    },
+    {
+      "id": "dq2-q8",
+      "objectiveCode": "2.9",
+      "type": "multiple_choice",
+      "question": "In a Cisco wireless deployment, the WLC is connected to the network switch via a trunk link. What is the primary reason the WLC uplink requires a trunk port rather than an access port?",
+      "options": [
+        "A. Trunk ports provide higher bandwidth than access ports",
+        "B. The WLC needs to communicate across multiple VLANs to support different WLANs mapped to different subnets",
+        "C. Trunk ports encrypt all traffic between the switch and the WLC",
+        "D. Access ports cannot forward CAPWAP traffic"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A WLC uplink is configured as a trunk port because the WLC typically supports multiple WLANs (SSIDs), each mapped to a different VLAN and IP subnet. The trunk link carries tagged traffic for all these VLANs between the WLC and the switch. For example, a corporate WLAN might map to VLAN 10, a guest WLAN to VLAN 20, and a voice WLAN to VLAN 30. Trunk ports do not inherently provide more bandwidth or encryption; they carry multiple VLAN traffic using 802.1Q tagging.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/17-6/config-guide/b_wl_17_6_cg/m_management_interface.html",
+      "difficulty": "hard",
+      "tags": ["WLC", "trunk port", "VLANs", "wireless infrastructure"]
+    }
+  ]
+}

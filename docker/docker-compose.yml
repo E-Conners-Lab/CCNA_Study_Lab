@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  # -- PostgreSQL Database ------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: ccna-studylab-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ccna_studylab
+      POSTGRES_USER: studylab
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-studylab_dev_2024}
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U studylab"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # -- Lab Engine (FastAPI) -----------------------------------------------
+  lab-engine:
+    build:
+      context: ../services/lab-engine
+      dockerfile: Dockerfile
+    container_name: ccna-studylab-labs
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://studylab:${POSTGRES_PASSWORD:-studylab_dev_2024}@postgres:5432/ccna_studylab
+      PYTHONDONTWRITEBYTECODE: "1"
+    ports:
+      - "8100:8100"
+    volumes:
+      - ../services/lab-engine:/app
+      - ../labs:/labs:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8100/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  pgdata:

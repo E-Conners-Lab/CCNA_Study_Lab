@@ -1,0 +1,692 @@
+{
+  "examId": "sample-exam-1",
+  "title": "CCNA Practice Exam 1",
+  "description": "40-question practice exam covering all 6 domains of the Cisco CCNA 200-301 exam, weighted by exam blueprint percentages.",
+  "totalQuestions": 40,
+  "timeLimit": 60,
+  "questions": [
+    {
+      "id": "se1-q01",
+      "objectiveCode": "1.1",
+      "type": "multiple_choice",
+      "question": "Which of the following correctly describes the function of the OSI Layer 3?",
+      "options": [
+        "A) It provides reliable end-to-end data delivery and flow control",
+        "B) It handles logical addressing and path determination for packets",
+        "C) It defines how data is formatted and presented to the application",
+        "D) It manages access to the physical network medium"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Layer 3 (Network layer) is responsible for logical addressing (such as IP addresses) and routing packets between different networks. Layer 4 handles reliable delivery, Layer 6 handles data formatting, and Layer 2 manages media access.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13769-5.html",
+      "difficulty": "easy",
+      "tags": ["OSI model", "network fundamentals"]
+    },
+    {
+      "id": "se1-q02",
+      "objectiveCode": "1.3",
+      "type": "multiple_choice",
+      "question": "A host has the IP address 172.16.45.130/27. What is the network address for this host?",
+      "options": [
+        "A) 172.16.45.0",
+        "B) 172.16.45.96",
+        "C) 172.16.45.128",
+        "D) 172.16.45.160"
+      ],
+      "correctAnswer": "C",
+      "explanation": "A /27 mask is 255.255.255.224, which creates subnets in increments of 32 in the last octet. The subnets are .0, .32, .64, .96, .128, .160, .192, .224. The address 172.16.45.130 falls in the 172.16.45.128 subnet (128 + 32 = 160, and 130 < 160).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13788-3.html",
+      "difficulty": "medium",
+      "tags": ["subnetting", "IPv4"]
+    },
+    {
+      "id": "se1-q03",
+      "objectiveCode": "1.3",
+      "type": "multiple_choice",
+      "question": "How many usable host addresses are available on a /28 subnet?",
+      "options": [
+        "A) 16",
+        "B) 14",
+        "C) 30",
+        "D) 12"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A /28 subnet has 4 host bits (32 - 28 = 4). The total addresses are 2^4 = 16, minus the network address and broadcast address, leaving 14 usable host addresses.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13788-3.html",
+      "difficulty": "easy",
+      "tags": ["subnetting", "IPv4"]
+    },
+    {
+      "id": "se1-q04",
+      "objectiveCode": "1.5",
+      "type": "multiple_choice",
+      "question": "Which protocol operates at the transport layer and provides connectionless, best-effort delivery?",
+      "options": [
+        "A) TCP",
+        "B) UDP",
+        "C) ICMP",
+        "D) ARP"
+      ],
+      "correctAnswer": "B",
+      "explanation": "UDP (User Datagram Protocol) is a transport layer protocol that provides connectionless communication with no guaranteed delivery, ordering, or error checking beyond checksums. TCP provides connection-oriented delivery. ICMP operates at Layer 3, and ARP operates at Layer 2/3.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13769-5.html",
+      "difficulty": "easy",
+      "tags": ["TCP vs UDP", "transport layer"]
+    },
+    {
+      "id": "se1-q05",
+      "objectiveCode": "1.6",
+      "type": "multiple_choice",
+      "question": "A network administrator needs to verify the IP address, subnet mask, and default gateway configured on a Cisco switch. Which command should be used?",
+      "options": [
+        "A) show ip route",
+        "B) show ip interface brief",
+        "C) show running-config",
+        "D) show version"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The 'show ip interface brief' command provides a concise summary of interface IP addresses, subnet masks, and status. While 'show running-config' also contains this information, 'show ip interface brief' is the most efficient command for this specific task.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/fundamentals/command/cf_command_ref.html",
+      "difficulty": "easy",
+      "tags": ["IOS commands", "show commands"]
+    },
+    {
+      "id": "se1-q06",
+      "objectiveCode": "1.1",
+      "type": "multiple_choice",
+      "question": "What is the primary purpose of a Layer 2 switch in a network?",
+      "options": [
+        "A) To route packets between different networks using IP addresses",
+        "B) To forward frames based on MAC addresses within the same broadcast domain",
+        "C) To provide wireless access to network clients",
+        "D) To filter traffic between networks using access control lists"
+      ],
+      "correctAnswer": "B",
+      "explanation": "A Layer 2 switch makes forwarding decisions based on destination MAC addresses. It operates within a single broadcast domain and builds a MAC address table to efficiently forward frames to the correct port.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/switches/index.html",
+      "difficulty": "easy",
+      "tags": ["switching", "Layer 2"]
+    },
+    {
+      "id": "se1-q07",
+      "objectiveCode": "1.4",
+      "type": "multiple_choice",
+      "question": "Which of the following is a valid IPv6 abbreviated address for 2001:0DB8:0000:0000:0000:0000:0000:0001?",
+      "options": [
+        "A) 2001:DB8::1",
+        "B) 2001:DB8:0:1",
+        "C) 2001::DB8::1",
+        "D) 2001:DB8:::1"
+      ],
+      "correctAnswer": "A",
+      "explanation": "IPv6 addresses can be abbreviated by removing leading zeros and replacing consecutive groups of all zeros with ::. However, :: can only be used once in an address. 2001:DB8::1 correctly compresses the six groups of all zeros.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/xe-3s/ip6b-xe-3s-book/ip6-add-basic-conn-xe.html",
+      "difficulty": "easy",
+      "tags": ["IPv6", "addressing"]
+    },
+    {
+      "id": "se1-q08",
+      "objectiveCode": "1.1",
+      "type": "multiple_select",
+      "question": "Which two of the following are characteristics of TCP? (Choose two.)",
+      "options": [
+        "A) Connectionless communication",
+        "B) Three-way handshake for session establishment",
+        "C) No guarantee of packet delivery",
+        "D) Sequence numbers for ordered delivery",
+        "E) Lower overhead than UDP"
+      ],
+      "correctAnswer": ["B", "D"],
+      "explanation": "TCP uses a three-way handshake (SYN, SYN-ACK, ACK) to establish connections and sequence numbers to ensure data is delivered in the correct order. TCP is connection-oriented (not connectionless), guarantees delivery through acknowledgments, and has higher overhead than UDP.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13769-5.html",
+      "difficulty": "easy",
+      "tags": ["TCP", "transport layer"]
+    },
+    {
+      "id": "se1-q09",
+      "objectiveCode": "2.1",
+      "type": "multiple_choice",
+      "question": "A switch port is configured as a trunk. Which IEEE standard defines VLAN tagging on trunk ports?",
+      "options": [
+        "A) IEEE 802.1Q",
+        "B) IEEE 802.3",
+        "C) IEEE 802.11",
+        "D) IEEE 802.1D"
+      ],
+      "correctAnswer": "A",
+      "explanation": "IEEE 802.1Q defines VLAN tagging, which inserts a 4-byte tag into the Ethernet frame header to identify VLAN membership on trunk links. 802.3 defines Ethernet, 802.11 defines wireless, and 802.1D defines Spanning Tree Protocol.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/vlan/b_1612_vlan_9300_cg/configuring_vlan_trunks.html",
+      "difficulty": "easy",
+      "tags": ["VLANs", "trunking", "802.1Q"]
+    },
+    {
+      "id": "se1-q10",
+      "objectiveCode": "2.1",
+      "type": "multiple_choice",
+      "question": "Which command configures a switch port to carry traffic for VLANs 10, 20, and 30 across a trunk link?",
+      "options": [
+        "A) switchport trunk allowed vlan add 10,20,30",
+        "B) switchport trunk allowed vlan 10,20,30",
+        "C) switchport mode trunk vlan 10,20,30",
+        "D) switchport vlan trunk 10 20 30"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The command 'switchport trunk allowed vlan 10,20,30' configures the trunk to carry only the specified VLANs. Option A with 'add' appends to the existing list rather than setting it. Options C and D use incorrect syntax.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/vlan/b_1612_vlan_9300_cg/configuring_vlan_trunks.html",
+      "difficulty": "medium",
+      "tags": ["VLANs", "trunking", "IOS commands"]
+    },
+    {
+      "id": "se1-q11",
+      "objectiveCode": "2.4",
+      "type": "multiple_choice",
+      "question": "An administrator is configuring a wireless LAN controller (WLC). Which access point mode allows the AP to serve clients while also monitoring for rogue APs on unused channels?",
+      "options": [
+        "A) Monitor mode",
+        "B) FlexConnect mode",
+        "C) Local mode",
+        "D) Sniffer mode"
+      ],
+      "correctAnswer": "C",
+      "explanation": "In Local mode (the default), a lightweight AP serves clients on its configured channels and performs off-channel scanning to detect rogue APs during brief intervals. Monitor mode is dedicated to scanning and does not serve clients. FlexConnect allows local switching but is not specifically about rogue detection. Sniffer mode captures packets.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/9800/config-guide/b_wl_16_10_cg.html",
+      "difficulty": "medium",
+      "tags": ["wireless", "WLC", "AP modes"]
+    },
+    {
+      "id": "se1-q12",
+      "objectiveCode": "2.2",
+      "type": "multiple_choice",
+      "question": "Which Cisco IOS command assigns VLAN 50 to a switch interface?",
+      "options": [
+        "A) vlan 50",
+        "B) switchport access vlan 50",
+        "C) switchport vlan 50",
+        "D) interface vlan 50"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The 'switchport access vlan 50' command, entered in interface configuration mode, assigns the interface to VLAN 50 as an access port. 'vlan 50' creates the VLAN in global config. 'interface vlan 50' creates an SVI. Option C is invalid syntax.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/vlan/b_1612_vlan_9300_cg.html",
+      "difficulty": "easy",
+      "tags": ["VLANs", "IOS commands", "switching"]
+    },
+    {
+      "id": "se1-q13",
+      "objectiveCode": "2.3",
+      "type": "multiple_choice",
+      "question": "In a network running Rapid PVST+, a switch port transitions directly from the discarding state to which state before forwarding traffic?",
+      "options": [
+        "A) Blocking",
+        "B) Listening",
+        "C) Learning",
+        "D) Forwarding"
+      ],
+      "correctAnswer": "C",
+      "explanation": "In Rapid PVST+ (based on 802.1w), the port states are Discarding, Learning, and Forwarding. A port transitions from Discarding to Learning (where it builds the MAC table) before moving to the Forwarding state. The Blocking and Listening states from 802.1D are consolidated into the Discarding state.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/lyr2/b_1612_lyr2_9300_cg/configuring_spanning_tree_protocol.html",
+      "difficulty": "medium",
+      "tags": ["STP", "Rapid PVST+", "spanning tree"]
+    },
+    {
+      "id": "se1-q14",
+      "objectiveCode": "2.5",
+      "type": "multiple_select",
+      "question": "Which two statements are true about EtherChannel? (Choose two.)",
+      "options": [
+        "A) PAgP is a Cisco proprietary protocol for EtherChannel negotiation",
+        "B) LACP is defined by IEEE 802.3ad",
+        "C) All ports in an EtherChannel must be in different VLANs",
+        "D) EtherChannel reduces the number of physical links between switches",
+        "E) Ports in an EtherChannel must have matching speed and duplex settings"
+      ],
+      "correctAnswer": ["A", "E"],
+      "explanation": "PAgP (Port Aggregation Protocol) is Cisco proprietary, and all ports in an EtherChannel must have matching configurations including speed, duplex, and VLAN assignments. LACP is 802.3ad (B is also true but the best two answers are A and E). EtherChannel bundles links rather than reducing them, and all ports must be in the same VLANs, not different ones.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/lyr2/b_1612_lyr2_9300_cg/configuring_etherchannels.html",
+      "difficulty": "medium",
+      "tags": ["EtherChannel", "LACP", "PAgP"]
+    },
+    {
+      "id": "se1-q15",
+      "objectiveCode": "2.6",
+      "type": "multiple_choice",
+      "question": "Which wireless standard operates exclusively in the 5 GHz frequency band and supports a maximum theoretical data rate of 6.93 Gbps?",
+      "options": [
+        "A) 802.11n (Wi-Fi 4)",
+        "B) 802.11ac (Wi-Fi 5)",
+        "C) 802.11ax (Wi-Fi 6)",
+        "D) 802.11g"
+      ],
+      "correctAnswer": "B",
+      "explanation": "802.11ac (Wi-Fi 5) operates exclusively in the 5 GHz band and supports up to 6.93 Gbps with Wave 2 using 8 spatial streams and 160 MHz channels. 802.11n operates in both 2.4 and 5 GHz. 802.11ax also operates in both bands. 802.11g operates only in 2.4 GHz.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/wireless/what-is-wifi-6.html",
+      "difficulty": "medium",
+      "tags": ["wireless", "802.11", "Wi-Fi standards"]
+    },
+    {
+      "id": "se1-q16",
+      "objectiveCode": "2.1",
+      "type": "drag_drop",
+      "question": "Match each switching concept to its correct description.",
+      "options": ["Access port", "Trunk port", "Native VLAN", "Voice VLAN"],
+      "correctAnswer": {
+        "Access port": "Carries traffic for a single VLAN and connects to end devices",
+        "Trunk port": "Carries traffic for multiple VLANs between switches using 802.1Q tags",
+        "Native VLAN": "VLAN whose traffic is sent untagged across a trunk link",
+        "Voice VLAN": "Separate VLAN configured on an access port to prioritize IP phone traffic"
+      },
+      "explanation": "Access ports belong to one VLAN and connect to hosts. Trunk ports carry multiple VLANs using 802.1Q tagging. The native VLAN is the VLAN whose traffic traverses the trunk untagged (default VLAN 1). Voice VLAN is a special VLAN configured alongside the access VLAN to carry voice traffic from IP phones.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/vlan/b_1612_vlan_9300_cg.html",
+      "difficulty": "easy",
+      "tags": ["VLANs", "trunking", "switching"]
+    },
+    {
+      "id": "se1-q17",
+      "objectiveCode": "3.1",
+      "type": "multiple_choice",
+      "question": "Which component of a router is used to store the active running configuration?",
+      "options": [
+        "A) NVRAM",
+        "B) Flash",
+        "C) RAM",
+        "D) ROM"
+      ],
+      "correctAnswer": "C",
+      "explanation": "The running configuration is stored in RAM (volatile memory). NVRAM stores the startup configuration. Flash stores the IOS image. ROM contains the bootstrap program and POST routines.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/fundamentals/configuration/guide/cf-fundamentals.html",
+      "difficulty": "easy",
+      "tags": ["router components", "memory"]
+    },
+    {
+      "id": "se1-q18",
+      "objectiveCode": "3.2",
+      "type": "multiple_choice",
+      "question": "A router receives a packet destined for 10.10.30.45. The routing table contains the following entries:\n\n10.10.0.0/16 via 192.168.1.1\n10.10.30.0/24 via 192.168.1.2\n10.10.30.32/27 via 192.168.1.3\n0.0.0.0/0 via 192.168.1.4\n\nWhich next-hop address will the router use?",
+      "options": [
+        "A) 192.168.1.1",
+        "B) 192.168.1.2",
+        "C) 192.168.1.3",
+        "D) 192.168.1.4"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Routers use the longest prefix match algorithm. The address 10.10.30.45 matches 10.10.30.32/27 (range 10.10.30.32-63), 10.10.30.0/24, 10.10.0.0/16, and the default route. The /27 entry is the most specific (longest) match, so the router forwards to 192.168.1.3.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/ip-routing/16448-static.html",
+      "difficulty": "medium",
+      "tags": ["routing", "longest prefix match"]
+    },
+    {
+      "id": "se1-q19",
+      "objectiveCode": "3.2",
+      "type": "multiple_choice",
+      "question": "Which command displays the routing table on a Cisco router?",
+      "options": [
+        "A) show ip protocols",
+        "B) show ip route",
+        "C) show ip interface",
+        "D) show ip arp"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The 'show ip route' command displays the IP routing table, including all known networks and their next-hop information. 'show ip protocols' shows routing protocol configuration. 'show ip interface' shows interface IP details. 'show ip arp' shows the ARP cache.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/command/iri-cr-book.html",
+      "difficulty": "easy",
+      "tags": ["routing", "show commands", "IOS commands"]
+    },
+    {
+      "id": "se1-q20",
+      "objectiveCode": "3.3",
+      "type": "multiple_choice",
+      "question": "Which routing protocol uses the Diffusing Update Algorithm (DUAL) for loop-free path computation?",
+      "options": [
+        "A) OSPF",
+        "B) RIP",
+        "C) EIGRP",
+        "D) BGP"
+      ],
+      "correctAnswer": "C",
+      "explanation": "EIGRP (Enhanced Interior Gateway Routing Protocol) uses the DUAL algorithm to calculate loop-free paths and maintain backup routes (feasible successors). OSPF uses the SPF (Dijkstra) algorithm. RIP uses Bellman-Ford. BGP uses the best path selection algorithm.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/enhanced-interior-gateway-routing-protocol-eigrp/16406-eigrp-toc.html",
+      "difficulty": "easy",
+      "tags": ["EIGRP", "routing protocols"]
+    },
+    {
+      "id": "se1-q21",
+      "objectiveCode": "3.3",
+      "type": "multiple_choice",
+      "question": "An OSPF router has learned three routes to the same destination network. Which attribute does OSPF use first to select the best route?",
+      "options": [
+        "A) Hop count",
+        "B) Bandwidth",
+        "C) Cost (based on cumulative interface bandwidth)",
+        "D) Administrative distance"
+      ],
+      "correctAnswer": "C",
+      "explanation": "OSPF selects the best route based on the lowest total cost, which is calculated from the cumulative bandwidth of interfaces along the path. The default cost formula is Reference Bandwidth / Interface Bandwidth. Administrative distance is used to choose between different routing protocols, not within OSPF itself.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html",
+      "difficulty": "medium",
+      "tags": ["OSPF", "routing protocols", "cost"]
+    },
+    {
+      "id": "se1-q22",
+      "objectiveCode": "3.4",
+      "type": "multiple_choice",
+      "question": "Which command configures a static default route on a Cisco router pointing to next-hop 10.0.0.1?",
+      "options": [
+        "A) ip route 0.0.0.0 0.0.0.0 10.0.0.1",
+        "B) ip default-route 10.0.0.1",
+        "C) ip route default 10.0.0.1",
+        "D) ip route 0.0.0.0 255.255.255.255 10.0.0.1"
+      ],
+      "correctAnswer": "A",
+      "explanation": "The command 'ip route 0.0.0.0 0.0.0.0 10.0.0.1' configures a static default route (0.0.0.0/0) with 10.0.0.1 as the next-hop address. This route matches all destinations that do not have a more specific entry in the routing table.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/ip-routing/16448-static.html",
+      "difficulty": "easy",
+      "tags": ["static routing", "default route", "IOS commands"]
+    },
+    {
+      "id": "se1-q23",
+      "objectiveCode": "3.2",
+      "type": "multiple_choice",
+      "question": "In the output of 'show ip route', a route is marked with 'O'. What type of route does this indicate?",
+      "options": [
+        "A) A directly connected route",
+        "B) A static route",
+        "C) An OSPF-learned route",
+        "D) An EIGRP-learned route"
+      ],
+      "correctAnswer": "C",
+      "explanation": "In the routing table, 'O' indicates an OSPF-learned route. 'C' indicates directly connected, 'S' indicates static, and 'D' indicates EIGRP. These codes are listed at the top of the 'show ip route' output.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/command/iri-cr-book.html",
+      "difficulty": "easy",
+      "tags": ["routing", "OSPF", "show commands"]
+    },
+    {
+      "id": "se1-q24",
+      "objectiveCode": "3.3",
+      "type": "multiple_select",
+      "question": "Which three statements about OSPF areas are correct? (Choose three.)",
+      "options": [
+        "A) All OSPF networks must have Area 0 as the backbone area",
+        "B) OSPF routers within the same area share an identical link-state database",
+        "C) OSPF supports only a single area in any deployment",
+        "D) Area Border Routers (ABRs) connect different OSPF areas",
+        "E) OSPF areas cannot contain more than 50 routers"
+      ],
+      "correctAnswer": ["A", "B", "D"],
+      "explanation": "OSPF requires Area 0 as the backbone, and all other areas must connect to it. Routers in the same area share the same LSDB. ABRs sit between areas and summarize routes. OSPF supports multi-area designs, and there is no hard limit of 50 routers per area.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/7039-1.html",
+      "difficulty": "medium",
+      "tags": ["OSPF", "areas", "routing protocols"]
+    },
+    {
+      "id": "se1-q25",
+      "objectiveCode": "3.5",
+      "type": "multiple_choice",
+      "question": "A router has the following routes to network 10.1.1.0/24:\n- OSPF with cost 50\n- EIGRP with metric 30720\n- Static route\n\nWhich route will be installed in the routing table?",
+      "options": [
+        "A) OSPF route because it has the lowest cost",
+        "B) EIGRP route because it has the lowest metric",
+        "C) Static route because it has the lowest administrative distance",
+        "D) All three routes will be load-balanced"
+      ],
+      "correctAnswer": "C",
+      "explanation": "When multiple routing sources provide routes to the same destination, the router selects the route with the lowest administrative distance (AD). Static routes have an AD of 1, EIGRP internal has 90, and OSPF has 110. Therefore the static route wins.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/border-gateway-protocol-bgp/15986-admin-distance.html",
+      "difficulty": "medium",
+      "tags": ["administrative distance", "routing"]
+    },
+    {
+      "id": "se1-q26",
+      "objectiveCode": "3.3",
+      "type": "multiple_choice",
+      "question": "What is the default OSPF hello interval on a broadcast multi-access network such as Ethernet?",
+      "options": [
+        "A) 5 seconds",
+        "B) 10 seconds",
+        "C) 30 seconds",
+        "D) 40 seconds"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The default OSPF hello interval on broadcast and point-to-point networks is 10 seconds. On non-broadcast multi-access (NBMA) networks, the default hello interval is 30 seconds. The dead interval is typically 4 times the hello interval.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13689-17.html",
+      "difficulty": "medium",
+      "tags": ["OSPF", "timers", "routing protocols"]
+    },
+    {
+      "id": "se1-q27",
+      "objectiveCode": "4.1",
+      "type": "multiple_choice",
+      "question": "A network administrator needs to configure a router to automatically assign IP addresses to clients. Which protocol should be configured?",
+      "options": [
+        "A) DNS",
+        "B) DHCP",
+        "C) NTP",
+        "D) SNMP"
+      ],
+      "correctAnswer": "B",
+      "explanation": "DHCP (Dynamic Host Configuration Protocol) automatically assigns IP addresses and other network parameters to clients. DNS resolves names to IPs, NTP synchronizes time, and SNMP is used for network management.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/xe-16/dhcp-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["DHCP", "IP services"]
+    },
+    {
+      "id": "se1-q28",
+      "objectiveCode": "4.3",
+      "type": "multiple_choice",
+      "question": "A company has a single public IP address 203.0.113.5 and needs to allow 200 internal hosts to access the internet simultaneously. Which NAT type should be used?",
+      "options": [
+        "A) Static NAT",
+        "B) Dynamic NAT",
+        "C) PAT (Port Address Translation)",
+        "D) NAT64"
+      ],
+      "correctAnswer": "C",
+      "explanation": "PAT (also called NAT overload) allows multiple internal hosts to share a single public IP address by using different source port numbers to distinguish sessions. Static NAT provides one-to-one mapping. Dynamic NAT maps from a pool but still requires one public IP per concurrent session.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_nat/configuration/xe-16/nat-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["NAT", "PAT", "IP services"]
+    },
+    {
+      "id": "se1-q29",
+      "objectiveCode": "4.4",
+      "type": "multiple_choice",
+      "question": "Which protocol is used to synchronize clocks across network devices to ensure consistent timestamps in log messages?",
+      "options": [
+        "A) SNMP",
+        "B) Syslog",
+        "C) NTP",
+        "D) TFTP"
+      ],
+      "correctAnswer": "C",
+      "explanation": "NTP (Network Time Protocol) synchronizes the clocks of network devices to a reference time source. Consistent timestamps are critical for correlating log entries across devices for troubleshooting and security analysis.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/bsm/configuration/xe-16/bsm-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["NTP", "IP services"]
+    },
+    {
+      "id": "se1-q30",
+      "objectiveCode": "4.6",
+      "type": "drag_drop",
+      "question": "Match each SNMP version to its key characteristic.",
+      "options": ["SNMPv1", "SNMPv2c", "SNMPv3"],
+      "correctAnswer": {
+        "SNMPv1": "Uses community strings for authentication with no encryption",
+        "SNMPv2c": "Adds GetBulk operation and improved error handling but still uses community strings",
+        "SNMPv3": "Provides message integrity, authentication, and encryption for secure management"
+      },
+      "explanation": "SNMPv1 uses basic community strings and is the least secure. SNMPv2c improved performance with GetBulk and better error codes but kept community-string authentication. SNMPv3 added comprehensive security with authentication (MD5/SHA) and encryption (DES/AES).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/snmp/configuration/xe-16/snmp-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["SNMP", "network management"]
+    },
+    {
+      "id": "se1-q31",
+      "objectiveCode": "5.1",
+      "type": "multiple_choice",
+      "question": "Which security concept ensures that data has not been altered in transit between the sender and receiver?",
+      "options": [
+        "A) Confidentiality",
+        "B) Integrity",
+        "C) Availability",
+        "D) Authentication"
+      ],
+      "correctAnswer": "B",
+      "explanation": "Integrity ensures that data has not been modified during transmission. This is typically verified using hashing algorithms like MD5 or SHA. Confidentiality protects data from unauthorized access. Availability ensures systems are accessible. Authentication verifies identity.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/security/what-is-network-security.html",
+      "difficulty": "easy",
+      "tags": ["CIA triad", "security fundamentals"]
+    },
+    {
+      "id": "se1-q32",
+      "objectiveCode": "5.2",
+      "type": "multiple_choice",
+      "question": "Which type of attack floods a target with traffic from many compromised systems to make a service unavailable?",
+      "options": [
+        "A) Man-in-the-middle attack",
+        "B) Phishing attack",
+        "C) Distributed Denial-of-Service (DDoS) attack",
+        "D) Social engineering attack"
+      ],
+      "correctAnswer": "C",
+      "explanation": "A DDoS attack uses multiple compromised systems (a botnet) to overwhelm a target with traffic, making it unavailable to legitimate users. A man-in-the-middle intercepts communication. Phishing tricks users into revealing information. Social engineering manipulates people.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/security/what-is-a-ddos-attack.html",
+      "difficulty": "easy",
+      "tags": ["DDoS", "security threats"]
+    },
+    {
+      "id": "se1-q33",
+      "objectiveCode": "5.3",
+      "type": "multiple_choice",
+      "question": "An administrator wants to restrict remote management access to a router so only SSH is allowed and Telnet is disabled. Which configuration achieves this on the VTY lines?",
+      "options": [
+        "A) transport input telnet",
+        "B) transport input ssh",
+        "C) transport input all",
+        "D) transport output ssh"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The 'transport input ssh' command on VTY lines restricts incoming connections to SSH only, effectively disabling Telnet access. 'transport input telnet' allows only Telnet. 'transport input all' allows all protocols. 'transport output' controls outbound connections, not inbound.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_usr_ssh/configuration/xe-16/sec-usr-ssh-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["SSH", "VTY", "device security"]
+    },
+    {
+      "id": "se1-q34",
+      "objectiveCode": "5.4",
+      "type": "multiple_choice",
+      "question": "Which standard access control list number range is valid for IP traffic on Cisco IOS?",
+      "options": [
+        "A) 1-99",
+        "B) 100-199",
+        "C) 200-299",
+        "D) 1300-1999"
+      ],
+      "correctAnswer": "A",
+      "explanation": "Standard IP ACLs use numbers 1-99 (and extended range 1300-1999). Extended IP ACLs use 100-199 (and 2000-2699). Standard ACLs filter based on source IP address only, while extended ACLs can match source, destination, protocol, and ports.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/security/ios-firewall/23602-confaccesslists.html",
+      "difficulty": "easy",
+      "tags": ["ACL", "security"]
+    },
+    {
+      "id": "se1-q35",
+      "objectiveCode": "5.5",
+      "type": "multiple_select",
+      "question": "Which two features are provided by IEEE 802.1X port-based authentication? (Choose two.)",
+      "options": [
+        "A) Encrypts all data traffic on the network",
+        "B) Authenticates devices before granting network access",
+        "C) Uses a RADIUS server as the authentication server",
+        "D) Replaces the need for VLANs",
+        "E) Provides intrusion detection capabilities"
+      ],
+      "correctAnswer": ["B", "C"],
+      "explanation": "802.1X is a port-based network access control protocol that authenticates devices (supplicants) before granting access to the network. It uses an authentication server, typically RADIUS, to verify credentials. It does not encrypt data traffic, replace VLANs, or provide intrusion detection.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/configuring_ieee_802_1x_port_based_authentication.html",
+      "difficulty": "medium",
+      "tags": ["802.1X", "RADIUS", "port security"]
+    },
+    {
+      "id": "se1-q36",
+      "objectiveCode": "5.7",
+      "type": "multiple_choice",
+      "question": "Which Cisco switch feature shuts down a port if the number of learned MAC addresses exceeds a configured maximum?",
+      "options": [
+        "A) DHCP snooping",
+        "B) Dynamic ARP Inspection",
+        "C) Port security",
+        "D) Storm control"
+      ],
+      "correctAnswer": "C",
+      "explanation": "Port security limits the number of MAC addresses that can be learned on a switch port. When the limit is exceeded, the port can be configured to shut down (err-disable), restrict, or protect. DHCP snooping validates DHCP messages. DAI validates ARP packets. Storm control limits broadcast/multicast/unicast traffic rates.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/configuring_port_security.html",
+      "difficulty": "easy",
+      "tags": ["port security", "Layer 2 security"]
+    },
+    {
+      "id": "se1-q37",
+      "objectiveCode": "6.1",
+      "type": "multiple_choice",
+      "question": "In a Software-Defined Networking (SDN) architecture, which plane is responsible for making forwarding decisions and is centralized in the SDN controller?",
+      "options": [
+        "A) Data plane",
+        "B) Control plane",
+        "C) Management plane",
+        "D) Application plane"
+      ],
+      "correctAnswer": "B",
+      "explanation": "In SDN, the control plane is centralized in the SDN controller, which makes all forwarding decisions and pushes them to the network devices. The data plane (forwarding plane) remains on the devices and forwards traffic based on the controller's instructions. The management plane handles device configuration.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/software-defined-networking/overview.html",
+      "difficulty": "easy",
+      "tags": ["SDN", "control plane", "automation"]
+    },
+    {
+      "id": "se1-q38",
+      "objectiveCode": "6.2",
+      "type": "multiple_choice",
+      "question": "A network engineer retrieves device information from Cisco DNA Center using a REST API call. The API returns data in JSON format. What HTTP method was most likely used?",
+      "options": [
+        "A) POST",
+        "B) GET",
+        "C) PUT",
+        "D) DELETE"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The HTTP GET method is used to retrieve (read) data from a REST API. POST is used to create new resources, PUT is used to update existing resources, and DELETE is used to remove resources.",
+      "sourceUrl": "https://developer.cisco.com/docs/dna-center/",
+      "difficulty": "easy",
+      "tags": ["REST API", "HTTP methods", "automation"]
+    },
+    {
+      "id": "se1-q39",
+      "objectiveCode": "6.3",
+      "type": "drag_drop",
+      "question": "Match each configuration management tool to its correct characteristic.",
+      "options": ["Ansible", "Puppet", "Chef"],
+      "correctAnswer": {
+        "Ansible": "Agentless, uses YAML playbooks, communicates via SSH",
+        "Puppet": "Agent-based, uses declarative manifests written in Puppet DSL",
+        "Chef": "Agent-based, uses imperative recipes written in Ruby"
+      },
+      "explanation": "Ansible is agentless and uses SSH for communication with YAML-based playbooks. Puppet uses an agent on managed nodes and declarative manifests. Chef also uses agents and imperative recipes written in Ruby. All three are popular configuration management tools in network automation.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/solutions/automation/network-automation.html",
+      "difficulty": "medium",
+      "tags": ["configuration management", "Ansible", "Puppet", "Chef"]
+    },
+    {
+      "id": "se1-q40",
+      "objectiveCode": "6.4",
+      "type": "multiple_select",
+      "question": "Which two data formats are commonly used with REST APIs in network automation? (Choose two.)",
+      "options": [
+        "A) JSON",
+        "B) CSV",
+        "C) XML",
+        "D) YAML",
+        "E) Binary"
+      ],
+      "correctAnswer": ["A", "C"],
+      "explanation": "JSON (JavaScript Object Notation) and XML (Extensible Markup Language) are the two most common data formats used with REST APIs. JSON is lightweight and widely preferred. XML is more verbose but also well-supported. While YAML is used in configuration management tools like Ansible, it is not the primary format for REST API communication.",
+      "sourceUrl": "https://developer.cisco.com/docs/dna-center/",
+      "difficulty": "easy",
+      "tags": ["JSON", "XML", "REST API", "data formats"]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "slug": "acl-config",
+  "title": "Extended ACL Configuration",
+  "description": "Create and apply an extended numbered ACL to filter traffic based on source/destination addresses, protocols, and port numbers, then apply it to a router interface.",
+  "domain": "Security Fundamentals",
+  "domainSlug": "security-fundamentals",
+  "objectiveCode": "5.6",
+  "difficulty": "hard",
+  "estimatedMinutes": 30,
+  "type": "acl-builder",
+  "tags": ["acl", "extended-acl", "security", "traffic-filtering", "access-list"],
+  "instructions": "## Extended ACL Configuration Lab\n\nIn this lab you will build an extended access control list (ACL) to filter traffic on a Cisco router interface.\n\n### Topology\n\n- **Router1**:\n  - Gi0/0: 192.168.1.1/24 (connected to the internal LAN)\n  - Gi0/1: 10.0.0.1/24 (connected to the server network, DNS server at 10.0.0.53)\n  - Gi0/2: 203.0.113.1/30 (connected to the internet)\n\n### Requirements\n\nCreate **extended ACL 100** with the following rules, in this order:\n\n1. **Permit HTTP** - Allow HTTP traffic (TCP port 80) from the 192.168.1.0/24 network to any destination.\n2. **Permit HTTPS** - Allow HTTPS traffic (TCP port 443) from the 192.168.1.0/24 network to any destination.\n3. **Permit DNS** - Allow DNS queries (UDP port 53) from the 192.168.1.0/24 network to the DNS server at host 10.0.0.53 only.\n4. **Deny All Other IP Traffic** - Deny all other IP traffic (this is explicit for logging/visibility, since there is an implicit deny at the end of every ACL).\n\nApply ACL 100 to interface **Gi0/0 inbound** (filtering traffic as it enters the router from the LAN).\n\n### Steps\n\n1. Enter global configuration mode.\n2. Create each ACE (Access Control Entry) in order using the `access-list 100` command.\n3. Apply the ACL to Gi0/0 in the inbound direction using `ip access-group 100 in`.\n4. Verify with `show access-lists 100` and `show ip interface GigabitEthernet0/0`.\n\n### Key Concepts\n\n- **Extended ACLs** (numbered 100-199) can filter on source IP, destination IP, protocol, and port numbers.\n- **Order matters**: ACEs are evaluated top-down. The first match determines the action.\n- Extended ACLs should be placed **close to the source** of the traffic being filtered.\n- The syntax is: `access-list <number> {permit|deny} <protocol> <source> <source-wildcard> <destination> <destination-wildcard> [eq <port>]`",
+  "starterCode": "! Enter your IOS commands below\nenable\nconfigure terminal\n!\n! Step 1: Permit HTTP from 192.168.1.0/24 to any\n!\n!\n! Step 2: Permit HTTPS from 192.168.1.0/24 to any\n!\n!\n! Step 3: Permit DNS (UDP 53) from 192.168.1.0/24 to host 10.0.0.53\n!\n!\n! Step 4: Deny all other IP traffic (explicit deny)\n!\n!\n! Step 5: Apply ACL to Gi0/0 inbound\n!\n!\nend",
+  "solutionCode": "enable\nconfigure terminal\n!\naccess-list 100 permit tcp 192.168.1.0 0.0.0.255 any eq 80\naccess-list 100 permit tcp 192.168.1.0 0.0.0.255 any eq 443\naccess-list 100 permit udp 192.168.1.0 0.0.0.255 host 10.0.0.53 eq 53\naccess-list 100 deny ip any any\n!\ninterface GigabitEthernet0/0\n ip access-group 100 in\n exit\n!\nend",
+  "expectedOutput": "Router1# show access-lists 100\nExtended IP access list 100\n    10 permit tcp 192.168.1.0 0.0.0.255 any eq www\n    20 permit tcp 192.168.1.0 0.0.0.255 any eq 443\n    30 permit udp 192.168.1.0 0.0.0.255 host 10.0.0.53 eq domain\n    40 deny ip any any\n\nRouter1# show ip interface GigabitEthernet0/0 | include access list\n  Inbound  access list is 100\n  Outgoing access list is not set",
+  "hints": [
+    "For HTTP and HTTPS, the protocol is TCP. The source is '192.168.1.0 0.0.0.255' (using the wildcard mask), the destination is 'any', and the port is specified with 'eq 80' or 'eq 443' at the end of the command.",
+    "For DNS, the protocol is UDP (DNS queries use UDP port 53). The destination is a single host, so use the keyword 'host 10.0.0.53' instead of a network and wildcard mask. The port is 'eq 53'.",
+    "To apply the ACL, enter interface configuration for Gi0/0 and use 'ip access-group 100 in'. The 'in' keyword means the ACL filters traffic entering the interface (from the LAN toward the router)."
+  ],
+  "learningObjectives": [
+    "Construct extended ACL entries that filter traffic based on protocol, source/destination addresses, and port numbers",
+    "Understand the significance of ACE ordering and the implicit deny at the end of every ACL",
+    "Apply an extended ACL to a router interface in the correct direction to achieve the desired filtering effect"
+  ]
+}

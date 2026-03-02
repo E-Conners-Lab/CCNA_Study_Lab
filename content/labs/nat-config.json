@@ -1,0 +1,26 @@
+{
+  "slug": "nat-config",
+  "title": "NAT Configuration",
+  "description": "Configure Port Address Translation (PAT/NAT overload) on a Cisco router to allow an internal network to access the internet using a single public IP address.",
+  "domain": "IP Services",
+  "domainSlug": "ip-services",
+  "objectiveCode": "4.1",
+  "difficulty": "medium",
+  "estimatedMinutes": 20,
+  "type": "ios-cli",
+  "tags": ["nat", "pat", "overload", "access-list", "inside-outside"],
+  "instructions": "## NAT (PAT/Overload) Configuration Lab\n\nIn this lab you will configure PAT (Port Address Translation), also known as NAT overload, to allow multiple internal hosts to share a single public IP address.\n\n### Topology\n\n- **Router1**:\n  - Gi0/0: 192.168.1.1/24 (Inside - connected to LAN)\n  - Gi0/1: 203.0.113.10/30 (Outside - connected to ISP)\n\n- Internal hosts on the 192.168.1.0/24 network need internet access.\n- The router's Gi0/1 IP address (203.0.113.10) will be used as the translated public address.\n\n### Requirements\n\n1. **Define Inside and Outside Interfaces**\n   - Gi0/0 is the NAT inside interface.\n   - Gi0/1 is the NAT outside interface.\n\n2. **Create an Access List**\n   - Standard access list 1 should permit the 192.168.1.0/24 network.\n\n3. **Configure NAT Overload**\n   - Map the access list to the outside interface using overload.\n\n### Steps\n\n1. Enter global configuration mode.\n2. Configure Gi0/0 as the NAT inside interface using `ip nat inside`.\n3. Configure Gi0/1 as the NAT outside interface using `ip nat outside`.\n4. Create standard access list 1 to permit 192.168.1.0 with wildcard mask 0.0.0.255.\n5. Configure NAT overload: `ip nat inside source list 1 interface GigabitEthernet0/1 overload`.\n6. Verify with `show ip nat translations` and `show ip nat statistics`.\n\n### Key Concepts\n\n- **PAT (NAT Overload)** translates multiple private IP addresses to a single public IP using unique port numbers.\n- The **inside** interface faces the private LAN, and the **outside** interface faces the public network.\n- The **overload** keyword enables PAT, allowing many-to-one translation.",
+  "starterCode": "! Enter your IOS commands below\nenable\nconfigure terminal\n!\n! Step 1: Configure inside interface\n!\n!\n! Step 2: Configure outside interface\n!\n!\n! Step 3: Create access list\n!\n!\n! Step 4: Configure NAT overload\n!\n!\nend",
+  "solutionCode": "enable\nconfigure terminal\n!\ninterface GigabitEthernet0/0\n ip address 192.168.1.1 255.255.255.0\n ip nat inside\n no shutdown\n exit\n!\ninterface GigabitEthernet0/1\n ip address 203.0.113.10 255.255.255.252\n ip nat outside\n no shutdown\n exit\n!\naccess-list 1 permit 192.168.1.0 0.0.0.255\n!\nip nat inside source list 1 interface GigabitEthernet0/1 overload\n!\nend",
+  "expectedOutput": "Router1# show ip nat statistics\nTotal active translations: 0 (0 static, 0 dynamic; 0 extended)\nOutside interfaces:\n  GigabitEthernet0/1\nInside interfaces:\n  GigabitEthernet0/0\nHits: 0  Misses: 0\nDynamic mappings:\n-- Inside Source\n[Id: 1] access-list 1 interface GigabitEthernet0/1 refcount 0",
+  "hints": [
+    "The 'ip nat inside' and 'ip nat outside' commands are configured under the interface configuration mode for each respective interface, not in global configuration.",
+    "Standard access list 1 uses wildcard masks (not subnet masks). To permit 192.168.1.0/24, use: access-list 1 permit 192.168.1.0 0.0.0.255.",
+    "The full NAT overload command ties everything together: 'ip nat inside source list 1 interface GigabitEthernet0/1 overload'. The 'overload' keyword at the end is what enables PAT (many-to-one translation)."
+  ],
+  "learningObjectives": [
+    "Identify and configure NAT inside and outside interfaces on a Cisco router",
+    "Create a standard access list to define the source network eligible for translation",
+    "Configure PAT (NAT overload) to translate multiple internal addresses to a single public address"
+  ]
+}

@@ -1,0 +1,302 @@
+{
+  "domain": 1,
+  "slug": "network-fundamentals",
+  "name": "Network Fundamentals",
+  "weight": 20,
+  "overview": "Network Fundamentals covers the foundational concepts required for the CCNA 200-301 exam, including network component roles, topology architectures, cabling types, IP addressing for both IPv4 and IPv6, and core protocols like TCP and UDP. This domain also introduces wireless principles, virtualization fundamentals, and Layer 2 switching concepts. Mastering these fundamentals is critical as they underpin every other domain on the exam.",
+  "keyTopics": [
+    {
+      "objectiveCode": "1.1",
+      "title": "Explain the role and function of network components",
+      "summary": "Network infrastructure relies on a variety of components, each serving a distinct role. Routers operate at Layer 3 to forward packets between networks, while Layer 2 switches forward frames within a LAN using MAC addresses and Layer 3 switches add routing capabilities. Other key components include next-generation firewalls, IPS, wireless access points, controllers like Cisco DNA Center and WLC, endpoints, servers, and PoE-capable devices.",
+      "keyPoints": [
+        "Routers make forwarding decisions based on destination IP addresses and maintain routing tables to determine the best path for packets across networks.",
+        "Layer 2 switches use MAC address tables to forward Ethernet frames within a broadcast domain, while Layer 3 switches combine switching and routing functionality in a single device.",
+        "Next-generation firewalls (NGFW) provide stateful inspection, application-level awareness, intrusion prevention, and threat intelligence beyond traditional packet filtering.",
+        "Cisco DNA Center serves as the centralized management and automation platform for intent-based networking, while Wireless LAN Controllers (WLC) manage and configure multiple access points.",
+        "Power over Ethernet (PoE) delivers electrical power alongside data over standard Ethernet cabling, following IEEE 802.3af (15.4W), 802.3at (PoE+ at 30W), and 802.3bt (PoE++ up to 90W) standards."
+      ],
+      "examTips": [
+        "Know the difference between a Layer 2 switch, Layer 3 switch, and router -- the exam frequently tests whether you understand which device makes forwarding decisions based on MAC addresses versus IP addresses.",
+        "Understand the distinction between Cisco DNA Center (network management/automation platform) and a WLC (specifically manages wireless APs). DNA Center is broader in scope.",
+        "Remember PoE power standards and their wattage limits: 802.3af = 15.4W, 802.3at = 30W, 802.3bt = up to 90W."
+      ],
+      "resources": [
+        {"title": "Cisco DNA Center Overview", "url": "https://www.cisco.com/c/en/us/products/cloud-systems-management/dna-center/index.html"},
+        {"title": "Cisco Network Component Roles - Study Guide", "url": "https://learningnetwork.cisco.com/s/article/ccna-exam-topics"}
+      ]
+    },
+    {
+      "objectiveCode": "1.2",
+      "title": "Describe characteristics of network topology architectures",
+      "summary": "Network topologies define how devices are interconnected and how traffic flows through the infrastructure. Enterprise networks commonly use two-tier (collapsed core) or three-tier (access, distribution, core) hierarchical designs, while modern data centers increasingly adopt spine-leaf architectures. Understanding WAN, SOHO, on-premises, and cloud deployment models is also essential.",
+      "keyPoints": [
+        "The three-tier architecture consists of access, distribution, and core layers, providing scalability, redundancy, and clear separation of functions in large enterprise networks.",
+        "The two-tier (collapsed core) architecture merges the core and distribution layers into a single layer, suitable for smaller campus networks that do not require a dedicated core.",
+        "Spine-leaf topology is used in modern data centers where every leaf switch connects to every spine switch, providing predictable latency, equal-cost paths, and easy horizontal scaling.",
+        "WAN topologies connect geographically dispersed sites using technologies like MPLS, Metro Ethernet, broadband VPN, or SD-WAN, each with different cost, performance, and reliability characteristics.",
+        "SOHO (Small Office/Home Office) networks typically use a single integrated device (router, switch, wireless AP, firewall) and a flat network design with a single broadcast domain."
+      ],
+      "examTips": [
+        "Be able to identify when a two-tier vs. three-tier architecture is appropriate based on network size and requirements described in a scenario.",
+        "Understand that spine-leaf provides consistent latency because every path between leaf switches traverses exactly one spine switch, making it ideal for east-west traffic in data centers."
+      ],
+      "resources": [
+        {"title": "Cisco Campus Network Design Guide", "url": "https://www.cisco.com/c/en/us/solutions/enterprise-networks/index.html"},
+        {"title": "Cisco Data Center Spine-Leaf Architecture", "url": "https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/white-paper-c11-737022.html"}
+      ]
+    },
+    {
+      "objectiveCode": "1.3",
+      "title": "Compare physical interface and cabling types",
+      "summary": "Different cable types support different distances, speeds, and use cases. Single-mode fiber uses a small core for long-distance transmission, while multimode fiber supports shorter distances at lower cost. Copper cabling (UTP) remains the most common LAN medium, and understanding the difference between shared media and point-to-point Ethernet is fundamental.",
+      "keyPoints": [
+        "Single-mode fiber (SMF) has a small core diameter (8-10 microns), uses laser light sources, and supports distances up to 100 km or more, making it ideal for long-haul and campus backbone connections.",
+        "Multimode fiber (MMF) has a larger core (50 or 62.5 microns), uses LED or VCSEL light sources, and is limited to shorter distances (up to about 550m at 10 Gbps with OM4), but costs less than single-mode.",
+        "Copper UTP (Unshielded Twisted Pair) cabling uses RJ-45 connectors, supports distances up to 100 meters, and comes in categories (Cat5e for 1 Gbps, Cat6 for up to 10 Gbps at 55m, Cat6a for 10 Gbps at 100m).",
+        "Shared media Ethernet (legacy hubs, coaxial bus) uses CSMA/CD for collision management, while modern point-to-point switched Ethernet provides full-duplex, dedicated bandwidth per port with no collisions."
+      ],
+      "examTips": [
+        "Remember the maximum distance for copper UTP is 100 meters (328 feet). Single-mode fiber goes much farther than multimode.",
+        "Know that single-mode fiber uses a laser and has a smaller core, while multimode uses LED/VCSEL and has a larger core. The exam may test these distinctions with specific scenarios."
+      ],
+      "resources": [
+        {"title": "Cisco Cabling and Interface Guide", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/hardware/install/b_c9300_hig/b_c9300_hig_chapter_01.html"},
+        {"title": "Fiber Optic Cable Types Explained", "url": "https://www.cisco.com/c/en/us/products/switches/what-is-a-lan-local-area-network.html"}
+      ]
+    },
+    {
+      "objectiveCode": "1.4",
+      "title": "Identify interface and cable issues",
+      "summary": "Troubleshooting physical and data link layer issues is a critical networking skill. Common problems include collisions on shared media, interface errors shown in counters, and duplex or speed mismatches between connected devices. Recognizing these symptoms in show command output is essential for rapid problem resolution.",
+      "keyPoints": [
+        "Collisions occur on half-duplex links or shared media segments; late collisions specifically indicate a cable length violation or a duplex mismatch and are a strong diagnostic indicator.",
+        "Duplex mismatch occurs when one side of a link is set to full-duplex and the other to half-duplex, causing poor performance, late collisions on the half-duplex side, and FCS errors on the full-duplex side.",
+        "Speed mismatch prevents a link from coming up entirely if both sides cannot autonegotiate to a common speed, resulting in the interface showing a down/down state.",
+        "CRC errors, runts, giants, and input/output errors in 'show interfaces' output indicate physical layer problems such as damaged cables, electromagnetic interference, or failing hardware."
+      ],
+      "examTips": [
+        "A duplex mismatch is one of the most commonly tested troubleshooting scenarios. If you see late collisions and poor performance, suspect a duplex mismatch first.",
+        "Know the difference between runts (frames smaller than 64 bytes) and giants (frames larger than 1518 bytes) as they point to different underlying issues.",
+        "Use 'show interfaces' to identify error counters. CRC errors suggest physical layer problems, while late collisions suggest duplex mismatch."
+      ],
+      "resources": [
+        {"title": "Cisco Troubleshooting Interface Errors", "url": "https://www.cisco.com/c/en/us/support/docs/switches/catalyst-6500-series-switches/12027-53.html"}
+      ]
+    },
+    {
+      "objectiveCode": "1.5",
+      "title": "Compare TCP to UDP",
+      "summary": "TCP and UDP are the two primary Layer 4 transport protocols in the TCP/IP suite. TCP provides reliable, connection-oriented communication with flow control and error recovery, while UDP offers lightweight, connectionless delivery with lower overhead. The choice between them depends on whether the application prioritizes reliability or speed.",
+      "keyPoints": [
+        "TCP is connection-oriented, using a three-way handshake (SYN, SYN-ACK, ACK) to establish sessions before data transfer and a four-way process (FIN/ACK) to gracefully close connections.",
+        "TCP provides reliable delivery through sequence numbers, acknowledgments, retransmission of lost segments, flow control (sliding window), and congestion avoidance mechanisms.",
+        "UDP is connectionless with no handshake, no acknowledgments, no sequencing, and no retransmission, resulting in lower overhead and faster transmission for latency-sensitive applications.",
+        "Common TCP applications include HTTP/HTTPS (80/443), FTP (20/21), SSH (22), Telnet (23), SMTP (25), and BGP (179). Common UDP applications include DNS (53), DHCP (67/68), TFTP (69), SNMP (161/162), and RTP for voice/video.",
+        "DNS uses UDP by default for queries but falls back to TCP for zone transfers or when response data exceeds 512 bytes."
+      ],
+      "examTips": [
+        "Memorize key port numbers and which protocol they use. The exam frequently tests whether a given application uses TCP or UDP.",
+        "Remember that DNS uses both TCP and UDP -- UDP for standard queries, TCP for zone transfers and large responses. This is a common exam question."
+      ],
+      "resources": [
+        {"title": "Cisco TCP/IP Overview", "url": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13769-5.html"},
+        {"title": "Common TCP and UDP Port Numbers", "url": "https://learningnetwork.cisco.com/s/article/common-ports-x"}
+      ]
+    },
+    {
+      "objectiveCode": "1.6",
+      "title": "Configure and verify IPv4 addressing and subnetting",
+      "summary": "IPv4 addressing and subnetting are among the most heavily tested topics on the CCNA exam. You must be able to determine network addresses, broadcast addresses, valid host ranges, and subnet masks using both dotted-decimal and CIDR notation. Subnetting skills are foundational to nearly every other networking concept.",
+      "keyPoints": [
+        "IPv4 addresses are 32 bits divided into four octets, classified into network and host portions determined by the subnet mask. CIDR notation (e.g., /24) specifies the number of network bits.",
+        "Subnetting divides a larger network into smaller subnets by borrowing host bits. Each additional borrowed bit doubles the number of subnets but halves the available hosts per subnet.",
+        "The formula for usable hosts per subnet is 2^h - 2 (where h is the number of host bits), subtracting the network address (all host bits 0) and broadcast address (all host bits 1).",
+        "Private IPv4 ranges (RFC 1918) are: 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16. These are not routable on the public Internet.",
+        "To configure an IPv4 address on a Cisco router interface: 'interface GigabitEthernet0/0', 'ip address 192.168.1.1 255.255.255.0', 'no shutdown'. Verify with 'show ip interface brief'."
+      ],
+      "examTips": [
+        "Practice subnetting until you can do it quickly. You should be able to determine the network, broadcast, first usable, and last usable addresses for any given IP and mask within 30 seconds.",
+        "Know the subnet mask equivalents: /24 = 255.255.255.0, /25 = 255.255.255.128, /26 = 255.255.255.192, /27 = 255.255.255.224, /28 = 255.255.255.240, /30 = 255.255.255.252.",
+        "A /30 subnet provides exactly 2 usable host addresses and is commonly used for point-to-point links between routers."
+      ],
+      "resources": [
+        {"title": "Cisco IPv4 Subnetting Guide", "url": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13788-3.html"},
+        {"title": "Subnetting Practice - Cisco Learning Network", "url": "https://learningnetwork.cisco.com/s/article/subnetting-practice"}
+      ]
+    },
+    {
+      "objectiveCode": "1.7",
+      "title": "Describe the need for private IPv4 addressing",
+      "summary": "Private IPv4 addressing was introduced to conserve the limited 32-bit IPv4 address space. RFC 1918 defines three private address ranges that can be freely used within organizations but are not routable on the public Internet. Network Address Translation (NAT) allows private addresses to communicate with public Internet hosts.",
+      "keyPoints": [
+        "The three RFC 1918 private ranges are: 10.0.0.0/8 (Class A, ~16.7 million addresses), 172.16.0.0/12 (Class B, ~1 million addresses), and 192.168.0.0/16 (Class C, ~65,000 addresses).",
+        "Private addresses solve IPv4 exhaustion by allowing millions of organizations to reuse the same address space internally without conflict, since these addresses are never routed on the public Internet.",
+        "NAT (Network Address Translation) translates private addresses to public addresses at the network boundary, enabling internal hosts to access the Internet while conserving public IP addresses.",
+        "PAT (Port Address Translation), also called NAT overload, allows many internal hosts to share a single public IP address by tracking connections through unique source port numbers."
+      ],
+      "examTips": [
+        "Memorize all three RFC 1918 private address ranges exactly, including their CIDR notation. The 172.16.0.0/12 range (172.16.0.0 through 172.31.255.255) is the one candidates most often get wrong.",
+        "Understand that private addresses MUST be translated via NAT/PAT to reach the public Internet. Routers on the Internet drop packets with private source or destination addresses."
+      ],
+      "resources": [
+        {"title": "RFC 1918 - Address Allocation for Private Internets", "url": "https://www.rfc-editor.org/rfc/rfc1918"},
+        {"title": "Cisco NAT Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_nat/configuration/xe-16/nat-xe-16-book.html"}
+      ]
+    },
+    {
+      "objectiveCode": "1.8",
+      "title": "Configure and verify IPv6 addressing and prefix",
+      "summary": "IPv6 uses 128-bit addresses represented in hexadecimal, vastly expanding the address space compared to IPv4. Configuring IPv6 on Cisco devices requires enabling IPv6 routing and assigning addresses to interfaces. Verification commands confirm proper addressing and neighbor discovery operation.",
+      "keyPoints": [
+        "IPv6 addresses are 128 bits written as eight groups of four hex digits separated by colons (e.g., 2001:0DB8:0000:0001:0000:0000:0000:0001). Leading zeros in each group can be omitted, and one consecutive sequence of all-zero groups can be replaced with '::'.",
+        "To configure IPv6 on a Cisco router: 'ipv6 unicast-routing' (global), then on the interface: 'ipv6 address 2001:DB8:1::1/64'. Use 'ipv6 address autoconfig' for SLAAC or 'ipv6 address dhcp' for DHCPv6.",
+        "Every IPv6-enabled interface automatically generates a link-local address (FE80::/10) used for local communication, neighbor discovery, and routing protocol operations.",
+        "Verification commands include 'show ipv6 interface brief' (summary of all IPv6 addresses), 'show ipv6 interface' (detailed info), and 'show ipv6 neighbors' (equivalent of ARP table).",
+        "The /64 prefix length is standard for most IPv6 subnets, leaving 64 bits for the interface identifier portion."
+      ],
+      "examTips": [
+        "Remember that 'ipv6 unicast-routing' must be enabled globally before a router will forward IPv6 packets. Without it, the router only acts as an IPv6 host.",
+        "Practice compressing and expanding IPv6 addresses. The exam may present the same address in different formats and ask you to identify the correct or equivalent representation."
+      ],
+      "resources": [
+        {"title": "Cisco IPv6 Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/xe-16/ip6b-xe-16-book.html"},
+        {"title": "IPv6 Addressing at a Glance - Cisco", "url": "https://www.cisco.com/c/dam/en/us/solutions/collateral/enterprise/design-zone-ipv6/ipv6-at-a-glance.pdf"}
+      ]
+    },
+    {
+      "objectiveCode": "1.9",
+      "title": "Describe IPv6 address types",
+      "summary": "IPv6 defines several address types that serve different purposes in network communication. Understanding the scope and function of global unicast, unique local, link-local, anycast, and multicast addresses is essential. Modified EUI-64 is a method for automatically generating the interface identifier portion of an IPv6 address from a device's MAC address.",
+      "keyPoints": [
+        "Global Unicast Addresses (GUA) are the IPv6 equivalent of public IPv4 addresses, routable on the Internet, and typically begin with 2000::/3 (addresses starting with 2 or 3 in the first hex digit).",
+        "Unique Local Addresses (ULA) are similar to RFC 1918 private addresses, using the FC00::/7 prefix (typically FD00::/8 in practice), routable within an organization but not on the Internet.",
+        "Link-Local Addresses (FE80::/10) are automatically assigned to every IPv6 interface, used only for communication on the local link, and required for neighbor discovery and routing protocol peering.",
+        "Anycast addresses are syntactically identical to unicast addresses but assigned to multiple interfaces; packets are delivered to the nearest interface (by routing distance), useful for load balancing and redundancy.",
+        "Modified EUI-64 creates a 64-bit interface ID from a 48-bit MAC address by inserting FFFE in the middle and flipping the 7th bit (Universal/Local bit). For example, MAC 00:1A:2B:3C:4D:5E becomes interface ID 021A:2BFF:FE3C:4D5E."
+      ],
+      "examTips": [
+        "Know the EUI-64 process step by step: split the MAC, insert FFFE, flip the 7th bit. Practice converting MAC addresses to EUI-64 interface identifiers.",
+        "Remember that multicast replaces broadcast in IPv6. Key multicast addresses: FF02::1 (all nodes), FF02::2 (all routers), FF02::5 (all OSPF routers), FF02::A (all EIGRP routers).",
+        "Link-local addresses are always present on IPv6 interfaces and are used as next-hop addresses in IPv6 routing tables."
+      ],
+      "resources": [
+        {"title": "IPv6 Address Types - Cisco", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/xe-16/ip6b-xe-16-book/ip6-uni-add.html"},
+        {"title": "Understanding IPv6 EUI-64", "url": "https://learningnetwork.cisco.com/s/article/understanding-ipv6-eui-64-bit-address-x"}
+      ]
+    },
+    {
+      "objectiveCode": "1.10",
+      "title": "Verify IP parameters for Client OS (Windows, Mac OS, Linux)",
+      "summary": "Network troubleshooting often begins at the client endpoint by verifying IP parameters. Each major operating system has specific commands for displaying IP address, subnet mask, default gateway, and DNS server information. Knowing these commands across Windows, macOS, and Linux is a practical skill tested on the exam.",
+      "keyPoints": [
+        "Windows uses 'ipconfig' to display basic IP settings and 'ipconfig /all' for detailed information including MAC address, DHCP lease, and DNS servers. 'ipconfig /release' and 'ipconfig /renew' manage DHCP leases.",
+        "macOS and Linux use 'ifconfig' (legacy) or 'ip addr show' / 'ip a' (modern Linux) to display interface configuration. 'networksetup -getinfo <service>' is used on macOS for detailed settings.",
+        "On all platforms, 'ping' tests basic connectivity, 'traceroute' (Linux/macOS) or 'tracert' (Windows) shows the path to a destination, and 'nslookup' / 'dig' verify DNS resolution.",
+        "Key parameters to verify include: IP address, subnet mask, default gateway, DNS server addresses, DHCP status (enabled/disabled), and MAC address."
+      ],
+      "examTips": [
+        "The exam may show you command output from different operating systems and ask you to identify the problem. Be familiar with the output format of ipconfig, ifconfig, and ip addr.",
+        "Remember that Windows uses 'ipconfig' while Linux and macOS use 'ifconfig' or 'ip addr'. The exam tests this distinction directly."
+      ],
+      "resources": [
+        {"title": "Cisco - Verifying Client IP Configuration", "url": "https://learningnetwork.cisco.com/s/article/ccna-cert-prep-ip-addressing"}
+      ]
+    },
+    {
+      "objectiveCode": "1.11",
+      "title": "Describe wireless principles",
+      "summary": "Wireless networking operates using radio frequency (RF) signals governed by IEEE 802.11 standards. Understanding Wi-Fi channels, SSIDs, RF behavior, and wireless security encryption methods is essential for both design and troubleshooting. Proper channel planning avoids interference and maximizes network performance.",
+      "keyPoints": [
+        "In the 2.4 GHz band, only channels 1, 6, and 11 are nonoverlapping in North America. Using overlapping channels causes co-channel interference that degrades performance for all nearby devices.",
+        "The 5 GHz band offers many more nonoverlapping channels (up to 25 depending on regulatory domain), higher throughput, but shorter range and less ability to penetrate walls compared to 2.4 GHz.",
+        "SSID (Service Set Identifier) is the human-readable name of a wireless network. Multiple SSIDs can be broadcast from a single access point, each mapped to a different VLAN.",
+        "RF fundamentals include understanding signal absorption (walls, obstacles), reflection, refraction, diffraction, and scattering, all of which affect wireless coverage and signal strength.",
+        "Modern wireless encryption standards include WPA2 (uses AES-CCMP, current enterprise standard) and WPA3 (uses SAE for personal mode, 192-bit security for enterprise). WEP and WPA-TKIP are deprecated and insecure."
+      ],
+      "examTips": [
+        "Memorize the three nonoverlapping channels for 2.4 GHz: 1, 6, and 11. This is one of the most frequently tested wireless facts on the CCNA.",
+        "Know the differences between WPA2-Personal (PSK), WPA2-Enterprise (802.1X with RADIUS), and WPA3 enhancements."
+      ],
+      "resources": [
+        {"title": "Cisco Wireless LAN Fundamentals", "url": "https://www.cisco.com/c/en/us/products/wireless/what-is-wifi.html"},
+        {"title": "Cisco Wireless Design Guide", "url": "https://www.cisco.com/c/en/us/solutions/enterprise-networks/802-11ax-solution/index.html"}
+      ]
+    },
+    {
+      "objectiveCode": "1.12",
+      "title": "Explain virtualization fundamentals",
+      "summary": "Virtualization allows multiple virtual instances to share physical hardware, improving efficiency, flexibility, and resource utilization. Server virtualization uses hypervisors to run multiple virtual machines on a single physical server. Containers provide application-level isolation, and VRFs create virtual routing instances within a single physical router.",
+      "keyPoints": [
+        "Server virtualization uses a hypervisor (Type 1 runs directly on hardware, Type 2 runs on a host OS) to create multiple virtual machines, each with its own OS, on a single physical server.",
+        "Containers (e.g., Docker) package applications with their dependencies and share the host OS kernel, making them more lightweight, faster to start, and more resource-efficient than full virtual machines.",
+        "VRF (Virtual Routing and Forwarding) creates multiple isolated routing table instances on a single router. Each VRF maintains its own independent routing table, allowing overlapping IP address spaces.",
+        "Benefits of virtualization include reduced hardware costs, faster provisioning, better disaster recovery, improved scalability, and more efficient resource utilization."
+      ],
+      "examTips": [
+        "Understand the key difference between VMs and containers: VMs include a full guest OS and are managed by a hypervisor, while containers share the host kernel and isolate only the application and its dependencies.",
+        "Know that VRF-Lite allows a single physical router to maintain separate routing tables for different customers or departments, effectively creating multiple virtual routers."
+      ],
+      "resources": [
+        {"title": "Cisco VRF Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/iri-xe-16-book/iri-vrf.html"},
+        {"title": "Cisco Virtualization and Containers Overview", "url": "https://www.cisco.com/c/en/us/solutions/data-center-virtualization/index.html"}
+      ]
+    },
+    {
+      "objectiveCode": "1.13",
+      "title": "Describe switching concepts",
+      "summary": "Layer 2 switches use MAC addresses to make forwarding decisions, building and maintaining a MAC address table (also called a CAM table) to efficiently direct frames. Understanding how switches learn MAC addresses, age out stale entries, forward known unicast frames, and flood unknown unicast, multicast, and broadcast frames is fundamental to networking.",
+      "keyPoints": [
+        "MAC learning: When a switch receives a frame, it records the source MAC address and the ingress port in its MAC address table. This process is dynamic and automatic.",
+        "MAC aging: Entries in the MAC address table have a default aging timer (300 seconds on Cisco switches). If no frames from a MAC address are received before the timer expires, the entry is removed to keep the table current.",
+        "Frame switching (forwarding): When a switch receives a frame with a known destination MAC address in its table, it forwards the frame only out the specific port associated with that MAC address.",
+        "Frame flooding: When a switch receives a frame with an unknown destination MAC address (unknown unicast), it floods the frame out all ports in the VLAN except the port it was received on. Broadcast and multicast frames are also flooded by default.",
+        "Switches operate at Layer 2, creating separate collision domains per port but a single broadcast domain per VLAN. This eliminates collisions on full-duplex links while containing broadcasts within VLANs."
+      ],
+      "examTips": [
+        "Remember the three actions a switch takes: forward (known unicast), flood (unknown unicast/broadcast/multicast), and filter (frame destined for a MAC on the same port it arrived on).",
+        "The default MAC address aging time on Cisco switches is 300 seconds (5 minutes). This value is frequently tested.",
+        "Understand that switches create separate collision domains per port but all ports in the same VLAN share one broadcast domain."
+      ],
+      "resources": [
+        {"title": "Cisco Switching Fundamentals", "url": "https://www.cisco.com/c/en/us/support/docs/switches/catalyst-6500-series-switches/12023-17.html"},
+        {"title": "Understanding MAC Address Tables", "url": "https://learningnetwork.cisco.com/s/article/switching-concepts-x"}
+      ]
+    }
+  ],
+  "practiceScenarios": [
+    {
+      "scenario": "You are designing a network for a medium-sized company with 500 users across three floors. The company needs separate broadcast domains for each department (HR, Engineering, Sales) and wants to use the 192.168.0.0/16 private address space.",
+      "question": "How many subnets and what subnet mask would you use if each department needs up to 200 hosts, and what topology architecture would be most appropriate?",
+      "answer": "Use a /24 subnet mask (255.255.255.0) for each department, providing 254 usable hosts per subnet, which accommodates up to 200 hosts with room for growth. Assign 192.168.1.0/24 to HR, 192.168.2.0/24 to Engineering, and 192.168.3.0/24 to Sales. For 500 users across three floors, a two-tier (collapsed core) architecture is appropriate, combining the core and distribution layers into a single layer with access switches on each floor connecting to the collapsed core switches."
+    },
+    {
+      "scenario": "A technician reports that a connection between two switches is operating very slowly. The link shows many late collisions and FCS errors. One side of the link was manually configured for 1 Gbps full-duplex, while the other side is set to autonegotiate.",
+      "question": "What is the most likely cause of the problem, and how would you fix it?",
+      "answer": "This is a classic duplex mismatch. When one side is manually set to full-duplex and the other is set to autonegotiate, the autonegotiating side cannot detect the manually configured speed and duplex settings. Per IEEE standards, when autonegotiation fails to detect the remote side, it defaults to half-duplex. The result is one side operating full-duplex while the other is half-duplex, causing late collisions on the half-duplex side and FCS errors on the full-duplex side. Fix it by either setting both sides to the same manual configuration (1 Gbps, full-duplex) or setting both sides to autonegotiate."
+    },
+    {
+      "scenario": "A host with MAC address AA:BB:CC:11:22:33 needs an IPv6 global unicast address configured using EUI-64 on a network with prefix 2001:DB8:ACAD:1::/64.",
+      "question": "What will the full IPv6 address be after applying the Modified EUI-64 process?",
+      "answer": "Starting with MAC AA:BB:CC:11:22:33, split it into two halves: AA:BB:CC and 11:22:33. Insert FFFE in the middle to get AA:BB:CC:FF:FE:11:22:33. Then flip the 7th bit (the U/L bit) of the first byte: AA in binary is 10101010, flipping the 7th bit gives 10101000, which is A8. The EUI-64 interface ID becomes A8BB:CCFF:FE11:2233. The complete IPv6 address is 2001:DB8:ACAD:1:A8BB:CCFF:FE11:2233/64."
+    }
+  ],
+  "commonMistakes": [
+    {
+      "mistake": "Confusing the 172.16.0.0/12 private address range and thinking it only covers 172.16.0.0 through 172.16.255.255.",
+      "correction": "The 172.16.0.0/12 range covers 172.16.0.0 through 172.31.255.255. The /12 mask means the first 12 bits are the network portion, so the second octet ranges from 16 (00010000) to 31 (00011111)."
+    },
+    {
+      "mistake": "Forgetting to subtract 2 from the total host count when subnetting, arriving at incorrect usable host numbers.",
+      "correction": "Always use 2^h - 2 for usable hosts, where h is the number of host bits. You must subtract the network address (all host bits 0) and the broadcast address (all host bits 1). For example, a /26 has 6 host bits: 2^6 = 64 total, minus 2 = 62 usable hosts."
+    },
+    {
+      "mistake": "Assuming that a Layer 3 switch and a router are completely interchangeable devices with identical capabilities.",
+      "correction": "While both route packets, Layer 3 switches are optimized for high-speed LAN routing using hardware-based forwarding (ASICs) and typically lack WAN interfaces and advanced features like NAT and VPN termination that routers provide. Routers are better suited for WAN connectivity and complex routing policies."
+    },
+    {
+      "mistake": "Incorrectly flipping the wrong bit when performing Modified EUI-64 conversion, or forgetting to flip the 7th bit altogether.",
+      "correction": "In EUI-64, you must flip the 7th bit (the Universal/Local bit) of the first byte of the MAC address. Counting from the left, the 7th bit position has a value of 02 in hex. So if the first byte is 00, it becomes 02; if it is 02, it becomes 00; if it is AA (10101010), it becomes A8 (10101000)."
+    }
+  ]
+}

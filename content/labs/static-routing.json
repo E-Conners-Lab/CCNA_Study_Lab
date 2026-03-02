@@ -1,0 +1,26 @@
+{
+  "slug": "static-routing",
+  "title": "Static Route Configuration",
+  "description": "Configure various types of static routes on a Cisco router including standard static routes, a default route, a host route, and a floating static route with a custom administrative distance.",
+  "domain": "IP Connectivity",
+  "domainSlug": "ip-connectivity",
+  "objectiveCode": "3.3",
+  "difficulty": "medium",
+  "estimatedMinutes": 25,
+  "type": "ios-cli",
+  "tags": ["static-route", "default-route", "floating-static", "host-route", "routing"],
+  "instructions": "## Static Route Configuration Lab\n\nIn this lab you will configure multiple types of static routes on a Cisco router.\n\n### Topology\n\n- **Router1** has the following connections:\n  - Gi0/0: 192.168.1.1/24 (connects to Router2 at 192.168.1.2)\n  - Gi0/1: 203.0.113.2/30 (connects to ISP at 203.0.113.1)\n  - Gi0/2: 192.168.2.1/24 (connects to Router3 at 192.168.2.2)\n  - Gi0/3: 192.168.3.1/24 (connects to Router4 at 192.168.3.2)\n\n### Requirements\n\n1. **Standard Static Route**\n   - Destination: 10.0.0.0/8\n   - Next-hop: 192.168.1.2\n\n2. **Default Static Route**\n   - All unknown destinations should be sent to the ISP at 203.0.113.1.\n\n3. **Host Route**\n   - Destination: 172.16.1.100/32 (a specific server)\n   - Next-hop: 192.168.2.2\n\n4. **Floating Static Route**\n   - Destination: 10.0.0.0/8 (same as the standard static route)\n   - Next-hop: 192.168.3.2\n   - Administrative distance: 200 (backup route)\n\n### Steps\n\n1. Enter global configuration mode on Router1.\n2. Configure the standard static route to 10.0.0.0/8 via 192.168.1.2.\n3. Configure the default route via 203.0.113.1.\n4. Configure the host route to 172.16.1.100/32 via 192.168.2.2.\n5. Configure the floating static route to 10.0.0.0/8 via 192.168.3.2 with an AD of 200.\n6. Verify with `show ip route static`.\n\n### Key Concepts\n\n- A **default route** uses 0.0.0.0 0.0.0.0 as the destination.\n- A **host route** uses a /32 mask (255.255.255.255).\n- A **floating static route** has a higher administrative distance than the primary route, so it only appears in the routing table if the primary route fails.",
+  "starterCode": "! Enter your IOS commands below\nenable\nconfigure terminal\n!\n! Step 1: Standard static route to 10.0.0.0/8\n!\n!\n! Step 2: Default static route\n!\n!\n! Step 3: Host route to 172.16.1.100/32\n!\n!\n! Step 4: Floating static route to 10.0.0.0/8 (backup)\n!\n!\nend",
+  "solutionCode": "enable\nconfigure terminal\n!\n! Standard static route to 10.0.0.0/8 via 192.168.1.2\nip route 10.0.0.0 255.0.0.0 192.168.1.2\n!\n! Default static route via ISP\nip route 0.0.0.0 0.0.0.0 203.0.113.1\n!\n! Host route to 172.16.1.100/32 via 192.168.2.2\nip route 172.16.1.100 255.255.255.255 192.168.2.2\n!\n! Floating static route to 10.0.0.0/8 via 192.168.3.2 with AD 200\nip route 10.0.0.0 255.0.0.0 192.168.3.2 200\n!\nend",
+  "expectedOutput": "S     10.0.0.0/8 [1/0] via 192.168.1.2\nS     172.16.1.100/32 [1/0] via 192.168.2.2\nS*    0.0.0.0/0 [1/0] via 203.0.113.1\n\nNote: The floating static route (10.0.0.0/8 via 192.168.3.2 AD 200) will not appear in the routing table unless the primary route via 192.168.1.2 is removed.",
+  "hints": [
+    "The syntax for a static route is: ip route <destination-network> <subnet-mask> <next-hop-ip> [administrative-distance]. Remember to use dotted-decimal subnet masks, not CIDR prefix lengths.",
+    "The default route destination is 0.0.0.0 with a mask of 0.0.0.0. This matches all destinations that do not have a more specific route in the routing table.",
+    "A floating static route is identical to a normal static route but with an administrative distance value appended at the end. The default AD for a static route is 1, so any value higher than 1 (such as 200) will make it a backup route."
+  ],
+  "learningObjectives": [
+    "Configure standard static routes using next-hop IP addresses",
+    "Implement a default route and understand its role as a gateway of last resort",
+    "Configure floating static routes with custom administrative distances for route redundancy"
+  ]
+}

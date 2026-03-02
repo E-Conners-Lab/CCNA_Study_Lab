@@ -1,0 +1,356 @@
+{
+  "domain": 5,
+  "domainName": "Security Fundamentals",
+  "flashcards": [
+    {
+      "id": "d5-fc-001",
+      "objectiveCode": "5.1",
+      "question": "What are the three categories of malware threats commonly tested on the CCNA?",
+      "answer": "Viruses, worms, and Trojan horses.",
+      "explanation": "A virus attaches to a host file and requires user action to spread. A worm self-replicates across networks without user intervention. A Trojan horse disguises itself as legitimate software but performs malicious actions. Other malware types include ransomware, spyware, and adware.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/security/common-cyberattacks.html",
+      "difficulty": "easy",
+      "tags": ["security threats", "malware", "virus", "worm", "trojan"]
+    },
+    {
+      "id": "d5-fc-002",
+      "objectiveCode": "5.1",
+      "question": "What is the difference between a DoS attack and a DDoS attack?",
+      "answer": "A DoS (Denial of Service) attack originates from a single source. A DDoS (Distributed Denial of Service) attack originates from multiple coordinated sources (often a botnet).",
+      "explanation": "Both aim to make a service unavailable by overwhelming it with traffic or exploiting vulnerabilities. DDoS attacks are harder to mitigate because traffic comes from many different sources, making simple IP blocking ineffective. Common types include SYN floods, UDP floods, and application-layer attacks.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/security/common-cyberattacks.html",
+      "difficulty": "easy",
+      "tags": ["security threats", "DoS", "DDoS"]
+    },
+    {
+      "id": "d5-fc-003",
+      "objectiveCode": "5.1",
+      "question": "What is social engineering in the context of network security?",
+      "answer": "Social engineering is the manipulation of people into revealing confidential information or performing actions that compromise security.",
+      "explanation": "Social engineering exploits human psychology rather than technical vulnerabilities. Common techniques include phishing (fraudulent emails), spear phishing (targeted phishing), vishing (voice phishing), pretexting (fabricated scenarios), and tailgating (following authorized personnel into restricted areas).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/security/common-cyberattacks.html",
+      "difficulty": "easy",
+      "tags": ["security threats", "social engineering", "phishing"]
+    },
+    {
+      "id": "d5-fc-004",
+      "objectiveCode": "5.1",
+      "question": "What is a man-in-the-middle (MITM) attack?",
+      "answer": "A MITM attack occurs when an attacker secretly intercepts and potentially alters communications between two parties who believe they are communicating directly with each other.",
+      "explanation": "In a MITM attack, the attacker positions themselves between the victim and the resource (e.g., via ARP spoofing or DNS poisoning). They can eavesdrop on traffic, steal credentials, or modify data in transit. Encryption (HTTPS, SSH, VPNs) and certificate validation help prevent MITM attacks.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/security/common-cyberattacks.html",
+      "difficulty": "medium",
+      "tags": ["security threats", "MITM", "ARP spoofing"]
+    },
+    {
+      "id": "d5-fc-005",
+      "objectiveCode": "5.2",
+      "question": "What is the difference between 'enable secret' and 'enable password' on a Cisco IOS device?",
+      "answer": "'enable secret' stores the password as an MD5 hash (type 5) by default. 'enable password' stores it in cleartext (type 0) by default.",
+      "explanation": "Both commands set the password for privileged EXEC mode. 'enable secret' always hashes the password and takes precedence if both are configured. 'enable password' stores the password in plaintext in the running configuration unless 'service password-encryption' is applied (which only provides weak type 7 encryption). Always use 'enable secret' or better yet 'enable algorithm-type scrypt secret'.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/security/s1/sec-s1-cr-book.html",
+      "difficulty": "easy",
+      "tags": ["password security", "enable secret", "IOS commands"]
+    },
+    {
+      "id": "d5-fc-006",
+      "objectiveCode": "5.2",
+      "question": "What does the 'service password-encryption' command do?",
+      "answer": "It encrypts all plaintext passwords in the running configuration using a weak type 7 (Vigenere cipher) encryption.",
+      "explanation": "This global configuration command applies type 7 encryption to passwords that would otherwise appear in cleartext, such as 'enable password', console/VTY passwords, and SNMP community strings. Type 7 is easily reversible and provides only minimal protection against casual viewing. It does not affect 'enable secret' which already uses MD5 hashing.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/security/s1/sec-s1-cr-book.html",
+      "difficulty": "medium",
+      "tags": ["password security", "service password-encryption", "type 7", "IOS commands"]
+    },
+    {
+      "id": "d5-fc-007",
+      "objectiveCode": "5.3",
+      "question": "What is the difference between a standard ACL and an extended ACL?",
+      "answer": "Standard ACLs filter based only on source IP address. Extended ACLs can filter based on source IP, destination IP, protocol, and port numbers.",
+      "explanation": "Standard ACLs use numbered ranges 1-99 and 1300-1999. Extended ACLs use numbered ranges 100-199 and 2000-2699. Standard ACLs should be placed close to the destination to avoid unintentionally blocking traffic. Extended ACLs should be placed close to the source to block unwanted traffic as early as possible.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_data_acl/configuration/xe-16/sec-data-acl-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["ACL", "standard ACL", "extended ACL"]
+    },
+    {
+      "id": "d5-fc-008",
+      "objectiveCode": "5.3",
+      "question": "What is the purpose of an ACL wildcard mask, and what wildcard mask matches the single host 192.168.1.10?",
+      "answer": "A wildcard mask identifies which bits in an IP address to check (0 = must match) and which to ignore (1 = ignore). The wildcard mask 0.0.0.0 matches a single host.",
+      "explanation": "Wildcard masks are the inverse of subnet masks. For 192.168.1.10 with wildcard 0.0.0.0, every bit must match exactly. For a /24 network (subnet mask 255.255.255.0), the wildcard mask is 0.0.0.255, meaning the first 24 bits must match and the last 8 can be anything. You can also use the 'host' keyword instead of specifying 0.0.0.0.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_data_acl/configuration/xe-16/sec-data-acl-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["ACL", "wildcard mask", "IP addressing"]
+    },
+    {
+      "id": "d5-fc-009",
+      "objectiveCode": "5.3",
+      "question": "Write an extended named ACL entry that permits HTTP traffic from 10.0.0.0/24 to any destination.",
+      "answer": "permit tcp 10.0.0.0 0.0.0.255 any eq 80",
+      "explanation": "Within a named extended ACL (created with 'ip access-list extended <name>'), this entry permits TCP traffic from the 10.0.0.0/24 network (wildcard 0.0.0.255) to any destination on port 80 (HTTP). The 'eq' operator means 'equal to'. Other operators include 'gt' (greater than), 'lt' (less than), 'neq' (not equal to), and 'range'.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_data_acl/configuration/xe-16/sec-data-acl-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["ACL", "extended ACL", "named ACL", "IOS commands"]
+    },
+    {
+      "id": "d5-fc-010",
+      "objectiveCode": "5.3",
+      "question": "What happens to traffic that does not match any explicit ACL entry?",
+      "answer": "It is denied by the implicit 'deny any' rule at the end of every ACL.",
+      "explanation": "Every Cisco ACL has an invisible implicit deny at the end that drops all traffic not matching a previous entry. This means if you create an ACL with only permit statements, all non-matching traffic is dropped. This is why at least one permit statement is typically needed, and why standard ACLs placed incorrectly can block all traffic.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_data_acl/configuration/xe-16/sec-data-acl-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["ACL", "implicit deny", "security"]
+    },
+    {
+      "id": "d5-fc-011",
+      "objectiveCode": "5.3",
+      "question": "Which IOS command applies an ACL named 'BLOCK_TELNET' inbound on interface GigabitEthernet0/1?",
+      "answer": "ip access-group BLOCK_TELNET in (configured under interface GigabitEthernet0/1).",
+      "explanation": "ACLs are applied to interfaces using 'ip access-group <name|number> {in|out}'. The 'in' direction filters packets entering the interface, and 'out' filters packets leaving the interface. Only one ACL per protocol, per direction, per interface is allowed (the 'one ACL rule').",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_data_acl/configuration/xe-16/sec-data-acl-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["ACL", "ip access-group", "IOS commands"]
+    },
+    {
+      "id": "d5-fc-012",
+      "objectiveCode": "5.4",
+      "question": "What are the three port security violation modes on a Cisco switch?",
+      "answer": "Protect, Restrict, and Shutdown.",
+      "explanation": "Protect: drops frames from unknown source MACs silently (no log, no counter increment for violations). Restrict: drops frames from unknown source MACs and increments the violation counter, generating a syslog/SNMP message. Shutdown (default): places the port in err-disabled state, requiring manual or automatic recovery. All three modes allow traffic from learned secure MAC addresses.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/port_security.html",
+      "difficulty": "medium",
+      "tags": ["port security", "violation modes", "switch security"]
+    },
+    {
+      "id": "d5-fc-013",
+      "objectiveCode": "5.4",
+      "question": "Which IOS commands enable port security on switch interface Fa0/1 with a maximum of 2 MAC addresses?",
+      "answer": "interface Fa0/1 -> switchport mode access -> switchport port-security -> switchport port-security maximum 2",
+      "explanation": "Port security requires the interface to be in access mode (or trunk mode). The 'switchport port-security' command enables the feature. The 'maximum' keyword sets the number of allowed MAC addresses (default is 1). MACs can be learned dynamically, configured statically with 'switchport port-security mac-address <MAC>', or made persistent with 'switchport port-security mac-address sticky'.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/port_security.html",
+      "difficulty": "medium",
+      "tags": ["port security", "IOS commands", "switch security"]
+    },
+    {
+      "id": "d5-fc-014",
+      "objectiveCode": "5.4",
+      "question": "What does the 'switchport port-security mac-address sticky' command do?",
+      "answer": "It dynamically learns MAC addresses and adds them to the running configuration as static secure MAC entries.",
+      "explanation": "Sticky learning combines the convenience of dynamic learning with the persistence of static configuration. Learned MAC addresses are added to the running config as 'switchport port-security mac-address sticky <MAC>'. To survive a reboot, you must save the running configuration to startup configuration. This avoids manually entering MAC addresses for every port.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/port_security.html",
+      "difficulty": "medium",
+      "tags": ["port security", "sticky MAC", "IOS commands"]
+    },
+    {
+      "id": "d5-fc-015",
+      "objectiveCode": "5.5",
+      "question": "What is DHCP snooping and what security threat does it mitigate?",
+      "answer": "DHCP snooping is a Layer 2 security feature that filters untrusted DHCP messages and builds a binding table of legitimate IP-to-MAC-to-port mappings. It mitigates rogue DHCP server attacks.",
+      "explanation": "DHCP snooping classifies ports as trusted (connected to legitimate DHCP servers/uplinks) or untrusted (connected to clients). DHCP server messages (Offer, Ack) received on untrusted ports are dropped. The snooping binding table records client MAC, IP, lease time, VLAN, and port, and is used by other features like Dynamic ARP Inspection (DAI) and IP Source Guard.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/dhcp_snooping.html",
+      "difficulty": "medium",
+      "tags": ["DHCP snooping", "Layer 2 security", "rogue DHCP"]
+    },
+    {
+      "id": "d5-fc-016",
+      "objectiveCode": "5.5",
+      "question": "Which IOS commands enable DHCP snooping on VLAN 10 and trust the uplink port Gi0/1?",
+      "answer": "ip dhcp snooping -> ip dhcp snooping vlan 10 -> interface Gi0/1 -> ip dhcp snooping trust",
+      "explanation": "DHCP snooping is enabled globally with 'ip dhcp snooping' and then per VLAN. By default, all ports are untrusted. Trusted ports (uplinks to DHCP servers or other switches) must be explicitly configured with 'ip dhcp snooping trust'. Untrusted ports only allow DHCP client messages (Discover, Request).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/dhcp_snooping.html",
+      "difficulty": "medium",
+      "tags": ["DHCP snooping", "IOS commands", "trusted port"]
+    },
+    {
+      "id": "d5-fc-017",
+      "objectiveCode": "5.5",
+      "question": "What is Dynamic ARP Inspection (DAI) and how does it relate to DHCP snooping?",
+      "answer": "DAI validates ARP packets using the DHCP snooping binding table. It drops ARP packets with IP-to-MAC mappings that do not match the binding table, preventing ARP spoofing attacks.",
+      "explanation": "DAI intercepts all ARP requests and replies on untrusted ports. It checks the sender MAC and IP against the DHCP snooping binding table. If no match exists, the ARP packet is dropped. DAI requires DHCP snooping to be enabled to populate the binding table. For statically addressed hosts, ARP ACLs can be configured manually.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/dynamic_arp_inspection.html",
+      "difficulty": "hard",
+      "tags": ["DAI", "ARP inspection", "DHCP snooping", "Layer 2 security"]
+    },
+    {
+      "id": "d5-fc-018",
+      "objectiveCode": "5.6",
+      "question": "What do the three A's in AAA stand for?",
+      "answer": "Authentication, Authorization, and Accounting.",
+      "explanation": "Authentication verifies who the user is (username/password, certificates). Authorization determines what the authenticated user is allowed to do (which commands, resources). Accounting tracks what the user did and when (logging session times, commands executed). AAA can use local databases or external servers like TACACS+ or RADIUS.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_usr_aaa/configuration/xe-16/sec-usr-aaa-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["AAA", "authentication", "authorization", "accounting"]
+    },
+    {
+      "id": "d5-fc-019",
+      "objectiveCode": "5.6",
+      "question": "Compare TACACS+ and RADIUS: which protocol separates AAA functions, and which combines authentication and authorization?",
+      "answer": "TACACS+ separates authentication, authorization, and accounting into distinct processes. RADIUS combines authentication and authorization into a single process.",
+      "explanation": "TACACS+ (Cisco proprietary) uses TCP port 49 and encrypts the entire packet body. It provides granular command-level authorization. RADIUS (industry standard) uses UDP ports 1812/1645 (auth) and 1813/1646 (acct), and only encrypts the password field. RADIUS is commonly used for network access (802.1X), while TACACS+ is preferred for device administration.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_usr_aaa/configuration/xe-16/sec-usr-aaa-xe-16-book.html",
+      "difficulty": "hard",
+      "tags": ["AAA", "TACACS+", "RADIUS", "comparison"]
+    },
+    {
+      "id": "d5-fc-020",
+      "objectiveCode": "5.7",
+      "question": "What are the two modes of IPsec VPN operation?",
+      "answer": "Tunnel mode and Transport mode.",
+      "explanation": "Tunnel mode encrypts the entire original IP packet and adds a new IP header, commonly used for site-to-site VPNs between gateways. Transport mode only encrypts the payload (not the original IP header), commonly used for host-to-host communication or with GRE tunnels. Tunnel mode is the default for IPsec.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_ike/configuration/xe-16/sec-ike-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["IPsec", "VPN", "tunnel mode", "transport mode"]
+    },
+    {
+      "id": "d5-fc-021",
+      "objectiveCode": "5.7",
+      "question": "What are the two main protocols used within the IPsec framework?",
+      "answer": "AH (Authentication Header) and ESP (Encapsulating Security Payload).",
+      "explanation": "AH (IP protocol 51) provides data integrity and authentication but not encryption. ESP (IP protocol 50) provides data integrity, authentication, and encryption. ESP is far more commonly used because it provides confidentiality. Both can operate in tunnel or transport mode. IKE (Internet Key Exchange) is used to negotiate the IPsec security associations.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_ike/configuration/xe-16/sec-ike-xe-16-book.html",
+      "difficulty": "hard",
+      "tags": ["IPsec", "AH", "ESP", "VPN"]
+    },
+    {
+      "id": "d5-fc-022",
+      "objectiveCode": "5.8",
+      "question": "What are the key differences between WPA2-Personal and WPA2-Enterprise?",
+      "answer": "WPA2-Personal uses a pre-shared key (PSK) for authentication. WPA2-Enterprise uses 802.1X with a RADIUS server for individual user authentication.",
+      "explanation": "WPA2-Personal (WPA2-PSK) is simpler to deploy and suitable for small networks where all users share the same passphrase. WPA2-Enterprise (WPA2-802.1X) provides stronger security with per-user credentials, centralized authentication, and the ability to revoke individual access. Both use AES-CCMP for encryption.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/wireless/what-is-wi-fi-security.html",
+      "difficulty": "medium",
+      "tags": ["WPA2", "wireless security", "PSK", "802.1X"]
+    },
+    {
+      "id": "d5-fc-023",
+      "objectiveCode": "5.8",
+      "question": "What encryption protocol does WPA3 use to replace WPA2's AES-CCMP?",
+      "answer": "WPA3 uses AES-GCMP (Galois/Counter Mode Protocol) with 128-bit encryption (WPA3-Personal) or 192-bit encryption (WPA3-Enterprise).",
+      "explanation": "WPA3-Personal replaces the PSK 4-way handshake with SAE (Simultaneous Authentication of Equals), which provides forward secrecy and protection against offline dictionary attacks. WPA3-Enterprise mandates 192-bit minimum cryptographic strength. WPA3 also introduces OWE (Opportunistic Wireless Encryption) for open networks.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/wireless/what-is-wi-fi-security.html",
+      "difficulty": "hard",
+      "tags": ["WPA3", "wireless security", "GCMP", "SAE"]
+    },
+    {
+      "id": "d5-fc-024",
+      "objectiveCode": "5.2",
+      "question": "Which IOS command creates a local user account 'admin' with a secret password 'Cisco123' for SSH/console login?",
+      "answer": "username admin secret Cisco123",
+      "explanation": "The 'username <name> secret <password>' command creates a local user account with an MD5-hashed (type 5) password stored in the running configuration. This is preferred over 'username <name> password <password>' which stores the password in cleartext. Use 'login local' on VTY/console lines to reference the local user database.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/security/s1/sec-s1-cr-book.html",
+      "difficulty": "easy",
+      "tags": ["local authentication", "username secret", "IOS commands"]
+    },
+    {
+      "id": "d5-fc-025",
+      "objectiveCode": "5.3",
+      "question": "What is the valid number range for standard numbered ACLs in Cisco IOS?",
+      "answer": "1-99 and 1300-1999.",
+      "explanation": "Standard ACLs filter traffic based only on the source IP address. The original range was 1-99, and the expanded range 1300-1999 was added to provide more numbering options. Extended ACLs use ranges 100-199 and 2000-2699. Named ACLs (both standard and extended) avoid the numbering limitation entirely.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_data_acl/configuration/xe-16/sec-data-acl-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["ACL", "standard ACL", "numbered ACL"]
+    },
+    {
+      "id": "d5-fc-026",
+      "objectiveCode": "5.3",
+      "question": "Where should standard ACLs be placed in the network, and why?",
+      "answer": "Standard ACLs should be placed as close to the destination as possible.",
+      "explanation": "Since standard ACLs can only filter by source address, placing them close to the source could inadvertently block the source from reaching other legitimate destinations. By placing them close to the destination, you ensure that only traffic to that specific destination is affected, minimizing unintended impact on other traffic flows.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_data_acl/configuration/xe-16/sec-data-acl-xe-16-book.html",
+      "difficulty": "medium",
+      "tags": ["ACL", "standard ACL", "placement", "best practice"]
+    },
+    {
+      "id": "d5-fc-027",
+      "objectiveCode": "5.4",
+      "question": "What happens when a port security violation occurs with the default violation mode?",
+      "answer": "The port is placed in err-disabled state, effectively shutting it down.",
+      "explanation": "The default violation mode is 'shutdown'. When a violation occurs (a frame with an unauthorized source MAC arrives), the port transitions to err-disabled state. To recover, an administrator can manually shut/no shut the interface, or configure automatic err-disable recovery with 'errdisable recovery cause psecure-violation' and 'errdisable recovery interval <seconds>'.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/port_security.html",
+      "difficulty": "medium",
+      "tags": ["port security", "err-disabled", "violation", "shutdown"]
+    },
+    {
+      "id": "d5-fc-028",
+      "objectiveCode": "5.9",
+      "question": "What is 802.1X and what role do the supplicant, authenticator, and authentication server play?",
+      "answer": "802.1X is a port-based network access control standard. The supplicant is the client device, the authenticator is the switch/AP, and the authentication server is typically a RADIUS server.",
+      "explanation": "The supplicant (client software) provides credentials. The authenticator (network switch or wireless AP) acts as a gatekeeper, blocking all traffic except 802.1X (EAPoL) until authentication succeeds. The authentication server (RADIUS) validates the credentials and signals the authenticator to grant or deny access. EAP (Extensible Authentication Protocol) carries the authentication exchange.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/ieee_802_1x_port_based_authentication.html",
+      "difficulty": "medium",
+      "tags": ["802.1X", "NAC", "RADIUS", "supplicant", "authenticator"]
+    },
+    {
+      "id": "d5-fc-029",
+      "objectiveCode": "5.10",
+      "question": "What is a site-to-site VPN and when is it used?",
+      "answer": "A site-to-site VPN creates an encrypted tunnel between two network gateways (routers or firewalls), connecting entire networks over the internet.",
+      "explanation": "Site-to-site VPNs are used to securely connect branch offices, data centers, or partner networks. Traffic between the sites is encrypted by the VPN gateways, transparent to end users. Common implementations include IPsec VPN and GRE over IPsec. Unlike remote-access VPNs, no client software is needed on individual devices.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_ike/configuration/xe-16/sec-ike-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["VPN", "site-to-site", "IPsec"]
+    },
+    {
+      "id": "d5-fc-030",
+      "objectiveCode": "5.10",
+      "question": "What is a remote-access VPN and how does it differ from a site-to-site VPN?",
+      "answer": "A remote-access VPN allows individual users to connect securely to a corporate network from remote locations using VPN client software, whereas a site-to-site VPN connects entire networks via gateway devices.",
+      "explanation": "Remote-access VPNs are designed for mobile workers or telecommuters. The user runs VPN client software (e.g., Cisco AnyConnect) that creates an encrypted tunnel to a VPN concentrator. Common protocols include SSL/TLS VPN (port 443) and IPsec with IKEv2. Site-to-site VPNs are always-on connections between fixed locations.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_ike/configuration/xe-16/sec-ike-xe-16-book.html",
+      "difficulty": "easy",
+      "tags": ["VPN", "remote access", "AnyConnect"]
+    },
+    {
+      "id": "d5-fc-031",
+      "objectiveCode": "5.1",
+      "question": "What is phishing and how does it differ from spear phishing?",
+      "answer": "Phishing is a broad, untargeted attack using fraudulent emails to trick recipients. Spear phishing targets specific individuals or organizations with customized, convincing messages.",
+      "explanation": "Phishing casts a wide net, sending generic messages to many people hoping some will click malicious links or provide credentials. Spear phishing requires research on the target and crafts personalized messages (e.g., appearing to come from a known colleague), making it far more effective and dangerous. Whaling is spear phishing that targets executives.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/security/common-cyberattacks.html",
+      "difficulty": "easy",
+      "tags": ["phishing", "spear phishing", "social engineering"]
+    },
+    {
+      "id": "d5-fc-032",
+      "objectiveCode": "5.7",
+      "question": "What are the two phases of IKE (Internet Key Exchange) in IPsec?",
+      "answer": "IKE Phase 1 establishes a secure, authenticated channel (IKE SA) between peers. IKE Phase 2 negotiates the IPsec SA parameters for encrypting actual data traffic.",
+      "explanation": "Phase 1 can operate in Main Mode (6 messages, more secure) or Aggressive Mode (3 messages, faster). It authenticates peers using pre-shared keys or certificates and establishes a secure tunnel for Phase 2 negotiation. Phase 2 uses Quick Mode to negotiate the IPsec transform set (encryption algorithm, hash, etc.) and creates the IPsec SAs for data encryption.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_conn_ike/configuration/xe-16/sec-ike-xe-16-book.html",
+      "difficulty": "hard",
+      "tags": ["IKE", "IPsec", "Phase 1", "Phase 2", "VPN"]
+    },
+    {
+      "id": "d5-fc-033",
+      "objectiveCode": "5.5",
+      "question": "Which IOS command enables Dynamic ARP Inspection on VLAN 10?",
+      "answer": "ip arp inspection vlan 10",
+      "explanation": "DAI is enabled per VLAN in global configuration mode. By default, all ports are untrusted for DAI. Uplink and trunk ports connected to other trusted switches should be configured with 'ip arp inspection trust' under the interface. DAI relies on the DHCP snooping binding table, so DHCP snooping must be enabled on the same VLANs.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/dynamic_arp_inspection.html",
+      "difficulty": "medium",
+      "tags": ["DAI", "ARP inspection", "IOS commands", "VLAN security"]
+    },
+    {
+      "id": "d5-fc-034",
+      "objectiveCode": "5.8",
+      "question": "What encryption standard does WPA2 use?",
+      "answer": "WPA2 uses AES (Advanced Encryption Standard) with CCMP (Counter Mode with CBC-MAC Protocol).",
+      "explanation": "AES-CCMP replaced the weaker TKIP/RC4 used in WPA. AES uses 128-bit encryption keys and is considered highly secure. CCMP provides both data confidentiality (encryption) and data integrity (message authentication). WPA2 was mandated by the Wi-Fi Alliance starting in 2006 for all certified devices.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/wireless/what-is-wi-fi-security.html",
+      "difficulty": "medium",
+      "tags": ["WPA2", "AES", "CCMP", "wireless security"]
+    },
+    {
+      "id": "d5-fc-035",
+      "objectiveCode": "5.9",
+      "question": "What is the difference between an EAP method used in 802.1X and the EAPoL protocol?",
+      "answer": "EAPoL (EAP over LAN) is the Layer 2 encapsulation protocol that carries EAP frames between the supplicant and authenticator. EAP methods (e.g., EAP-TLS, PEAP) define how authentication credentials are actually verified.",
+      "explanation": "EAPoL operates between the client and the switch/AP at Layer 2. The switch then re-encapsulates the EAP data inside RADIUS packets to communicate with the authentication server. EAP methods include EAP-TLS (mutual certificate authentication, most secure), PEAP (server certificate + client password inside a TLS tunnel), and EAP-FAST (Cisco proprietary, uses PAC credentials).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/16-12/configuration_guide/sec/b_1612_sec_9300_cg/ieee_802_1x_port_based_authentication.html",
+      "difficulty": "hard",
+      "tags": ["802.1X", "EAP", "EAPoL", "PEAP", "EAP-TLS"]
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "domain": 3,
+  "slug": "ip-connectivity",
+  "name": "IP Connectivity",
+  "weight": 25,
+  "overview": "IP Connectivity is the highest-weighted domain on the CCNA 200-301 exam at 25%, reflecting the critical importance of routing concepts in modern networks. This domain covers routing table interpretation, forwarding decisions based on longest prefix match and administrative distance, static routing for both IPv4 and IPv6, single-area OSPFv2 configuration and verification, and first hop redundancy protocols. A deep understanding of how routers select paths and forward packets is essential for passing the exam.",
+  "keyTopics": [
+    {
+      "objectiveCode": "3.1",
+      "title": "Interpret the components of routing table",
+      "summary": "The routing table is the central data structure a router uses to make forwarding decisions. Each entry contains critical information including the routing protocol source code, network prefix, subnet mask, next-hop address, administrative distance, and metric. Understanding how to read and interpret every component of a routing table entry is fundamental to troubleshooting and validating network connectivity.",
+      "keyPoints": [
+        "Routing protocol codes identify the source of each route: C (connected), L (local), S (static), O (OSPF), D (EIGRP), R (RIP), B (BGP), and others. Connected and local routes are automatically created for directly attached interfaces.",
+        "The network prefix and mask define the destination network the route applies to. For example, '10.1.1.0/24' means the route matches any destination in the 10.1.1.0 to 10.1.1.255 range.",
+        "The next-hop address is the IP address of the next router along the path to the destination. For connected routes, traffic is delivered directly. For remote routes, traffic is forwarded to the next-hop router.",
+        "Administrative distance (AD) is the trustworthiness rating of a routing source (lower is better): connected = 0, static = 1, EIGRP = 90, OSPF = 110, RIP = 120. When multiple routing protocols have routes to the same prefix, the route with the lowest AD is installed in the routing table.",
+        "The metric is the value used within a single routing protocol to determine the best path when multiple routes to the same destination exist via that protocol. OSPF uses cost (based on bandwidth), EIGRP uses a composite metric, and RIP uses hop count."
+      ],
+      "examTips": [
+        "Memorize the default administrative distances: Connected = 0, Static = 1, EIGRP summary = 5, eBGP = 20, EIGRP = 90, OSPF = 110, IS-IS = 115, RIP = 120, iBGP = 200. These are heavily tested.",
+        "Know the difference between AD and metric: AD selects between different routing protocols (or sources), while metric selects between different paths learned from the same routing protocol.",
+        "The gateway of last resort (default route, 0.0.0.0/0) is used when no more specific route matches the destination. If no default route exists and no match is found, the router drops the packet and may send an ICMP Destination Unreachable message."
+      ],
+      "resources": [
+        {"title": "Cisco IP Routing Table Explained", "url": "https://www.cisco.com/c/en/us/support/docs/ip/ip-routed-protocols/16448-troubleshooting.html"},
+        {"title": "Understanding Administrative Distance", "url": "https://www.cisco.com/c/en/us/support/docs/ip/border-gateway-protocol-bgp/15986-admin-distance.html"}
+      ]
+    },
+    {
+      "objectiveCode": "3.2",
+      "title": "Determine how a router makes a forwarding decision by default",
+      "summary": "When a router receives a packet, it must determine the best path to the destination using a systematic decision process. The longest prefix match selects the most specific route in the routing table. When multiple routing sources know about the same prefix, administrative distance determines which is installed. Within a single routing protocol, the metric selects the best path. Understanding this three-level hierarchy is essential for predicting router behavior.",
+      "keyPoints": [
+        "Longest prefix match is the primary forwarding decision mechanism. The router selects the route with the most specific (longest) matching prefix. For example, a /28 route is preferred over a /24 route for a destination that matches both, because /28 is more specific.",
+        "If multiple routing protocols have routes to the exact same prefix (same network and mask), administrative distance breaks the tie. Only the route with the lowest AD is installed in the routing table; routes from other protocols with higher AD are kept as backups.",
+        "Within a single routing protocol, the metric determines the best path when multiple routes to the same prefix exist. For OSPF, the lowest cost wins. For RIP, the lowest hop count wins. For EIGRP, the lowest feasible distance wins.",
+        "Equal-cost multi-path (ECMP) routing occurs when a routing protocol learns multiple routes to the same prefix with equal metrics. By default, Cisco routers install up to four equal-cost paths (configurable up to 32 for some protocols) and load-balance across them.",
+        "The Cisco Express Forwarding (CEF) table and adjacency table are used in hardware for fast forwarding decisions, but conceptually the router still follows the longest prefix match, AD, and metric hierarchy."
+      ],
+      "examTips": [
+        "Longest prefix match ALWAYS wins, regardless of administrative distance or metric. A static route to 10.1.1.0/24 is chosen over an OSPF route to 10.1.0.0/16 for a packet destined to 10.1.1.5, because /24 is a longer (more specific) match.",
+        "Administrative distance is compared ONLY between routes to the exact same prefix and mask. A route to 10.0.0.0/8 and a route to 10.1.0.0/16 are not compared by AD because they are different prefixes -- longest prefix match applies first.",
+        "Remember the order of operations: (1) longest prefix match selects the most specific route, (2) AD selects between different routing sources for the same prefix, (3) metric selects between paths within the same routing protocol."
+      ],
+      "resources": [
+        {"title": "Cisco IP Routing Process Explained", "url": "https://www.cisco.com/c/en/us/support/docs/ip/ip-routed-protocols/16448-troubleshooting.html"},
+        {"title": "Understanding Longest Prefix Match", "url": "https://learningnetwork.cisco.com/s/article/longest-prefix-match"}
+      ]
+    },
+    {
+      "objectiveCode": "3.3",
+      "title": "Configure and verify IPv4 and IPv6 static routing",
+      "summary": "Static routes are manually configured routing entries that provide explicit path control and are commonly used for default routes, stub networks, backup paths, and small network deployments. Static routing applies to both IPv4 and IPv6 and includes several variations: default routes, network routes, host routes, and floating static routes. While static routes do not scale well for large networks, they are simple, predictable, and consume no bandwidth for routing protocol advertisements.",
+      "keyPoints": [
+        "A default static route (0.0.0.0/0 for IPv4, ::/0 for IPv6) matches all destinations and acts as the gateway of last resort. Configured with: 'ip route 0.0.0.0 0.0.0.0 <next-hop>' or 'ipv6 route ::/0 <next-hop>'.",
+        "A network static route specifies a specific destination network: 'ip route 192.168.2.0 255.255.255.0 10.1.1.2' directs traffic for the 192.168.2.0/24 network to next-hop 10.1.1.2. For IPv6: 'ipv6 route 2001:DB8:2::/64 2001:DB8:1::2'.",
+        "A host route has a /32 (IPv4) or /128 (IPv6) mask, matching a single specific host address. Example: 'ip route 10.1.1.100 255.255.255.255 192.168.1.1' routes traffic for only the host 10.1.1.100.",
+        "A floating static route is a static route with a manually increased administrative distance (higher than the primary route's AD), so it is installed only when the primary route (learned from a routing protocol) fails. Example: 'ip route 10.0.0.0 255.0.0.0 192.168.1.2 130' sets AD to 130, higher than OSPF's 110, so it acts as a backup.",
+        "Static routes can specify a next-hop IP address, an exit interface, or both. Using a next-hop IP is preferred on multi-access networks (Ethernet) to avoid ARP issues. On point-to-point links (serial), specifying just the exit interface is acceptable.",
+        "IPv6 static routes pointing to a link-local next-hop address MUST also specify the exit interface, because link-local addresses are ambiguous (the same link-local can exist on multiple interfaces). Example: 'ipv6 route 2001:DB8:2::/64 GigabitEthernet0/0 FE80::2'."
+      ],
+      "examTips": [
+        "Floating static routes are a very popular exam topic. Remember to set the AD higher than the primary routing protocol's AD. For backing up OSPF (AD 110), set the floating static to 111 or higher.",
+        "For IPv6 static routes using a link-local next-hop, you MUST specify the exit interface along with the next-hop address. This is because link-local addresses are not unique across interfaces.",
+        "Verify static routes with 'show ip route static' (IPv4) or 'show ipv6 route static' (IPv6). A static route only appears in the routing table if the next-hop is reachable or the exit interface is up."
+      ],
+      "resources": [
+        {"title": "Cisco Static Routing Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/iri-xe-16-book/iri-ip-static-routes.html"},
+        {"title": "Configuring IPv6 Static Routes", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/xe-16/ip6b-xe-16-book/ip6-stat-routes.html"}
+      ]
+    },
+    {
+      "objectiveCode": "3.4",
+      "title": "Configure and verify single area OSPFv2",
+      "summary": "Open Shortest Path First version 2 (OSPFv2) is a link-state routing protocol that uses Dijkstra's SPF algorithm to calculate the shortest path to every destination. On the CCNA exam, you must configure and verify single-area OSPF (all routers in Area 0), understand neighbor adjacency formation, distinguish between network types (point-to-point and broadcast), and know the DR/BDR election process. OSPF is the most heavily tested routing protocol on the CCNA exam.",
+      "keyPoints": [
+        "OSPF is configured with 'router ospf <process-id>' followed by 'network <address> <wildcard-mask> area <area-id>' to enable OSPF on matching interfaces. Alternatively, use 'ip ospf <process-id> area <area-id>' directly on the interface for more precise control.",
+        "OSPF neighbor adjacency requires matching: area ID, hello/dead timers (default 10/40 on broadcast, 30/120 on NBMA), subnet and mask, authentication settings, MTU (though some implementations ignore this), and stub area flags. If any of these mismatch, adjacency will not form.",
+        "The Router ID (RID) uniquely identifies each OSPF router. It is selected in order of priority: (1) manually configured with 'router-id <id>', (2) highest IP of any active loopback interface, (3) highest IP of any active physical interface. Changing the RID requires 'clear ip ospf process'.",
+        "On broadcast networks (Ethernet), OSPF elects a Designated Router (DR) and Backup Designated Router (BDR) to reduce OSPF traffic. The DR collects LSAs and distributes them to all routers. Election is based on highest OSPF interface priority (default 1, 0 means ineligible), then highest Router ID as tiebreaker.",
+        "On point-to-point networks (serial links, configured with 'ip ospf network point-to-point'), no DR/BDR election occurs. Only two routers form a full adjacency directly. This is simpler and converges faster.",
+        "OSPF cost is calculated as reference bandwidth divided by interface bandwidth (default reference = 100 Mbps). Cost = 100,000,000 / bandwidth in bps. Modify with 'auto-cost reference-bandwidth <value>' (in Mbps) to accommodate high-speed links, or set manually with 'ip ospf cost <value>'.",
+        "The passive-interface command ('passive-interface <interface>') prevents OSPF from sending hello packets on an interface while still advertising the interface's network. Use this on LAN interfaces facing end users where no OSPF neighbors exist.",
+        "OSPF uses multicast addresses 224.0.0.5 (ALLSPFRouters, sent to all OSPF routers) and 224.0.0.6 (ALLDRouters, sent to DR/BDR only on broadcast networks)."
+      ],
+      "examTips": [
+        "The DR/BDR election is NOT preemptive. Once a DR is elected, a new router with a higher priority does not take over as DR until the current DR fails. Know this for troubleshooting scenarios.",
+        "If OSPF neighbors are stuck in INIT or 2-WAY state, check for mismatched hello/dead timers, subnet/mask, area ID, authentication, or MTU. 'show ip ospf neighbor' shows neighbor states and is the primary verification command.",
+        "Know OSPF wildcard masks: they are the inverse of subnet masks. For 255.255.255.0, the wildcard is 0.0.0.255. For 255.255.255.252, the wildcard is 0.0.0.3. The 'network' command uses wildcards, not subnet masks.",
+        "Remember to change the reference bandwidth on ALL routers in the OSPF domain with 'auto-cost reference-bandwidth 10000' (for 10 Gbps links) to ensure consistent cost calculations. The default 100 Mbps reference treats FastEthernet and GigabitEthernet as the same cost (1).",
+        "The 'show ip ospf interface brief' command shows OSPF-enabled interfaces, their areas, cost, and DR/BDR status in a concise format."
+      ],
+      "resources": [
+        {"title": "Cisco OSPF Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_ospf/configuration/xe-16/iro-xe-16-book.html"},
+        {"title": "OSPF Neighbor Adjacency Troubleshooting", "url": "https://www.cisco.com/c/en/us/support/docs/ip/open-shortest-path-first-ospf/13684-12.html"}
+      ]
+    },
+    {
+      "objectiveCode": "3.5",
+      "title": "Describe the purpose, functions, and concepts of first hop redundancy protocols",
+      "summary": "First Hop Redundancy Protocols (FHRPs) provide default gateway redundancy for hosts on a subnet by allowing multiple routers to present a single virtual IP address and virtual MAC address as the default gateway. If the active gateway fails, another router seamlessly takes over, minimizing downtime for end users. The three main FHRPs are HSRP (Cisco proprietary), VRRP (IEEE standard), and GLBP (Cisco proprietary with load balancing).",
+      "keyPoints": [
+        "HSRP (Hot Standby Router Protocol) is Cisco proprietary and creates a virtual IP and virtual MAC address shared between an active and standby router. Only the active router forwards traffic; the standby takes over if the active fails. HSRPv1 uses multicast 224.0.0.2 (UDP 1985), HSRPv2 uses 224.0.0.102 (UDP 1985).",
+        "VRRP (Virtual Router Redundancy Protocol, RFC 5798) is an open standard similar to HSRP. It uses a master and backup role (instead of active/standby). VRRP allows the virtual IP to be the same as a physical router interface IP, unlike HSRP. VRRP uses multicast 224.0.0.18 (IP protocol 112).",
+        "GLBP (Gateway Load Balancing Protocol) is Cisco proprietary and provides both redundancy and load balancing. One router is the AVG (Active Virtual Gateway) that assigns different virtual MAC addresses to AVF (Active Virtual Forwarder) routers, distributing traffic across multiple gateways.",
+        "HSRP priority determines which router becomes active (default priority 100, highest wins). Preemption must be explicitly enabled with 'standby <group> preempt' for a higher-priority router to take over from a lower-priority active router.",
+        "FHRP timers control failover speed: HSRP default hello = 3 seconds, holdtime = 10 seconds. Faster timers (e.g., hello 200ms, hold 700ms) reduce failover time but increase network overhead. HSRP tracking allows the priority to be decremented when a tracked interface goes down, triggering failover."
+      ],
+      "examTips": [
+        "HSRP is the most heavily tested FHRP on the CCNA. Know the active/standby roles, priority configuration, preemption (disabled by default), and that only the active router forwards traffic.",
+        "Remember that HSRP preemption is NOT enabled by default. Without preemption, a higher-priority router that comes online after the current active router will remain in standby state until the active router fails.",
+        "Know the differences between HSRP, VRRP, and GLBP at a high level: HSRP and VRRP provide active/standby redundancy (only one gateway forwards), while GLBP provides both redundancy and load balancing across multiple gateways.",
+        "Virtual MAC format for HSRP: 0000.0c07.acXX (v1) or 0000.0c9f.fXXX (v2), where XX/XXX is the group number in hex."
+      ],
+      "resources": [
+        {"title": "Cisco HSRP Configuration Guide", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipapp_fhrp/configuration/xe-16/fhp-xe-16-book/fhp-hsrp.html"},
+        {"title": "Understanding FHRPs (HSRP, VRRP, GLBP)", "url": "https://www.cisco.com/c/en/us/support/docs/ip/hot-standby-router-protocol-hsrp/10583-62.html"}
+      ]
+    }
+  ],
+  "practiceScenarios": [
+    {
+      "scenario": "You have three routers: R1, R2, and R3. R1 connects to R2 via 10.0.12.0/30, and R1 connects to R3 via 10.0.13.0/30. R2 and R3 each connect to a remote network 192.168.100.0/24. R1 has a static route to 192.168.100.0/24 via R2 (next-hop 10.0.12.2) and an OSPF-learned route to the same network via R3 (next-hop 10.0.13.2, OSPF cost 20).",
+      "question": "Which path will R1 use to reach 192.168.100.0/24, and why? How could you configure R1 to use OSPF as the primary path and the static route as a backup?",
+      "answer": "R1 will use the static route via R2 (next-hop 10.0.12.2) because static routes have an administrative distance of 1, which is lower than OSPF's AD of 110. Since both routes are to the exact same prefix (192.168.100.0/24), the route with the lower AD is installed in the routing table. To make OSPF the primary path and the static route a backup, configure the static route as a floating static by increasing its AD above 110: 'ip route 192.168.100.0 255.255.255.0 10.0.12.2 120'. Now OSPF (AD 110) is preferred, and the static route (AD 120) only activates if the OSPF route disappears."
+    },
+    {
+      "scenario": "You are configuring single-area OSPFv2 on a network with four routers connected via Ethernet. R1 has Router ID 1.1.1.1 with OSPF priority 100, R2 has RID 2.2.2.2 with priority 200, R3 has RID 3.3.3.3 with default priority, and R4 has RID 4.4.4.4 with priority 0. All routers are in Area 0. The network has been stable for several hours, then R2 is rebooted.",
+      "question": "Before the reboot, which router is the DR and which is the BDR? After R2 reboots and returns to the network, what happens to the DR/BDR roles?",
+      "answer": "Before the reboot: R2 is the DR because it has the highest OSPF interface priority (200). R3 is the BDR. R3 has the default priority of 1 and the highest Router ID (3.3.3.3) among the remaining eligible routers (R1 has priority 100 but R1 was likely elected BDR initially, however, in the stable state, R2 = DR and R1 = BDR or R3 = BDR depending on order of boot). Actually, with priorities: R2 (200) = DR, R1 (100) = BDR, R3 (1) = DROTHER, R4 (0) = DROTHER (ineligible). After R2 reboots: The DR/BDR election is NOT preemptive. When R2 went down, R1 (the BDR) was promoted to DR, and R3 (highest eligible RID among remaining) became the new BDR. When R2 comes back online with priority 200, it does NOT retake the DR role because the election is non-preemptive. R2 becomes a DROTHER. R1 remains DR and R3 remains BDR until one of them fails."
+    },
+    {
+      "scenario": "A company has two Internet connections: a primary fiber link and a backup DSL link. The primary default gateway is 203.0.113.1 (via fiber) and the backup gateway is 198.51.100.1 (via DSL). They also have an internal network 10.0.0.0/8 reachable via next-hop 172.16.1.1. You need to configure static routing on the edge router for both IPv4 connectivity to the Internet and the internal network, ensuring automatic failover.",
+      "question": "Write the complete static route configuration for this edge router, including a floating static route for the backup Internet link.",
+      "answer": "The configuration requires three static routes: (1) Primary default route via fiber: 'ip route 0.0.0.0 0.0.0.0 203.0.113.1' (uses default AD of 1). (2) Floating static default route via DSL backup: 'ip route 0.0.0.0 0.0.0.0 198.51.100.1 10' (AD set to 10, higher than the primary's AD of 1, so this route only installs when the primary is unavailable). (3) Internal network route: 'ip route 10.0.0.0 255.0.0.0 172.16.1.1'. The primary default route (AD 1) is installed in the routing table. If the fiber link fails and the primary route is removed, the floating static (AD 10) automatically activates, directing Internet traffic through the DSL backup. The internal 10.0.0.0/8 route always remains active. You can verify with 'show ip route static' and test failover by shutting down the fiber interface."
+    }
+  ],
+  "commonMistakes": [
+    {
+      "mistake": "Confusing administrative distance with metric, believing that a lower OSPF cost (metric) will cause a route to be preferred over a static route to the same destination.",
+      "correction": "Administrative distance is evaluated FIRST when comparing routes from different routing sources to the same prefix. A static route (AD 1) will always be preferred over an OSPF route (AD 110) to the same prefix, regardless of the OSPF cost. Metric is only used to compare routes learned from the SAME routing protocol."
+    },
+    {
+      "mistake": "Thinking that a more specific route learned via a higher-AD protocol will lose to a less specific route from a lower-AD protocol, leading to incorrect path predictions.",
+      "correction": "Longest prefix match ALWAYS takes priority over administrative distance. A /24 route learned via RIP (AD 120) will be selected over a /16 route learned via OSPF (AD 110) for a destination that matches both, because the /24 is a more specific match. AD is only compared between routes with the EXACT same prefix and mask."
+    },
+    {
+      "mistake": "Expecting the OSPF DR/BDR election to be preemptive, assuming a new router with higher priority will automatically become the DR when it joins the network.",
+      "correction": "The OSPF DR/BDR election is NOT preemptive by default. Once a DR and BDR are elected, they retain their roles until they fail, even if a router with a higher priority or Router ID joins later. The new router becomes a DROTHER. Only when the DR fails does the BDR get promoted to DR, and a new BDR election occurs among the remaining DROTHER routers."
+    },
+    {
+      "mistake": "Configuring OSPF with mismatched hello and dead timers between neighbors and not understanding why the adjacency fails or keeps flapping.",
+      "correction": "OSPF neighbors MUST have matching hello and dead timers to form an adjacency. The default is 10-second hello and 40-second dead timer on broadcast/point-to-point networks. If one router has hello 10 / dead 40 and the other has hello 30 / dead 120, the adjacency will not form. Always verify timers with 'show ip ospf interface' on both sides."
+    }
+  ]
+}

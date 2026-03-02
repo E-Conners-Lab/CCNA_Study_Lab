@@ -1,0 +1,26 @@
+{
+  "slug": "subnetting-ipv4",
+  "title": "IPv4 Subnetting Practice",
+  "description": "Practice calculating subnet details for a given IPv4 address and prefix length, including network address, broadcast address, host range, and number of usable hosts.",
+  "domain": "Network Fundamentals",
+  "domainSlug": "network-fundamentals",
+  "objectiveCode": "1.6",
+  "difficulty": "medium",
+  "estimatedMinutes": 20,
+  "type": "subnetting",
+  "tags": ["ipv4", "subnetting", "CIDR", "network-address", "broadcast-address"],
+  "instructions": "## IPv4 Subnetting Practice\n\nGiven the IP address **172.16.45.100/20**, calculate the following subnet details.\n\n### Steps\n\n1. **Convert the prefix length to a subnet mask**\n   - A /20 prefix means the first 20 bits are network bits.\n   - Convert to dotted-decimal notation.\n\n2. **Determine the network address**\n   - Perform a bitwise AND between the IP address and the subnet mask.\n   - Identify which octet the subnet boundary falls in (the \"interesting octet\").\n\n3. **Determine the broadcast address**\n   - Set all host bits to 1 in the network address.\n\n4. **Calculate the first usable host address**\n   - Add 1 to the network address.\n\n5. **Calculate the last usable host address**\n   - Subtract 1 from the broadcast address.\n\n6. **Calculate the number of usable hosts**\n   - Use the formula: 2^(32 - prefix) - 2.\n\n### Fill in the Template\n\nReplace each blank in the starter code with the correct value.",
+  "starterCode": "network=\nbroadcast=\nfirst_host=\nlast_host=\nhosts=\nsubnet_mask=",
+  "solutionCode": "network=172.16.32.0\nbroadcast=172.16.47.255\nfirst_host=172.16.32.1\nlast_host=172.16.47.254\nhosts=4094\nsubnet_mask=255.255.240.0",
+  "expectedOutput": "network=172.16.32.0\nbroadcast=172.16.47.255\nfirst_host=172.16.32.1\nlast_host=172.16.47.254\nhosts=4094\nsubnet_mask=255.255.240.0",
+  "hints": [
+    "A /20 means 20 network bits and 12 host bits. The subnet mask in binary is 11111111.11111111.11110000.00000000, which converts to 255.255.240.0.",
+    "The interesting octet is the third octet. The block size is 256 - 240 = 16. Multiples of 16 are 0, 16, 32, 48, 64... Since 45 falls between 32 and 48, the network address starts at 172.16.32.0.",
+    "With 12 host bits, the total number of addresses is 2^12 = 4096. Subtract 2 (network and broadcast) to get 4094 usable hosts."
+  ],
+  "learningObjectives": [
+    "Calculate the subnet mask from CIDR prefix length notation",
+    "Determine network address, broadcast address, and usable host range for a given IP and prefix",
+    "Apply the 2^n - 2 formula to calculate the number of usable host addresses in a subnet"
+  ]
+}

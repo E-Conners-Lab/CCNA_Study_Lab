@@ -1,0 +1,258 @@
+{
+  "domain": 4,
+  "slug": "ip-services",
+  "name": "IP Services",
+  "weight": 10,
+  "overview": "IP Services covers essential network services that enable connectivity, management, and optimization across enterprise networks. This domain focuses on NAT, DHCP, DNS, NTP, SNMP, syslog, QoS, SSH, and file transfer protocols that are fundamental to day-to-day network operations. Mastering these topics requires both conceptual understanding and hands-on configuration skills on Cisco IOS devices.",
+  "keyTopics": [
+    {
+      "objectiveCode": "4.1",
+      "title": "Configure and verify inside source NAT using static and pools",
+      "summary": "Network Address Translation (NAT) allows private IP addresses to be translated to public IP addresses for internet access. Static NAT provides a one-to-one mapping between a local and global address, while NAT pools define a range of public addresses that can be dynamically assigned to internal hosts.",
+      "keyPoints": [
+        "Static NAT creates a permanent one-to-one mapping between an inside local and inside global address using the 'ip nat inside source static' command",
+        "Dynamic NAT uses a pool of public addresses defined with 'ip nat pool' and associates it with an access list identifying internal hosts",
+        "PAT (Port Address Translation), also called NAT overload, maps multiple private addresses to a single public address using unique port numbers",
+        "Interfaces must be designated as 'ip nat inside' or 'ip nat outside' for NAT to function",
+        "Use 'show ip nat translations' and 'show ip nat statistics' to verify NAT operations and troubleshoot issues"
+      ],
+      "examTips": [
+        "Know the four NAT address types: inside local, inside global, outside local, and outside global, and be able to identify each in a NAT translation table",
+        "Remember that PAT (overload) is the most common NAT type in production and requires the 'overload' keyword at the end of the NAT statement"
+      ],
+      "resources": [
+        {
+          "title": "Cisco NAT Configuration Guide",
+          "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_nat/configuration/xe-16/nat-xe-16-book.html"
+        },
+        {
+          "title": "Cisco NAT FAQ",
+          "url": "https://www.cisco.com/c/en/us/support/docs/ip/network-address-translation-nat/26704-nat-faq-00.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "4.2",
+      "title": "Configure and verify NTP operating in a client and server mode",
+      "summary": "Network Time Protocol (NTP) synchronizes clocks across network devices, which is critical for accurate logging, certificate validation, and troubleshooting. NTP uses a hierarchical system of stratum levels where stratum 0 represents atomic clocks and each subsequent level is one step removed from the reference source.",
+      "keyPoints": [
+        "NTP uses UDP port 123 and operates in a hierarchical stratum model where lower stratum numbers indicate higher accuracy",
+        "Configure a device as an NTP client using 'ntp server <ip-address>' to point to an upstream NTP server",
+        "A device becomes an NTP server automatically once it synchronizes its clock with an upstream source",
+        "Use 'ntp master <stratum>' to configure a device as an authoritative NTP server for the network",
+        "Verify NTP status with 'show ntp status' and 'show ntp associations' to confirm synchronization and stratum level"
+      ],
+      "examTips": [
+        "Remember that stratum 0 devices are reference clocks (atomic clocks, GPS), stratum 1 devices connect directly to stratum 0, and the maximum valid stratum is 15; stratum 16 means unsynchronized",
+        "NTP authentication uses MD5 and requires configuring 'ntp authenticate', 'ntp authentication-key', and 'ntp trusted-key' on both client and server"
+      ],
+      "resources": [
+        {
+          "title": "Cisco NTP Configuration Guide",
+          "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/bsm/configuration/xe-16/bsm-xe-16-book/bsm-time-calendar-set.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "4.3",
+      "title": "Explain the role of DHCP and DNS within the network",
+      "summary": "DHCP automates IP address assignment and network configuration for hosts, eliminating manual configuration errors and simplifying administration. DNS resolves human-readable domain names to IP addresses, enabling users to access network resources by name rather than by numerical address.",
+      "keyPoints": [
+        "DHCP uses a four-step DORA process: Discover (broadcast), Offer, Request, and Acknowledge to assign IP addresses to clients",
+        "DHCP provides not only IP addresses but also subnet masks, default gateways, DNS server addresses, and lease duration",
+        "DNS uses a hierarchical naming structure with root servers, TLD servers, and authoritative name servers to resolve queries",
+        "DNS primarily uses UDP port 53 for standard queries and TCP port 53 for zone transfers and responses exceeding 512 bytes",
+        "DHCP operates on UDP ports 67 (server) and 68 (client)"
+      ],
+      "examTips": [
+        "Be able to identify each step of the DORA process and know that Discover and Request are broadcasts from the client while Offer and Acknowledge are from the server",
+        "Understand the difference between DNS recursive queries (client asks resolver to fully resolve) and iterative queries (resolver refers client to another server)"
+      ],
+      "resources": [
+        {
+          "title": "Understanding DHCP - Cisco",
+          "url": "https://www.cisco.com/c/en/us/support/docs/ip/dynamic-address-allocation-resolution/27470-100.html"
+        },
+        {
+          "title": "Cisco DNS Configuration Guide",
+          "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dns/configuration/xe-16/dns-xe-16-book.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "4.4",
+      "title": "Explain the function of SNMP in network operations",
+      "summary": "Simple Network Management Protocol (SNMP) enables centralized monitoring and management of network devices through a standardized framework. SNMP uses managers, agents, and Management Information Bases (MIBs) to collect device statistics, detect faults, and in some cases push configuration changes.",
+      "keyPoints": [
+        "SNMP consists of three components: the SNMP manager (NMS), SNMP agents running on managed devices, and the MIB database that defines monitored variables",
+        "SNMPv1 uses community strings in plaintext, SNMPv2c adds bulk retrieval but still uses plaintext community strings, and SNMPv3 adds authentication and encryption",
+        "SNMP operations include GET (retrieve a value), SET (modify a value), GETNEXT (retrieve the next OID), GETBULK (retrieve large tables), and TRAP/INFORM (unsolicited notifications)",
+        "SNMP traps are sent from agents to the manager without acknowledgment, while SNMP informs require acknowledgment from the receiver",
+        "SNMP uses UDP port 161 for queries and UDP port 162 for traps and informs"
+      ],
+      "examTips": [
+        "Know the differences between SNMPv1, v2c, and v3, especially that v3 is the only version providing encryption (privacy) and message integrity",
+        "Understand that read-only (ro) community strings allow GET operations while read-write (rw) community strings allow both GET and SET operations"
+      ],
+      "resources": [
+        {
+          "title": "Cisco SNMP Configuration Guide",
+          "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/snmp/configuration/xe-16/snmp-xe-16-book.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "4.5",
+      "title": "Describe the use of syslog features including facilities and levels",
+      "summary": "Syslog is a standard logging protocol that collects and categorizes messages generated by network devices for monitoring, troubleshooting, and auditing. Messages are classified by facility (source) and severity level, allowing administrators to filter and prioritize alerts effectively.",
+      "keyPoints": [
+        "Syslog severity levels range from 0 (Emergency) to 7 (Debugging), remembered by the mnemonic: Every Awesome Cisco Engineer Will Need Ice cream Daily",
+        "The eight severity levels are: 0-Emergency, 1-Alert, 2-Critical, 3-Error, 4-Warning, 5-Notification, 6-Informational, 7-Debugging",
+        "Syslog messages can be sent to the console, terminal lines (VTY), buffer (RAM), or an external syslog server",
+        "Configure logging to a syslog server with 'logging host <ip-address>' and set the severity threshold with 'logging trap <level>'",
+        "Setting a severity level includes all messages at that level and above (lower numbers are more severe)"
+      ],
+      "examTips": [
+        "Memorize all eight syslog severity levels and their numbers; the exam frequently tests your ability to identify which level number corresponds to which name",
+        "Remember that syslog uses UDP port 514 by default and that setting 'logging trap 4' captures levels 0 through 4 (Emergency through Warning)"
+      ],
+      "resources": [
+        {
+          "title": "Cisco Syslog Configuration Guide",
+          "url": "https://www.cisco.com/c/en/us/td/docs/routers/access/wireless/software/guide/SysslogExternalServers.html"
+        },
+        {
+          "title": "Cisco System Message Logging",
+          "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/esm/configuration/xe-16/esm-xe-16-book.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "4.6",
+      "title": "Configure and verify DHCP client and relay",
+      "summary": "DHCP client configuration allows a router interface to obtain its IP address dynamically, while DHCP relay (ip helper-address) forwards DHCP broadcast requests across subnet boundaries to a centralized DHCP server. Both features are critical for scalable IP address management in multi-subnet networks.",
+      "keyPoints": [
+        "Configure a router interface as a DHCP client with the 'ip address dhcp' interface command",
+        "DHCP relay is configured with 'ip helper-address <server-ip>' on the interface facing the client subnet",
+        "The ip helper-address command converts the client's DHCP broadcast into a unicast directed to the DHCP server on a remote subnet",
+        "By default, ip helper-address also forwards other UDP broadcasts including TFTP (port 69), DNS (port 53), TACACS (port 49), and NetBIOS services",
+        "Verify DHCP operations with 'show ip dhcp binding', 'show ip dhcp pool', and 'show ip dhcp server statistics'"
+      ],
+      "examTips": [
+        "The ip helper-address is configured on the router interface closest to the DHCP clients, not on the interface closest to the DHCP server",
+        "Remember that ip helper-address forwards eight UDP broadcast types by default, not just DHCP; use 'no ip forward-protocol udp' to disable specific ones"
+      ],
+      "resources": [
+        {
+          "title": "Cisco DHCP Configuration Guide",
+          "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipaddr_dhcp/configuration/xe-16/dhcp-xe-16-book.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "4.7",
+      "title": "Explain the forwarding per-hop behavior (PHB) for QoS",
+      "summary": "Quality of Service (QoS) mechanisms classify, mark, and manage network traffic to ensure critical applications receive appropriate bandwidth and low latency. Per-Hop Behavior (PHB) defines how each router or switch along the path treats packets based on their QoS markings.",
+      "keyPoints": [
+        "Classification identifies traffic types using criteria such as ACLs, NBAR, DSCP values, or CoS markings at Layer 2",
+        "Marking sets QoS values in packet headers; DSCP (6 bits in the IP ToS field) provides 64 possible values while CoS uses 3 bits in the 802.1Q VLAN tag",
+        "Queuing mechanisms like CBWFQ and LLQ determine the order in which packets are transmitted; LLQ provides a strict priority queue for real-time traffic like voice",
+        "Policing drops or re-marks traffic that exceeds a configured rate, while shaping buffers excess traffic and sends it when bandwidth becomes available",
+        "Common DSCP values to know: EF (Expedited Forwarding, 46) for voice, AF classes for assured forwarding, and CS values for backward compatibility with IP Precedence"
+      ],
+      "examTips": [
+        "Understand the difference between policing (drops excess traffic immediately) and shaping (buffers excess traffic and delays transmission), and know that policing is typically applied at the ingress while shaping is applied at the egress",
+        "Know that trust boundaries define where QoS markings are accepted; traffic from untrusted sources should be re-classified and re-marked at the network edge"
+      ],
+      "resources": [
+        {
+          "title": "Cisco QoS Overview",
+          "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/qos/configuration/xe-16/qos-xe-16-book.html"
+        },
+        {
+          "title": "QoS Classification and Marking - Cisco",
+          "url": "https://www.cisco.com/c/en/us/support/docs/quality-of-service-qos/qos-packet-marking/10103-dscpvalues.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "4.8",
+      "title": "Configure network devices for remote access using SSH",
+      "summary": "Secure Shell (SSH) provides encrypted remote access to network devices, replacing the insecure Telnet protocol. Configuring SSH on Cisco devices requires setting a hostname, domain name, generating RSA keys, and configuring VTY lines to accept SSH connections.",
+      "keyPoints": [
+        "SSH configuration requires four steps: set hostname, set domain name, generate RSA key pair (minimum 1024 bits recommended), and configure VTY lines with 'transport input ssh'",
+        "SSH version 2 is preferred over version 1 for stronger security; enable it with 'ip ssh version 2'",
+        "VTY lines must have a login method configured, either 'login local' with local usernames or 'login authentication' with AAA",
+        "Use 'show ip ssh' to verify SSH version and configuration, and 'show ssh' to display active SSH sessions",
+        "The 'crypto key generate rsa modulus 2048' command creates the RSA key pair needed for SSH encryption"
+      ],
+      "examTips": [
+        "Remember the exact sequence of commands needed to enable SSH: hostname, ip domain-name, crypto key generate rsa, username/password, and VTY line configuration with transport input ssh",
+        "Know that SSH uses TCP port 22 and that 'transport input ssh' on VTY lines restricts access to SSH only, while 'transport input ssh telnet' allows both"
+      ],
+      "resources": [
+        {
+          "title": "Configuring SSH on Cisco Routers and Switches",
+          "url": "https://www.cisco.com/c/en/us/support/docs/security-vpn/secure-shell-ssh/4145-ssh.html"
+        }
+      ]
+    },
+    {
+      "objectiveCode": "4.9",
+      "title": "Describe the capabilities and functions of TFTP/FTP in the network",
+      "summary": "TFTP and FTP are file transfer protocols commonly used to transfer IOS images, configuration files, and firmware between network devices and servers. Understanding their differences in functionality, security, and transport is essential for network administration tasks.",
+      "keyPoints": [
+        "TFTP is a lightweight protocol using UDP port 69 with no authentication, making it simple but insecure; it is commonly used for IOS image transfers and configuration backups",
+        "FTP uses TCP ports 20 (data) and 21 (control), provides username/password authentication, supports directory listing, and is more reliable than TFTP",
+        "TFTP supports only basic read and write operations with no directory browsing, while FTP offers a full set of file management commands",
+        "Cisco IOS uses 'copy tftp: flash:' or 'copy ftp: flash:' to transfer files to and from network devices",
+        "SCP (Secure Copy Protocol) is a more secure alternative that uses SSH for encrypted file transfers"
+      ],
+      "examTips": [
+        "Know that TFTP uses UDP (connectionless, no authentication) while FTP uses TCP (connection-oriented, with authentication), and understand why TFTP is still used despite its limitations",
+        "Remember the common copy commands: 'copy running-config tftp:', 'copy tftp: running-config', and 'copy flash: tftp:' for backing up and restoring configurations and images"
+      ],
+      "resources": [
+        {
+          "title": "Cisco IOS File Management",
+          "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sys-image-mgmt/configuration/xe-16/sysimgmgmt-xe-16-book.html"
+        }
+      ]
+    }
+  ],
+  "practiceScenarios": [
+    {
+      "scenario": "A company has a single public IP address (203.0.113.10) and 50 internal hosts on the 192.168.1.0/24 network that all need internet access. The router has GigabitEthernet0/0 facing the internal network and GigabitEthernet0/1 facing the ISP.",
+      "question": "What type of NAT should be configured, and what are the key commands needed on the router?",
+      "answer": "PAT (NAT overload) should be configured since there is only one public IP for 50 hosts. Key commands: (1) Create an ACL to identify internal traffic: 'access-list 1 permit 192.168.1.0 0.0.0.255'. (2) Configure PAT: 'ip nat inside source list 1 interface GigabitEthernet0/1 overload'. (3) Designate interfaces: 'interface GigabitEthernet0/0' with 'ip nat inside', and 'interface GigabitEthernet0/1' with 'ip nat outside'. The 'overload' keyword enables PAT, allowing all 50 hosts to share the single public IP using unique port numbers."
+    },
+    {
+      "scenario": "An administrator notices that log timestamps on network devices across three different sites are showing different times, causing confusion during incident investigation. The headquarters site has a reliable NTP server at 10.1.1.1.",
+      "question": "How should NTP be configured on the remote site routers to synchronize with headquarters, and how can the administrator verify synchronization?",
+      "answer": "On each remote site router, configure: 'ntp server 10.1.1.1'. Optionally add 'ntp update-calendar' to sync the hardware clock. To enable NTP authentication for security: 'ntp authenticate', 'ntp authentication-key 1 md5 SecretKey', 'ntp trusted-key 1', and 'ntp server 10.1.1.1 key 1'. Verify with 'show ntp status' to confirm the clock is synchronized and check the stratum level, and 'show ntp associations' to see the configured server and synchronization state. The asterisk (*) next to the server address indicates it is the selected synchronization source."
+    },
+    {
+      "scenario": "A network has clients on VLAN 10 (10.10.10.0/24) and the DHCP server is located on VLAN 20 (10.20.20.5). Clients on VLAN 10 are unable to obtain IP addresses automatically. The Layer 3 switch has an SVI for VLAN 10 at 10.10.10.1.",
+      "question": "What is the most likely cause, and how should it be resolved?",
+      "answer": "The most likely cause is that DHCP Discover broadcasts from VLAN 10 clients cannot reach the DHCP server on VLAN 20 because routers and Layer 3 switches do not forward broadcasts between subnets. The solution is to configure a DHCP relay agent on the SVI facing the clients. On the Layer 3 switch: 'interface vlan 10', then 'ip helper-address 10.20.20.5'. This converts the DHCP broadcast from clients into a unicast packet directed to the DHCP server at 10.20.20.5. Verify with 'show ip dhcp binding' on the DHCP server and 'show ip helper-address' on the switch."
+    }
+  ],
+  "commonMistakes": [
+    {
+      "mistake": "Forgetting to designate interfaces as 'ip nat inside' or 'ip nat outside' when configuring NAT",
+      "correction": "Both the inside and outside interfaces must be explicitly configured with 'ip nat inside' and 'ip nat outside' respectively. NAT will not translate any traffic until both interface designations are in place, even if the NAT rule itself is correctly configured."
+    },
+    {
+      "mistake": "Confusing syslog severity level numbers, thinking higher numbers mean higher severity",
+      "correction": "Syslog severity levels are inversely numbered: level 0 (Emergency) is the most severe and level 7 (Debugging) is the least severe. When setting 'logging trap 4', you capture all messages from level 0 through 4, not level 4 through 7."
+    },
+    {
+      "mistake": "Placing the ip helper-address command on the wrong interface, such as the interface closest to the DHCP server",
+      "correction": "The 'ip helper-address' command must be placed on the interface (or SVI) closest to the DHCP clients, not the server. This is because the relay agent needs to intercept the client's broadcast Discover message and convert it to a unicast before forwarding it to the DHCP server."
+    },
+    {
+      "mistake": "Attempting to configure SSH without first setting a hostname and domain name on the device",
+      "correction": "SSH requires an RSA key pair, which is generated using the device's fully qualified domain name (hostname + domain name). You must configure both 'hostname <name>' and 'ip domain-name <domain>' before running 'crypto key generate rsa'. Without these, the key generation will fail and SSH cannot be enabled."
+    }
+  ]
+}

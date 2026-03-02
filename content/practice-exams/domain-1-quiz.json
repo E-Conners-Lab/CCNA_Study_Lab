@@ -1,0 +1,214 @@
+{
+  "examId": "domain-1-quiz",
+  "title": "Domain 1: Network Fundamentals Quiz",
+  "description": "Focused quiz on Network Fundamentals objectives 1.2, 1.7, 1.8, 1.9, 1.10, 1.11, 1.12, and 1.13",
+  "totalQuestions": 12,
+  "timeLimit": 24,
+  "questions": [
+    {
+      "id": "dq1-q1",
+      "objectiveCode": "1.2",
+      "type": "multiple_choice",
+      "question": "In a three-tier network architecture, which layer aggregates traffic from access layer switches and enforces policies such as QoS and security?",
+      "options": [
+        "A. Core layer",
+        "B. Distribution layer",
+        "C. Access layer",
+        "D. Edge layer"
+      ],
+      "correctAnswer": "B",
+      "explanation": "In a three-tier (core, distribution, access) architecture, the distribution layer aggregates connections from the access layer and applies policies including access control lists, QoS, and route summarization. The core layer provides high-speed backbone connectivity, and the access layer connects end devices.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/solutions/CVD/Campus/cisco-campus-lan-wlan-design-guide.html",
+      "difficulty": "easy",
+      "tags": ["network architecture", "three-tier", "distribution layer"]
+    },
+    {
+      "id": "dq1-q2",
+      "objectiveCode": "1.2",
+      "type": "multiple_choice",
+      "question": "Which network topology architecture uses a flat, two-stage design with every leaf switch connected to every spine switch, and is commonly deployed in data center environments?",
+      "options": [
+        "A. Two-tier collapsed core",
+        "B. Three-tier hierarchical",
+        "C. Spine-leaf",
+        "D. SOHO hub-and-spoke"
+      ],
+      "correctAnswer": "C",
+      "explanation": "The spine-leaf architecture is a two-stage topology commonly used in data centers. Every leaf switch connects to every spine switch, providing consistent latency and predictable bandwidth. This design supports east-west traffic patterns typical of modern data center workloads and avoids the scalability limitations of traditional spanning tree designs.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/white-paper-c11-737022.html",
+      "difficulty": "medium",
+      "tags": ["spine-leaf", "data center", "network architecture"]
+    },
+    {
+      "id": "dq1-q3",
+      "objectiveCode": "1.7",
+      "type": "multiple_choice",
+      "question": "Which RFC defines the private IPv4 address ranges, and which of the following is NOT one of those ranges?",
+      "options": [
+        "A. 10.0.0.0/8",
+        "B. 172.16.0.0/12",
+        "C. 192.168.0.0/16",
+        "D. 169.254.0.0/16"
+      ],
+      "correctAnswer": "D",
+      "explanation": "RFC 1918 defines three private IPv4 address ranges: 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16. The range 169.254.0.0/16 is the link-local address range (APIPA) defined in RFC 3927, which is automatically assigned when a host cannot obtain an address from DHCP. Private addresses are not routable on the public internet and require NAT for internet connectivity.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/network-address-translation-nat/13772-12.html",
+      "difficulty": "easy",
+      "tags": ["private IPv4", "RFC 1918", "addressing"]
+    },
+    {
+      "id": "dq1-q4",
+      "objectiveCode": "1.7",
+      "type": "multiple_choice",
+      "question": "An organization has 500 hosts across multiple branch offices that need to communicate internally but do not require direct internet-routable addresses. What is the primary reason for using private IPv4 addressing in this scenario?",
+      "options": [
+        "A. Private addresses provide built-in encryption for internal traffic",
+        "B. Private addresses conserve the limited public IPv4 address space and are used with NAT for internet access",
+        "C. Private addresses automatically enable routing between all branch offices without configuration",
+        "D. Private addresses eliminate the need for a default gateway on each host"
+      ],
+      "correctAnswer": "B",
+      "explanation": "The primary purpose of private IPv4 addressing (RFC 1918) is to conserve the limited public IPv4 address space. Organizations use private addresses internally and employ NAT (Network Address Translation) to translate private addresses to public addresses when accessing the internet. Private addresses do not provide encryption, do not eliminate routing requirements, and hosts still need a default gateway.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ip/network-address-translation-nat/13772-12.html",
+      "difficulty": "medium",
+      "tags": ["private IPv4", "NAT", "address conservation"]
+    },
+    {
+      "id": "dq1-q5",
+      "objectiveCode": "1.8",
+      "type": "multiple_choice",
+      "question": "Which Cisco IOS command correctly assigns the IPv6 address 2001:DB8:ACAD:1::1 with a /64 prefix to interface GigabitEthernet0/0?",
+      "options": [
+        "A. ipv6 address 2001:DB8:ACAD:1::1/64",
+        "B. ip address 2001:DB8:ACAD:1::1 255.255.255.0",
+        "C. ipv6 address 2001:DB8:ACAD:1::1 /64",
+        "D. ipv6 address 2001:DB8:ACAD:1::1 prefix 64"
+      ],
+      "correctAnswer": "A",
+      "explanation": "The correct syntax for configuring an IPv6 address on a Cisco IOS interface is 'ipv6 address <address>/<prefix-length>' with no space before the slash. The command 'ip address' is used for IPv4 only. IPv6 uses prefix notation (CIDR) directly attached to the address, not a separate subnet mask. You must also enable IPv6 routing with 'ipv6 unicast-routing' globally and may need 'no shutdown' on the interface.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/xe-16/ip6b-xe-16-book/ip6-add-basic-conn-xe.html",
+      "difficulty": "easy",
+      "tags": ["IPv6", "configuration", "IOS commands"]
+    },
+    {
+      "id": "dq1-q6",
+      "objectiveCode": "1.9",
+      "type": "multiple_choice",
+      "question": "Which IPv6 address type begins with the prefix FE80::/10 and is used only for communication on the local network segment?",
+      "options": [
+        "A. Global unicast address",
+        "B. Unique local address",
+        "C. Link-local address",
+        "D. Solicited-node multicast address"
+      ],
+      "correctAnswer": "C",
+      "explanation": "IPv6 link-local addresses use the prefix FE80::/10 and are automatically assigned to every IPv6-enabled interface. They are used for communication on the local link only and are not routable beyond the local segment. They serve critical functions including neighbor discovery, stateless address autoconfiguration (SLAAC), and as next-hop addresses in routing protocols. Global unicast addresses start with 2000::/3, and unique local addresses start with FC00::/7.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/xe-16/ip6b-xe-16-book/ip6-add-basic-conn-xe.html",
+      "difficulty": "easy",
+      "tags": ["IPv6", "link-local", "address types"]
+    },
+    {
+      "id": "dq1-q7",
+      "objectiveCode": "1.9",
+      "type": "multiple_select",
+      "question": "Which of the following statements about the Modified EUI-64 format for generating an IPv6 interface ID are correct? (Choose two.)",
+      "options": [
+        "A. It inserts the hex value FFFE in the middle of the 48-bit MAC address to create a 64-bit interface ID",
+        "B. It inverts the seventh bit (Universal/Local bit) of the MAC address",
+        "C. It uses the device serial number to derive the interface ID",
+        "D. It removes the OUI portion of the MAC address before generating the interface ID",
+        "E. It results in a 128-bit interface identifier"
+      ],
+      "correctAnswer": ["A", "B"],
+      "explanation": "Modified EUI-64 takes a 48-bit MAC address, splits it in half, inserts FFFE (FF:FE) in the middle to create a 64-bit interface identifier, and then inverts the seventh bit (the U/L bit). For example, MAC 00:1A:2B:3C:4D:5E becomes interface ID 021A:2BFF:FE3C:4D5E. The OUI is retained (not removed), and the result is a 64-bit interface ID (not 128-bit) that forms the host portion of the IPv6 address.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/ipv6_basic/configuration/xe-16/ip6b-xe-16-book/ip6-add-basic-conn-xe.html",
+      "difficulty": "hard",
+      "tags": ["IPv6", "EUI-64", "interface ID", "MAC address"]
+    },
+    {
+      "id": "dq1-q8",
+      "objectiveCode": "1.10",
+      "type": "multiple_choice",
+      "question": "A user on a Windows workstation reports that they cannot access the network. Which command should the user run to verify their IP address, subnet mask, default gateway, and DNS server configuration?",
+      "options": [
+        "A. ifconfig -a",
+        "B. ipconfig /all",
+        "C. ip addr show",
+        "D. netstat -rn"
+      ],
+      "correctAnswer": "B",
+      "explanation": "On Windows, 'ipconfig /all' displays comprehensive IP parameters including IP address, subnet mask, default gateway, DNS servers, DHCP status, and MAC address. The 'ifconfig' command is used on older Linux/macOS systems, 'ip addr show' is the modern Linux command, and 'netstat -rn' displays the routing table rather than interface configuration details.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/support/docs/ios-nx-os-software/ios-software-releases-121-mainline/12778-ping-traceroute.html",
+      "difficulty": "easy",
+      "tags": ["Windows", "ipconfig", "troubleshooting", "IP parameters"]
+    },
+    {
+      "id": "dq1-q9",
+      "objectiveCode": "1.11",
+      "type": "multiple_choice",
+      "question": "In the 2.4 GHz band, which three Wi-Fi channels are recommended as nonoverlapping channels in North America?",
+      "options": [
+        "A. Channels 1, 5, and 9",
+        "B. Channels 1, 6, and 11",
+        "C. Channels 2, 7, and 12",
+        "D. Channels 3, 8, and 13"
+      ],
+      "correctAnswer": "B",
+      "explanation": "In the 2.4 GHz band, each channel is 22 MHz wide and channels are spaced 5 MHz apart. Channels 1, 6, and 11 are the three nonoverlapping channels in North America. Using these channels avoids co-channel interference when deploying multiple access points. Other combinations would result in overlapping frequencies that cause interference and degrade wireless performance.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/wireless/controller/technotes/8-6/b_Channel_Planning_Best_Practices.html",
+      "difficulty": "easy",
+      "tags": ["wireless", "Wi-Fi channels", "2.4 GHz", "RF"]
+    },
+    {
+      "id": "dq1-q10",
+      "objectiveCode": "1.11",
+      "type": "multiple_choice",
+      "question": "Which wireless security protocol uses AES-CCMP encryption and is considered the minimum recommended standard for enterprise Wi-Fi deployments?",
+      "options": [
+        "A. WEP",
+        "B. WPA with TKIP",
+        "C. WPA2 with AES",
+        "D. Open authentication"
+      ],
+      "correctAnswer": "C",
+      "explanation": "WPA2 (Wi-Fi Protected Access 2) with AES-CCMP (Counter Mode with CBC-MAC Protocol) is the minimum recommended wireless security standard. WEP is deprecated and easily cracked. WPA with TKIP was an interim improvement but is also considered weak. Open authentication provides no encryption. WPA3 is the newest standard, but WPA2 with AES remains the baseline requirement for CCNA.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/products/wireless/what-is-wifi-security.html",
+      "difficulty": "medium",
+      "tags": ["wireless security", "WPA2", "AES", "encryption"]
+    },
+    {
+      "id": "dq1-q11",
+      "objectiveCode": "1.12",
+      "type": "multiple_choice",
+      "question": "Which virtualization technology allows multiple isolated routing tables to coexist on a single physical router, enabling separate routing domains without additional hardware?",
+      "options": [
+        "A. Virtual machine (VM)",
+        "B. Container",
+        "C. Virtual Routing and Forwarding (VRF)",
+        "D. Hypervisor"
+      ],
+      "correctAnswer": "C",
+      "explanation": "VRF (Virtual Routing and Forwarding) allows a single physical router to maintain multiple independent routing tables. Each VRF instance operates as a logically separate router, enabling network segmentation and traffic isolation without deploying additional physical hardware. VMs and containers are server virtualization technologies, and a hypervisor is the software layer that manages VMs.",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/iproute_pi/configuration/xe-16/iri-xe-16-book/iri-vrf.html",
+      "difficulty": "medium",
+      "tags": ["VRF", "virtualization", "routing"]
+    },
+    {
+      "id": "dq1-q12",
+      "objectiveCode": "1.13",
+      "type": "multiple_choice",
+      "question": "When a Layer 2 switch receives a unicast frame with a destination MAC address that is not in its MAC address table, what action does the switch take?",
+      "options": [
+        "A. It drops the frame and sends an error message to the source",
+        "B. It forwards the frame to the default gateway",
+        "C. It floods the frame out all ports except the port on which it was received",
+        "D. It sends an ARP request to resolve the MAC address"
+      ],
+      "correctAnswer": "C",
+      "explanation": "When a switch receives a unicast frame with an unknown destination MAC address (unknown unicast), it floods the frame out all ports in the same VLAN except the ingress port. This ensures the frame reaches its destination. When the destination host replies, the switch learns the MAC-to-port mapping and adds it to the MAC address table for future forwarding decisions. MAC addresses are learned from the source address of incoming frames and age out after a configurable timer (default 300 seconds).",
+      "sourceUrl": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-6/configuration_guide/lyr2/b_176_lyr2_9300_cg/configuring_mac_address_table.html",
+      "difficulty": "easy",
+      "tags": ["switching", "MAC address table", "frame flooding", "unknown unicast"]
+    }
+  ]
+}
