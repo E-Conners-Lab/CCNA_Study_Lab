@@ -8,6 +8,10 @@ import { randomUUID } from "crypto";
 import { getLabForRun, saveLabAttempt } from "@/lib/data";
 import { getCurrentUserId } from "@/lib/auth-helpers";
 import { jsonOk, jsonNotFound, jsonBadRequest, jsonError } from "@/lib/api-helpers";
+import { createRateLimiter } from "@/lib/rate-limit";
+
+// 30 lab runs per minute per IP
+const labRunLimiter = createRateLimiter({ windowMs: 60_000, max: 30 });
 
 // ---------------------------------------------------------------------------
 // Lab types that can be executed as Python scripts
@@ -15,6 +19,32 @@ import { jsonOk, jsonNotFound, jsonBadRequest, jsonError } from "@/lib/api-helpe
 
 const PYTHON_LAB_TYPES = new Set(["python"]);
 const TEXT_LAB_TYPES = new Set(["ios-cli", "subnetting", "config-review", "acl-builder"]);
+
+// Dangerous Python modules that should not be importable in student code
+const BLOCKED_IMPORTS = [
+  "subprocess", "os", "sys", "shutil", "pathlib",
+  "socket", "http", "urllib", "requests", "ftplib", "smtplib",
+  "ctypes", "multiprocessing", "signal", "resource",
+  "importlib", "code", "compile", "compileall",
+  "webbrowser", "antigravity", "turtle",
+  "pickle", "shelve", "marshal",
+  "__builtin__", "builtins",
+];
+
+function containsBlockedImport(code: string): string | null {
+  for (const mod of BLOCKED_IMPORTS) {
+    // Match: import os, from os import ..., __import__('os')
+    const patterns = [
+      new RegExp(`^\\s*import\\s+${mod}\\b`, "m"),
+      new RegExp(`^\\s*from\\s+${mod}\\b`, "m"),
+      new RegExp(`__import__\\s*\\(\\s*['"]${mod}['"]`, "m"),
+    ];
+    for (const pat of patterns) {
+      if (pat.test(code)) return mod;
+    }
+  }
+  return null;
+}
 
 // ---------------------------------------------------------------------------
 // Run Python code locally via subprocess
@@ -33,8 +63,16 @@ async function runPythonLocally(
       (resolve, reject) => {
         execFile(
           "python3",
-          [tmpFile],
-          { timeout: 30_000, maxBuffer: 1024 * 512 },
+          ["-u", "-S", tmpFile],
+          {
+            timeout: 30_000,
+            maxBuffer: 1024 * 512,
+            env: {
+              PATH: process.env.PATH ?? "",
+              LANG: "en_US.UTF-8",
+              PYTHONDONTWRITEBYTECODE: "1",
+            } as unknown as NodeJS.ProcessEnv,
+          },
           (error, stdout, stderr) => {
             if (error && !stdout && !stderr) {
               reject(error);
@@ -78,6 +116,9 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string }> },
 ) {
+  const limited = labRunLimiter.check(request);
+  if (limited) return limited;
+
   try {
     const { slug } = await params;
     const lab = getLabForRun(slug);
@@ -157,6 +198,16 @@ export async function POST(
 
     // Python-based labs: execute locally via python3 subprocess
     if (PYTHON_LAB_TYPES.has(lab.type)) {
+      const blocked = containsBlockedImport(code);
+      if (blocked) {
+        return jsonOk({
+          success: false,
+          output: `Security: import of "${blocked}" is not allowed in lab submissions. This module could be used to access the host system.`,
+          executionTime: 0,
+          engineAvailable: false,
+        });
+      }
+
       const result = await runPythonLocally(code);
 
       // Fire-and-forget: save lab attempt to DB

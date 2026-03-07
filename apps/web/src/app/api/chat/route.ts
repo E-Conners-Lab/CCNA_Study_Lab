@@ -1,6 +1,10 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUserId } from "@/lib/auth-helpers";
+import { createRateLimiter } from "@/lib/rate-limit";
+
+// 20 messages per minute per client
+const chatLimiter = createRateLimiter({ windowMs: 60_000, max: 20 });
 
 /**
  * Helper: create a streaming text Response so the chat UI renders the message
@@ -136,6 +140,9 @@ Teaching guidelines:
 - Use numbered or bulleted lists for steps and comparisons`;
 
 export async function POST(request: NextRequest) {
+  const limited = chatLimiter.check(request);
+  if (limited) return limited;
+
   try {
     // Require authentication to prevent unauthorized API usage
     const userId = await getCurrentUserId();

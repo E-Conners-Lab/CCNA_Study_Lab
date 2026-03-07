@@ -70,6 +70,15 @@ function LoginForm() {
 
       <AuthButton loading={loading} label="Sign In" loadingLabel="Signing in..." />
 
+      <div className="text-right">
+        <Link
+          href="/forgot-password"
+          className="text-xs text-zinc-500 hover:text-blue-400 transition"
+        >
+          Forgot password?
+        </Link>
+      </div>
+
       <p className="text-center text-xs text-zinc-500">
         Default dev credentials:{" "}
         <span className="text-zinc-400">student@ccna.lab</span> /{" "}

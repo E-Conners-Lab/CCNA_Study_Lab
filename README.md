@@ -1,5 +1,7 @@
 # CCNA StudyLab
 
+[![CI](https://github.com/elliotconner/ccna-studylab/actions/workflows/ci.yml/badge.svg)](https://github.com/elliotconner/ccna-studylab/actions/workflows/ci.yml)
+
 A full-stack study platform for the **Cisco CCNA (200-301)** certification exam. Built with Next.js, PostgreSQL, and an interactive IOS CLI simulator for hands-on networking labs.
 
 ## Features
@@ -18,7 +20,9 @@ A full-stack study platform for the **Cisco CCNA (200-301)** certification exam.
   - Automatic grading against solution configs
 - **AI Tutor** -- Claude-powered conversational tutor with domain-specific system prompts and persistent conversation history
 - **Progress Persistence** -- All study progress saved to PostgreSQL (flashcards, exams, labs, objectives)
-- **Authentication** -- Auth.js v5 with credentials provider and JWT sessions
+- **Authentication** -- Auth.js v5 with credentials provider, JWT sessions, email verification, and password reset
+- **Rate Limiting** -- In-memory sliding-window rate limiting on signup, chat, and lab execution endpoints
+- **Sandbox Safety** -- Python lab submissions are screened for dangerous imports before execution
 
 ## Tech Stack
 
@@ -125,8 +129,14 @@ Configure in `apps/web/.env.local`:
 | `DATABASE_URL` | Yes | PostgreSQL connection string (default: `postgresql://studylab:studylab_dev_2024@localhost:5433/ccna_studylab`) |
 | `AUTH_SECRET` | Yes | Random secret for Auth.js session encryption |
 | `TUTOR_ANTHROPIC_KEY` | No | Anthropic API key to enable the AI Tutor feature |
+| `SMTP_HOST` | No | SMTP server host for sending emails (e.g., `smtp.resend.com`) |
+| `SMTP_PORT` | No | SMTP port (default: 587) |
+| `SMTP_USER` | No | SMTP username/API key |
+| `SMTP_PASS` | No | SMTP password |
+| `EMAIL_FROM` | No | Sender email address (default: `CCNA StudyLab <noreply@example.com>`) |
 
 > The Anthropic key is intentionally named `TUTOR_ANTHROPIC_KEY` (not `ANTHROPIC_API_KEY`) to avoid conflicts with other tools.
+> Without SMTP configured, verification and password reset emails are logged to the console (dev mode).
 
 ## Documentation
 

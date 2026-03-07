@@ -1,11 +1,19 @@
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
+import { NextRequest } from "next/server";
 
 import { isDbConfigured, getDb } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 import { jsonOk, jsonBadRequest, jsonError } from "@/lib/api-helpers";
+import { createRateLimiter } from "@/lib/rate-limit";
+import { generateToken, sendVerificationEmail } from "@/lib/email";
 
-export async function POST(request: Request) {
+// 5 signup attempts per minute per IP
+const signupLimiter = createRateLimiter({ windowMs: 60_000, max: 5 });
+
+export async function POST(request: NextRequest) {
+  const limited = signupLimiter.check(request);
+  if (limited) return limited;
   try {
     const { name, email, password } = await request.json();
 
@@ -53,6 +61,19 @@ export async function POST(request: Request) {
       email: email.toLowerCase(),
       hashedPassword,
     });
+
+    // Send verification email (fire-and-forget)
+    const token = generateToken();
+    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+    db.insert(schema.verificationTokens)
+      .values({
+        identifier: email.toLowerCase(),
+        token,
+        expires,
+      })
+      .then(() => sendVerificationEmail(email.toLowerCase(), token))
+      .catch((err) => console.error("Failed to send verification email:", err));
 
     return jsonOk({ success: true }, 201);
   } catch (err) {
