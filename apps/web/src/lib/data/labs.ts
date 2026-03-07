@@ -132,6 +132,18 @@ export function getLabSolution(
 }
 
 /**
+ * Returns only the show-command output for the IOS terminal simulator.
+ * Does NOT expose solution code — safe to load eagerly.
+ */
+export function getLabShowData(
+  slug: string,
+): { expectedOutput: string } | null {
+  const lab = loadLabFile(slug);
+  if (!lab) return null;
+  return { expectedOutput: lab.expectedOutput };
+}
+
+/**
  * Loads minimal lab data for the run/execute endpoint.
  * Always file-based because expectedOutput isn't in the database.
  */

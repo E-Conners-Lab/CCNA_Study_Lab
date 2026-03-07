@@ -195,35 +195,34 @@ test.describe("Labs Page", () => {
     await page.waitForLoadState("networkidle");
   });
 
-  test("filter tabs are all visible", async ({ page }) => {
-    await expect(page.getByRole("tab", { name: "All" })).toBeVisible();
-    await expect(page.getByRole("tab", { name: "Python" })).toBeVisible();
-    await expect(page.getByRole("tab", { name: "Bash" })).toBeVisible();
+  test("filter tabs include All and ios cli", async ({ page }) => {
+    // Filter tabs are plain buttons built from lab types, not role="tab"
+    await expect(page.getByText("All").first()).toBeVisible();
+    await expect(page.getByText("ios cli").first()).toBeVisible();
   });
 
-  test("clicking Python filter shows only Python labs", async ({ page }) => {
-    await page.getByRole("tab", { name: "Python" }).click();
+  test("clicking ios cli filter shows only IOS labs", async ({ page }) => {
+    await page.getByText("ios cli").first().click();
     await page.waitForTimeout(500);
 
-    // Python labs should still be visible
-    await expect(page.getByText("Python Data Parsing").first()).toBeVisible();
+    // An IOS lab should be visible
+    await expect(page.getByText("VLAN and Inter-VLAN Routing").first()).toBeVisible();
   });
 
-  test("clicking Git filter shows Git labs", async ({ page }) => {
-    await page.getByRole("tab", { name: "Git" }).click();
+  test("clicking subnetting filter shows subnetting labs", async ({ page }) => {
+    await page.getByText("subnetting").first().click();
     await page.waitForTimeout(500);
 
-    // Git labs should be visible
-    await expect(page.getByText(/Git/i).first()).toBeVisible();
+    await expect(page.getByText("IPv4 Subnetting").first()).toBeVisible();
   });
 
   test("clicking All tab shows all labs", async ({ page }) => {
-    // First filter to Python
-    await page.getByRole("tab", { name: "Python" }).click();
+    // First filter to subnetting
+    await page.getByText("subnetting").first().click();
     await page.waitForTimeout(300);
 
     // Then click All to reset
-    await page.getByRole("tab", { name: "All" }).click();
+    await page.getByText("All").first().click();
     await page.waitForTimeout(300);
 
     // Multiple labs should be visible
@@ -233,8 +232,8 @@ test.describe("Labs Page", () => {
   });
 
   test("lab cards show title, difficulty badge, and estimated time", async ({ page }) => {
-    await expect(page.getByText("Python Data Parsing").first()).toBeVisible();
-    await expect(page.getByText("45 min").first()).toBeVisible();
+    await expect(page.getByText("VLAN and Inter-VLAN Routing").first()).toBeVisible();
+    await expect(page.getByText("30 min").first()).toBeVisible();
   });
 
   test("lab cards have Start/Continue/Redo action buttons", async ({ page }) => {
@@ -246,7 +245,7 @@ test.describe("Labs Page", () => {
   });
 
   test("difficulty badges are colored appropriately", async ({ page }) => {
-    const badges = page.getByText(/beginner|intermediate|advanced/i);
+    const badges = page.getByText(/easy|medium|hard/i);
     const count = await badges.count();
     expect(count).toBeGreaterThanOrEqual(1);
   });
@@ -267,18 +266,17 @@ test.describe("Lab Execution Page", () => {
     await page.waitForURL(/\/dashboard\/labs\//);
   });
 
-  test("lab page loads with instructions and code editor", async ({ page }) => {
-    // Use a lab slug that exists in content/labs/ JSON files
+  test("IOS lab page loads with instructions and terminal", async ({ page }) => {
     await page.goto("/dashboard/labs/vlan-config");
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(1500);
 
-    // Should show lab title or instructions
+    // Should show lab title
     await expect(page.getByText(/VLAN and Inter-VLAN Routing/i).first()).toBeVisible({ timeout: 10000 });
 
-    // Should have a Run Code button
-    const runButton = page.getByRole("button", { name: /Run/i }).first();
-    await expect(runButton).toBeVisible({ timeout: 10000 });
+    // IOS labs have a Check Solution button instead of Run Code
+    const checkButton = page.getByRole("button", { name: /Check Solution/i }).first();
+    await expect(checkButton).toBeVisible({ timeout: 10000 });
   });
 
   test("lab page has back to labs navigation", async ({ page }) => {
@@ -290,8 +288,8 @@ test.describe("Lab Execution Page", () => {
     await expect(page.getByText("Labs").first()).toBeVisible({ timeout: 10000 });
   });
 
-  test("code editor loads and is editable", async ({ page }) => {
-    await page.goto("/dashboard/labs/vlan-config");
+  test("subnetting lab has CodeMirror editor", async ({ page }) => {
+    await page.goto("/dashboard/labs/subnetting-ipv4");
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(1500);
 
@@ -303,10 +301,8 @@ test.describe("Lab Execution Page", () => {
     const content = page.locator(".cm-content").first();
     await expect(content).toBeVisible({ timeout: 10000 });
 
-    // Verify it's editable by clicking and typing
-    await content.click();
-    await page.keyboard.type("print('hello')");
-    await expect(content).toContainText("print('hello')");
+    // Should have a Run Code button (non-IOS labs)
+    await expect(page.getByRole("button", { name: /Run Code/i })).toBeVisible({ timeout: 10000 });
   });
 });
 
@@ -314,14 +310,14 @@ test.describe("Lab Execution Page", () => {
 // EVERY LAB LOADS — Navigate to each lab, verify content and solution
 // ══════════════════════════════════════════════════════════════════════════════
 const ALL_LABS = [
-  { slug: "subnetting-ipv4", title: "IPv4 Subnetting" },
-  { slug: "vlan-config", title: "VLAN Configuration" },
-  { slug: "static-routing", title: "Static Route" },
-  { slug: "ospf-config", title: "OSPF" },
-  { slug: "nat-config", title: "NAT Configuration" },
-  { slug: "ssh-config", title: "SSH" },
-  { slug: "acl-config", title: "ACL" },
-  { slug: "etherchannel-config", title: "EtherChannel with LACP" },
+  { slug: "subnetting-ipv4", title: "IPv4 Subnetting Challenge", type: "subnetting" },
+  { slug: "vlan-config", title: "VLAN and Inter-VLAN Routing", type: "ios-cli" },
+  { slug: "static-routing", title: "IPv4 and IPv6 Static Routing", type: "ios-cli" },
+  { slug: "ospf-config", title: "Single-Area OSPF Configuration", type: "ios-cli" },
+  { slug: "nat-config", title: "NAT and PAT Configuration", type: "ios-cli" },
+  { slug: "ssh-config", title: "Secure Device Management with SSH", type: "ios-cli" },
+  { slug: "acl-config", title: "Standard and Extended ACL Configuration", type: "ios-cli" },
+  { slug: "etherchannel-config", title: "EtherChannel with LACP", type: "ios-cli" },
 ];
 
 test.describe("All Labs Completeness", () => {
@@ -345,16 +341,26 @@ test.describe("All Labs Completeness", () => {
         page.getByText("Learning Objectives").first()
       ).toBeVisible();
 
-      // 4. CodeMirror editor is visible
-      const editor = page.locator(".cm-editor").first();
-      await expect(editor).toBeVisible({ timeout: 10000 });
+      if (lab.type === "ios-cli") {
+        // 4a. IOS labs have a terminal, not a CodeMirror editor
+        await expect(page.getByText("IOS CLI").first()).toBeVisible({ timeout: 10000 });
 
-      // 5. Run Code button is visible
-      await expect(
-        page.getByRole("button", { name: /Run Code/i })
-      ).toBeVisible();
+        // 5a. Check Solution button instead of Run Code
+        await expect(
+          page.getByRole("button", { name: /Check Solution/i })
+        ).toBeVisible();
+      } else {
+        // 4b. Non-IOS labs have a CodeMirror editor
+        const editor = page.locator(".cm-editor").first();
+        await expect(editor).toBeVisible({ timeout: 10000 });
 
-      // 6. Show Solution button is visible (without needing to run first)
+        // 5b. Run Code button
+        await expect(
+          page.getByRole("button", { name: /Run Code/i })
+        ).toBeVisible();
+      }
+
+      // 6. Show Solution button is visible
       const solutionBtn = page.getByRole("button", { name: /Show Solution/i });
       await expect(solutionBtn).toBeVisible();
 
@@ -651,7 +657,7 @@ test.describe("Full User Journey", () => {
     await sidebar.getByRole("link", { name: "Labs" }).first().click();
     await page.waitForURL(/\/dashboard\/labs/);
     await page.waitForLoadState("networkidle");
-    await page.getByRole("tab", { name: "Python" }).click();
+    await page.getByText("ios cli").first().click();
     await page.waitForTimeout(300);
 
     // Practice

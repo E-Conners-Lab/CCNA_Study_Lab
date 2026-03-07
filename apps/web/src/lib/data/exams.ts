@@ -79,21 +79,21 @@ export interface GradeResult {
 // ---------------------------------------------------------------------------
 
 const DOMAIN_PREFIX_MAP: Record<string, string> = {
-  "software-dev": "1.",
-  apis: "2.",
-  "cisco-platforms": "3.",
-  "deployment-security": "4.",
-  "infrastructure-automation": "5.",
-  "network-fundamentals": "6.",
+  "network-fundamentals": "1.",
+  "network-access": "2.",
+  "ip-connectivity": "3.",
+  "ip-services": "4.",
+  "security-fundamentals": "5.",
+  "automation-programmability": "6.",
 };
 
 const DOMAIN_LABELS: Record<string, string> = {
-  "1": "Software Development & Design",
-  "2": "Understanding & Using APIs",
-  "3": "Cisco Platforms & Development",
-  "4": "Application Deployment & Security",
-  "5": "Infrastructure & Automation",
-  "6": "Network Fundamentals",
+  "1": "Network Fundamentals",
+  "2": "Network Access",
+  "3": "IP Connectivity",
+  "4": "IP Services",
+  "5": "Security Fundamentals",
+  "6": "Automation and Programmability",
 };
 
 // ---------------------------------------------------------------------------

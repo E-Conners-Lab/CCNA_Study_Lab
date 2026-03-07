@@ -168,6 +168,7 @@ export default function LabExecutionPage() {
   const [validationResult, setValidationResult] =
     useState<ValidationResult | null>(null);
   const [isChecking, setIsChecking] = useState(false);
+  const [showCmdData, setShowCmdData] = useState<string | undefined>(undefined);
 
   const originalCode = useRef("");
 
@@ -190,6 +191,16 @@ export default function LabExecutionPage() {
         setLab(data);
         setCode("");
         originalCode.current = "";
+
+        // Eagerly fetch show-command data for IOS labs
+        if (data.type === "ios-cli") {
+          fetch(`/api/labs/${slug}/show-data`)
+            .then((r) => (r.ok ? r.json() : null))
+            .then((d) => {
+              if (d?.expectedOutput) setShowCmdData(d.expectedOutput);
+            })
+            .catch(() => {});
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load lab");
       } finally {
@@ -555,7 +566,7 @@ export default function LabExecutionPage() {
                 <div className="flex-1 min-h-0">
                   <IOSTerminal
                     starterCode={lab.starterCode}
-                    expectedOutput={solutionData?.expectedOutput}
+                    expectedOutput={showCmdData ?? solutionData?.expectedOutput}
                     onCommandsChange={setIosCommands}
                     resetKey={iosResetKey}
                   />

@@ -22,6 +22,7 @@ export {
   listLabs,
   getLab,
   getLabSolution,
+  getLabShowData,
   getLabForRun,
   type LabMetadata,
   type LabDetail,

@@ -51,14 +51,20 @@ export function IOSTerminal({
   const scrollRef = useRef<HTMLDivElement>(null);
   const allCommandsRef = useRef<string[][]>([]);
 
-  // ---- Initialize / Reset ----
-  useEffect(() => {
+  // ---- Initialize / Reset (render-time state adjustment) ----
+  // Start with undefined so the init block runs on first mount
+  const [prevStarterCode, setPrevStarterCode] = useState<string | undefined>(undefined);
+  const [prevResetKey, setPrevResetKey] = useState<number | undefined>(undefined);
+
+  if (starterCode !== prevStarterCode || resetKey !== prevResetKey) {
+    setPrevStarterCode(starterCode);
+    setPrevResetKey(resetKey);
+
     const sections = starterCode ? parseSections(starterCode) : [];
     const hasMultiDevice = sections.length > 1;
 
     const initLines: TerminalLine[] = [];
 
-    // Show starter code comments as guide text
     if (starterCode) {
       const guideLines = starterCode
         .split("\n")
@@ -94,7 +100,6 @@ export function IOSTerminal({
         text: `Connected to ${devs[0].deviceName}`,
       });
     } else {
-      // Use hostname from single named section if available
       if (sections.length === 1 && sections[0].hostname !== "Router") {
         initialHostname = sections[0].hostname;
       }
@@ -107,8 +112,12 @@ export function IOSTerminal({
     setIosState(createInitialState(initialHostname));
     setInput("");
     setHistoryIndex(-1);
+  }
+
+  // Notify parent on reset
+  useEffect(() => {
     onCommandsChange?.([]);
-  }, [starterCode, resetKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [prevStarterCode, prevResetKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ---- Auto-scroll ----
   useEffect(() => {
@@ -146,8 +155,21 @@ export function IOSTerminal({
     allCommandsRef.current[currentDevice] = newConfigCmds;
 
     // Notify parent of all commands across all devices
-    const flat = allCommandsRef.current.flat();
-    onCommandsChange?.(flat);
+    // Include device markers for multi-device labs so the validator
+    // can parse them into sections and match per-device
+    if (deviceSections.length > 1) {
+      const withMarkers: string[] = [];
+      for (let d = 0; d < deviceSections.length; d++) {
+        const cmds = allCommandsRef.current[d] ?? [];
+        if (cmds.length > 0 || d <= currentDevice) {
+          withMarkers.push(`! ========== ${deviceSections[d].deviceName} ==========`);
+          withMarkers.push(...cmds);
+        }
+      }
+      onCommandsChange?.(withMarkers);
+    } else {
+      onCommandsChange?.(allCommandsRef.current.flat());
+    }
 
     setLines(newLines);
     setIosState(result.newState);

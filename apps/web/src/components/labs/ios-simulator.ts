@@ -79,18 +79,24 @@ const KEYWORDS: string[] = [
   "switchport",
   "encapsulation",
   "configure",
+  "interfaces",
   "terminal",
   "interface",
   "transport",
   "encryption",
   "overload",
   "privilege",
+  "protocols",
+  "neighbors",
+  "neighbor",
   "shutdown",
   "username",
   "hostname",
   "generate",
   "standard",
   "extended",
+  "statistics",
+  "summary",
   "modulus",
   "allowed",
   "address",
@@ -100,6 +106,7 @@ const KEYWORDS: string[] = [
   "service",
   "passive",
   "outside",
+  "running-config",
   "inside",
   "permit",
   "source",
@@ -111,11 +118,16 @@ const KEYWORDS: string[] = [
   "access",
   "enable",
   "crypto",
+  "brief",
   "trunk",
   "login",
   "local",
   "input",
   "route",
+  "show",
+  "port-channel",
+  "etherchannel",
+  "mypubkey",
   "mode",
   "vlan",
   "deny",
@@ -124,6 +136,7 @@ const KEYWORDS: string[] = [
   "area",
   "cost",
   "ospf",
+  "lacp",
   "exit",
   "ssh",
   "rsa",
@@ -135,6 +148,7 @@ const KEYWORDS: string[] = [
   "log",
   "tcp",
   "udp",
+  "nat",
   "ip",
   "no",
   "eq",
@@ -267,6 +281,13 @@ function expandTokenInContext(
   // "loc" / "loca" → local
   if (t === "loc" || t === "loca") return "local";
 
+  // "int" → interface (show context) vs inside/input in other contexts
+  if (t === "int" || t === "inte" || t === "interf") {
+    if (prev === "show" || prev === "ospf" || prev === "ip") return "interface";
+    return "interface"; // default
+  }
+  if (t === "interfaces") return "interfaces";
+
   // "in" → input (transport context) vs inside (ip nat context) vs "in" (access-group/class direction)
   if (t === "in") {
     if (prev === "transport") return "input";
@@ -274,7 +295,7 @@ function expandTokenInContext(
     return "in"; // direction keyword for access-group/access-class
   }
   if (t === "inp" || isPrefix(t, "input")) return "input";
-  if (isPrefix(t, "inside") && t.length >= 3 && t !== "in") return "inside";
+  if (isPrefix(t, "inside") && t.length >= 3 && t !== "in" && t !== "int" && t !== "inte" && t !== "interf") return "inside";
 
   // "ro" → router (global config) vs route (ip route)
   if (t === "ro") {
@@ -290,6 +311,31 @@ function expandTokenInContext(
   if (t === "ex") return "exit";
   if (isPrefix(t, "extended") && t.length >= 3 && t !== "ex" && t !== "exi" && t !== "exit") return "extended";
   if (isPrefix(t, "exec-timeout") && t.length >= 5) return "exec-timeout";
+
+  // "br" → brief (show context)
+  if (t === "br" || t === "bri" || t === "brie") return "brief";
+
+  // "run" → running-config (show context)
+  if (t === "run" || t === "runn" || t === "runni" || isPrefix(t, "running")) {
+    if (prev === "show") return "running-config";
+    return token;
+  }
+
+  // "sum" → summary
+  if (isPrefix(t, "summary") && t.length >= 3) return "summary";
+
+  // "transl" → translations (unambiguous at 6 chars, vs "transport")
+  if (isPrefix(t, "translations") && t.length >= 6) return "translations";
+
+  // "neig" → neighbor/neighbors
+  if (isPrefix(t, "neighbor") && t.length >= 4 && !isPrefix(t, "neighbors")) return "neighbor";
+  if (isPrefix(t, "neighbors") && t.length >= 9) return "neighbors";
+
+  // "proto" → protocols
+  if (isPrefix(t, "protocols") && t.length >= 5) return "protocols";
+
+  // "statis" → statistics (unambiguous at 6 chars)
+  if (isPrefix(t, "statistics") && t.length >= 6) return "statistics";
 
   // "ver" → version
   if (t === "ver" || isPrefix(t, "version")) return "version";
@@ -448,8 +494,10 @@ function processPrivilegedMode(
   }
 
   // Show commands → look up in expectedOutput
-  if (lower.startsWith("show ") || lower.startsWith("sh ")) {
-    const lines = lookupShowOutput(cmd, expectedOutput);
+  // Check both expanded `lower` and raw `cmd` since expandCommand maps "sh" → "shutdown"
+  const rawLower = cmd.toLowerCase();
+  if (lower.startsWith("show ") || rawLower.startsWith("sh ") || rawLower.startsWith("show ")) {
+    const lines = lookupShowOutput(cmd, expectedOutput, state.hostname);
     return { output: lines, newState: state };
   }
 
@@ -783,16 +831,48 @@ export function normalizeInterface(name: string): string {
     .replace(/^Vl(?:an)?(?=\d)/i, "Vlan");
 }
 
+/**
+ * Check if abbreviated user command matches a full show command from expectedOutput.
+ * Each token in the user command must be a prefix of the corresponding token in the
+ * full command (standard IOS abbreviation rules). Extra tokens in the full command
+ * are allowed (user can omit trailing tokens).
+ */
+function showCmdMatches(userCmd: string, fullCmd: string): boolean {
+  const userTokens = userCmd.toLowerCase().split(/\s+/);
+  const fullTokens = fullCmd.toLowerCase().split(/\s+/);
+
+  // Token counts must match — "show ip route" should not match "show ip route static"
+  if (userTokens.length !== fullTokens.length) return false;
+
+  for (let i = 0; i < userTokens.length; i++) {
+    const u = userTokens[i];
+    const f = fullTokens[i];
+    // Exact match, or user token is a prefix of full token (IOS abbreviation)
+    if (f === u || f.startsWith(u)) continue;
+    // Normalize interface names (e.g., "Gi0/0" vs "GigabitEthernet0/0")
+    if (normalizeInterface(u) === normalizeInterface(f)) continue;
+    return false;
+  }
+
+  return true;
+}
+
 /** Look up show command output from the expectedOutput blob */
 function lookupShowOutput(
   cmd: string,
   expectedOutput?: string,
+  hostname?: string,
 ): string[] {
   if (!expectedOutput) {
     return [`% Simulation: output not available for '${cmd}'`];
   }
 
-  const lower = cmd.toLowerCase();
+  // Normalize "sh" → "show" prefix
+  let normalized = cmd.trim();
+  if (/^sh\s/i.test(normalized)) {
+    normalized = "show" + normalized.slice(2);
+  }
+
   const lines = expectedOutput.split("\n");
   const results: string[] = [];
   let capturing = false;
@@ -800,12 +880,16 @@ function lookupShowOutput(
   for (const line of lines) {
     const promptMatch = line.match(/^(\S+[#>])(.+)/);
     if (promptMatch) {
-      const promptCmd = promptMatch[2].trim().toLowerCase();
-      if (
-        promptCmd === lower ||
-        lower.endsWith(promptCmd) ||
-        promptCmd.endsWith(lower.replace(/^(show|sh)\s+/, ""))
-      ) {
+      const promptHost = promptMatch[1].replace(/[#>]$/, "");
+      const promptCmd = promptMatch[2].trim();
+
+      // If hostname is provided, only match commands from the same device
+      if (hostname && promptHost.toLowerCase() !== hostname.toLowerCase()) {
+        if (capturing) break;
+        continue;
+      }
+
+      if (showCmdMatches(normalized, promptCmd)) {
         capturing = true;
         results.push(line);
         continue;

@@ -383,6 +383,22 @@ function DragDropInput({
 }
 
 // ---------------------------------------------------------------------------
+// Format answer for display (handles string, array, and object shapes)
+// ---------------------------------------------------------------------------
+
+function formatAnswer(answer: unknown): string {
+  if (answer == null) return "";
+  if (typeof answer === "string") return answer;
+  if (Array.isArray(answer)) return answer.join(", ");
+  if (typeof answer === "object") {
+    return Object.entries(answer as Record<string, string>)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join("; ");
+  }
+  return String(answer);
+}
+
+// ---------------------------------------------------------------------------
 // Results View
 // ---------------------------------------------------------------------------
 
@@ -513,18 +529,14 @@ function ResultsView({
                         qr.correct ? "text-blue-400" : "text-red-400"
                       )}
                     >
-                      {Array.isArray(qr.userAnswer)
-                        ? qr.userAnswer.join(", ")
-                        : qr.userAnswer || "(no answer)"}
+                      {formatAnswer(qr.userAnswer) || "(no answer)"}
                     </span>
                   </div>
                   {!qr.correct && (
                     <div>
                       <span className="text-zinc-500">Correct answer: </span>
                       <span className="font-medium text-blue-400">
-                        {Array.isArray(qr.correctAnswer)
-                          ? qr.correctAnswer.join(", ")
-                          : qr.correctAnswer}
+                        {formatAnswer(qr.correctAnswer)}
                       </span>
                     </div>
                   )}
