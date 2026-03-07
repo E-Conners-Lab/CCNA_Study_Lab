@@ -5,7 +5,7 @@ import { isDbConfigured, getDb } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 import { jsonOk, jsonBadRequest, jsonError } from "@/lib/api-helpers";
 import { createRateLimiter } from "@/lib/rate-limit";
-import { generateToken, sendPasswordResetEmail } from "@/lib/email";
+import { generateToken, hashToken, sendPasswordResetEmail } from "@/lib/email";
 
 // 3 password reset requests per minute per IP
 const resetLimiter = createRateLimiter({ windowMs: 60_000, max: 3 });
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
 
     await db.insert(schema.verificationTokens).values({
       identifier: `reset:${email.toLowerCase()}`,
-      token,
+      token: hashToken(token),
       expires,
     });
 

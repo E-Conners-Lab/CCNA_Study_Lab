@@ -96,31 +96,10 @@ export async function upsertFlashcardProgress(
   try {
     const db = getDb();
 
-    // Check if row exists
-    const existing = await db
-      .select({ id: schema.flashcardProgress.id })
-      .from(schema.flashcardProgress)
-      .where(
-        and(
-          eq(schema.flashcardProgress.userId, userId),
-          eq(schema.flashcardProgress.flashcardId, data.flashcardId),
-        ),
-      )
-      .limit(1);
-
-    if (existing.length > 0) {
-      await db
-        .update(schema.flashcardProgress)
-        .set({
-          ease: data.ease,
-          interval: data.interval,
-          repetitions: data.repetitions,
-          nextReview: new Date(data.nextReview),
-          lastReview: new Date(data.lastReview),
-        })
-        .where(eq(schema.flashcardProgress.id, existing[0].id));
-    } else {
-      await db.insert(schema.flashcardProgress).values({
+    // Atomic upsert — avoids race condition with concurrent requests
+    await db
+      .insert(schema.flashcardProgress)
+      .values({
         userId,
         flashcardId: data.flashcardId,
         ease: data.ease,
@@ -128,8 +107,17 @@ export async function upsertFlashcardProgress(
         repetitions: data.repetitions,
         nextReview: new Date(data.nextReview),
         lastReview: new Date(data.lastReview),
+      })
+      .onConflictDoUpdate({
+        target: [schema.flashcardProgress.userId, schema.flashcardProgress.flashcardId],
+        set: {
+          ease: data.ease,
+          interval: data.interval,
+          repetitions: data.repetitions,
+          nextReview: new Date(data.nextReview),
+          lastReview: new Date(data.lastReview),
+        },
       });
-    }
   } catch (err) {
     console.warn("Failed to upsert flashcard progress:", err);
   }

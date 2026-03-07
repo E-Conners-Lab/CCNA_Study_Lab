@@ -1,15 +1,33 @@
 /**
  * Route protection middleware
  *
- * Protects /dashboard/* routes, redirecting unauthenticated users to /login.
+ * Protects /dashboard/* and /api/* routes, redirecting or rejecting
+ * unauthenticated users.
  *
  * Auth is bypassed when:
  * - SKIP_AUTH=true (E2E tests)
  * - DATABASE_URL is not set (no DB to authenticate against)
+ *
+ * Public API routes (no auth required):
+ * - /api/auth/* (login, signup, verify-email, forgot/reset password)
  */
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+
+// API routes that don't require authentication
+const PUBLIC_API_PREFIXES = ["/api/auth/"];
+
+function isPublicApiRoute(pathname: string): boolean {
+  return PUBLIC_API_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+}
+
+function getSessionToken(request: NextRequest): string | undefined {
+  return (
+    request.cookies.get("authjs.session-token")?.value ??
+    request.cookies.get("__Secure-authjs.session-token")?.value
+  );
+}
 
 export function middleware(request: NextRequest) {
   // Skip auth when testing or when the database is unavailable
@@ -20,22 +38,38 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check for the NextAuth v5 JWT session cookie.
-  // In development the cookie name is "authjs.session-token".
-  // In production (HTTPS) it's "__Secure-authjs.session-token".
-  const token =
-    request.cookies.get("authjs.session-token")?.value ??
-    request.cookies.get("__Secure-authjs.session-token")?.value;
+  const { pathname } = request.nextUrl;
 
-  if (!token) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("callbackUrl", request.nextUrl.pathname);
-    return NextResponse.redirect(loginUrl);
+  // Public auth routes — always allow
+  if (isPublicApiRoute(pathname)) {
+    return NextResponse.next();
+  }
+
+  const token = getSessionToken(request);
+
+  // API routes — return 401 JSON instead of redirect
+  if (pathname.startsWith("/api/")) {
+    if (!token) {
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 },
+      );
+    }
+    return NextResponse.next();
+  }
+
+  // Dashboard pages — redirect to login
+  if (pathname.startsWith("/dashboard")) {
+    if (!token) {
+      const loginUrl = new URL("/login", request.url);
+      loginUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/api/:path*"],
 };

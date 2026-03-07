@@ -5,8 +5,16 @@ import { eq, and } from "drizzle-orm";
 import { isDbConfigured, getDb } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 import { jsonOk, jsonBadRequest, jsonError } from "@/lib/api-helpers";
+import { createRateLimiter } from "@/lib/rate-limit";
+import { hashToken } from "@/lib/email";
+
+// 5 reset attempts per minute per IP
+const resetConsumeLimiter = createRateLimiter({ windowMs: 60_000, max: 5 });
 
 export async function POST(request: NextRequest) {
+  const limited = resetConsumeLimiter.check(request);
+  if (limited) return limited;
+
   try {
     const { token, email, password } = await request.json();
 
@@ -24,15 +32,16 @@ export async function POST(request: NextRequest) {
 
     const db = getDb();
     const identifier = `reset:${email.toLowerCase()}`;
+    const tokenHash = hashToken(token);
 
-    // Look up the reset token
+    // Look up the reset token (stored as SHA-256 hash)
     const [record] = await db
       .select()
       .from(schema.verificationTokens)
       .where(
         and(
           eq(schema.verificationTokens.identifier, identifier),
-          eq(schema.verificationTokens.token, token),
+          eq(schema.verificationTokens.token, tokenHash),
         ),
       )
       .limit(1);
@@ -47,7 +56,7 @@ export async function POST(request: NextRequest) {
         .where(
           and(
             eq(schema.verificationTokens.identifier, identifier),
-            eq(schema.verificationTokens.token, token),
+            eq(schema.verificationTokens.token, tokenHash),
           ),
         );
       return jsonError("Reset link has expired. Please request a new one.", 400);
@@ -67,7 +76,7 @@ export async function POST(request: NextRequest) {
       .where(
         and(
           eq(schema.verificationTokens.identifier, identifier),
-          eq(schema.verificationTokens.token, token),
+          eq(schema.verificationTokens.token, tokenHash),
         ),
       );
 

@@ -4,6 +4,7 @@ import { eq, and } from "drizzle-orm";
 import { isDbConfigured, getDb } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 import { jsonOk, jsonBadRequest, jsonError } from "@/lib/api-helpers";
+import { hashToken } from "@/lib/email";
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,15 +19,16 @@ export async function POST(request: NextRequest) {
     }
 
     const db = getDb();
+    const tokenHash = hashToken(token);
 
-    // Look up the verification token
+    // Look up the verification token (stored as SHA-256 hash)
     const [record] = await db
       .select()
       .from(schema.verificationTokens)
       .where(
         and(
           eq(schema.verificationTokens.identifier, email.toLowerCase()),
-          eq(schema.verificationTokens.token, token),
+          eq(schema.verificationTokens.token, tokenHash),
         ),
       )
       .limit(1);
@@ -37,13 +39,12 @@ export async function POST(request: NextRequest) {
 
     // Check expiry
     if (record.expires < new Date()) {
-      // Clean up expired token
       await db
         .delete(schema.verificationTokens)
         .where(
           and(
             eq(schema.verificationTokens.identifier, email.toLowerCase()),
-            eq(schema.verificationTokens.token, token),
+            eq(schema.verificationTokens.token, tokenHash),
           ),
         );
       return jsonError("Verification link has expired. Please sign up again.", 400);
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest) {
       .where(
         and(
           eq(schema.verificationTokens.identifier, email.toLowerCase()),
-          eq(schema.verificationTokens.token, token),
+          eq(schema.verificationTokens.token, tokenHash),
         ),
       );
 

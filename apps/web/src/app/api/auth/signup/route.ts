@@ -6,7 +6,7 @@ import { isDbConfigured, getDb } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 import { jsonOk, jsonBadRequest, jsonError } from "@/lib/api-helpers";
 import { createRateLimiter } from "@/lib/rate-limit";
-import { generateToken, sendVerificationEmail } from "@/lib/email";
+import { generateToken, hashToken, sendVerificationEmail } from "@/lib/email";
 
 // 5 signup attempts per minute per IP
 const signupLimiter = createRateLimiter({ windowMs: 60_000, max: 5 });
@@ -50,7 +50,9 @@ export async function POST(request: NextRequest) {
       .limit(1);
 
     if (existing) {
-      return jsonError("Email already in use", 409);
+      // Return 201 with same response to prevent email enumeration.
+      // The user won't receive a verification email if already registered.
+      return jsonOk({ success: true }, 201);
     }
 
     // Hash password and insert user
@@ -69,7 +71,7 @@ export async function POST(request: NextRequest) {
     db.insert(schema.verificationTokens)
       .values({
         identifier: email.toLowerCase(),
-        token,
+        token: hashToken(token),
         expires,
       })
       .then(() => sendVerificationEmail(email.toLowerCase(), token))

@@ -7,7 +7,7 @@
  * Mailgun, SES, etc.).
  */
 
-import { randomBytes } from "crypto";
+import { randomBytes, createHash } from "crypto";
 
 const EMAIL_FROM = process.env.EMAIL_FROM ?? "CCNA StudyLab <noreply@example.com>";
 
@@ -23,9 +23,12 @@ async function sendEmail(options: EmailOptions): Promise<void> {
   if (SMTP_HOST && SMTP_USER && SMTP_PASS) {
     // Dynamic import to avoid requiring nodemailer when not configured
     const nodemailer = await import("nodemailer");
+    const port = Number(SMTP_PORT ?? 587);
     const transport = nodemailer.createTransport({
       host: SMTP_HOST,
-      port: Number(SMTP_PORT ?? 587),
+      port,
+      secure: port === 465,
+      requireTLS: port !== 465,
       auth: { user: SMTP_USER, pass: SMTP_PASS },
     });
     await transport.sendMail({ from: EMAIL_FROM, ...options });
@@ -45,6 +48,14 @@ async function sendEmail(options: EmailOptions): Promise<void> {
  */
 export function generateToken(): string {
   return randomBytes(32).toString("hex");
+}
+
+/**
+ * Hash a token with SHA-256 for secure storage.
+ * The raw token is sent to the user via email; only the hash is stored in the DB.
+ */
+export function hashToken(token: string): string {
+  return createHash("sha256").update(token).digest("hex");
 }
 
 /**

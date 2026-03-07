@@ -6,7 +6,7 @@
  * can fall back to hardcoded defaults.
  */
 
-import { eq, desc, count, max } from "drizzle-orm";
+import { eq, desc, count, max, gt, and as dbAnd } from "drizzle-orm";
 import { isDbConfigured, getDb } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 
@@ -75,8 +75,8 @@ export async function getDashboardStats(
     const [
       objectiveCounts,
       completedObjectives,
-      flashcardsDue,
       totalFlashcardsPerDomain,
+      notDueFlashcards,
       labsTotal,
       labsDone,
     ] = await Promise.all([
@@ -97,10 +97,28 @@ export async function getDashboardStats(
         .where(eq(schema.studyProgress.userId, userId))
         .groupBy(schema.studyProgress.domainId),
 
-      // 4. Flashcard progress per domain
+      // 4. Flashcards due for review per domain
+      // A card is "due" if it has never been reviewed (no progress row) or nextReview <= now.
+      // We count total flashcards minus those with nextReview in the future.
       db.select({
         domainId: schema.domains.id,
-        dueCount: count(),
+        total: count(),
+      })
+        .from(schema.flashcards)
+        .innerJoin(
+          schema.objectives,
+          eq(schema.flashcards.objectiveId, schema.objectives.id),
+        )
+        .innerJoin(
+          schema.domains,
+          eq(schema.objectives.domainId, schema.domains.id),
+        )
+        .groupBy(schema.domains.id),
+
+      // Cards with future nextReview (i.e., NOT due yet)
+      db.select({
+        domainId: schema.domains.id,
+        notDue: count(),
       })
         .from(schema.flashcardProgress)
         .innerJoin(
@@ -115,22 +133,11 @@ export async function getDashboardStats(
           schema.domains,
           eq(schema.objectives.domainId, schema.domains.id),
         )
-        .where(eq(schema.flashcardProgress.userId, userId))
-        .groupBy(schema.domains.id),
-
-      // Total flashcards per domain
-      db.select({
-        domainId: schema.domains.id,
-        total: count(),
-      })
-        .from(schema.flashcards)
-        .innerJoin(
-          schema.objectives,
-          eq(schema.flashcards.objectiveId, schema.objectives.id),
-        )
-        .innerJoin(
-          schema.domains,
-          eq(schema.objectives.domainId, schema.domains.id),
+        .where(
+          dbAnd(
+            eq(schema.flashcardProgress.userId, userId),
+            gt(schema.flashcardProgress.nextReview, new Date()),
+          ),
         )
         .groupBy(schema.domains.id),
 
@@ -172,7 +179,7 @@ export async function getDashboardStats(
     const objCountMap = new Map(objectiveCounts.map((r) => [r.domainId, r.total]));
     const completedMap = new Map(completedObjectives.map((r) => [r.domainId, r.count]));
     const totalFcMap = new Map(totalFlashcardsPerDomain.map((r) => [r.domainId, r.total]));
-    const reviewedFcMap = new Map(flashcardsDue.map((r) => [r.domainId, r.dueCount]));
+    const notDueFcMap = new Map(notDueFlashcards.map((r) => [r.domainId, r.notDue]));
     const labsTotalMap = new Map(labsTotal.map((r) => [r.domainId, r.total]));
     const labsDoneMap = new Map(labsDone.map((r) => [r.domainId, r.done]));
 
@@ -181,7 +188,7 @@ export async function getDashboardStats(
       const objTotal = objCountMap.get(d.id) ?? 0;
       const objCompleted = completedMap.get(d.id) ?? 0;
       const totalFc = totalFcMap.get(d.id) ?? 0;
-      const reviewedFc = reviewedFcMap.get(d.id) ?? 0;
+      const notDueFc = notDueFcMap.get(d.id) ?? 0;
       const labTotal = labsTotalMap.get(d.id) ?? 0;
       const labDone = labsDoneMap.get(d.id) ?? 0;
 
@@ -196,7 +203,7 @@ export async function getDashboardStats(
         stats: {
           objectivesCompleted: objCompleted,
           objectivesTotal: objTotal,
-          flashcardsDue: Math.max(0, totalFc - reviewedFc),
+          flashcardsDue: Math.max(0, totalFc - notDueFc),
           labsDone: labDone,
           labsTotal: labTotal,
         },

@@ -3,7 +3,8 @@ CCNA StudyLab - Lab Engine
 FastAPI service providing exercise grading for CCNA certification study.
 """
 
-from fastapi import FastAPI, APIRouter, HTTPException
+import os
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional
@@ -24,16 +25,37 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# Read allowed origins from env, defaulting to localhost for dev
+CORS_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 # ---------------------------------------------------------------------------
-# Health
+# Auth dependency
+# ---------------------------------------------------------------------------
+
+API_KEY = os.getenv("LAB_ENGINE_API_KEY", "")
+
+
+async def verify_api_key(authorization: Optional[str] = Header(None)):
+    """Require a valid Bearer token when LAB_ENGINE_API_KEY is set."""
+    if not API_KEY:
+        return  # No key configured — allow (dev mode)
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Missing or invalid authorization header")
+    token = authorization.removeprefix("Bearer ").strip()
+    if token != API_KEY:
+        raise HTTPException(status_code=403, detail="Invalid API key")
+
+
+# ---------------------------------------------------------------------------
+# Health (public — no auth required)
 # ---------------------------------------------------------------------------
 
 
@@ -51,7 +73,11 @@ async def health_check():
 # Grade router
 # ---------------------------------------------------------------------------
 
-grade_router = APIRouter(prefix="/api/v1/grade", tags=["grading"])
+grade_router = APIRouter(
+    prefix="/api/v1/grade",
+    tags=["grading"],
+    dependencies=[Depends(verify_api_key)],
+)
 
 
 class GradeRequest(BaseModel):
@@ -127,7 +153,11 @@ async def grade(request: GradeRequest):
 # Sandbox router
 # ---------------------------------------------------------------------------
 
-sandbox_router = APIRouter(prefix="/api/v1/sandbox", tags=["sandbox"])
+sandbox_router = APIRouter(
+    prefix="/api/v1/sandbox",
+    tags=["sandbox"],
+    dependencies=[Depends(verify_api_key)],
+)
 
 
 class SandboxRunRequest(BaseModel):
@@ -144,7 +174,7 @@ class SandboxRunResponse(BaseModel):
 
 @sandbox_router.post("/run", response_model=SandboxRunResponse)
 async def sandbox_run(request: SandboxRunRequest):
-    """Execute arbitrary code in a sandboxed subprocess (for practice)."""
+    """Execute code in a sandboxed subprocess (for practice)."""
     result = grade_submission(
         code=request.code,
         expected_output_contains="",
