@@ -17,18 +17,7 @@ async function typeIOSCommands(page: Page, commands: string[]) {
 }
 
 /**
- * Extract config commands from solutionCode, filtering out comments,
- * blank lines, and device markers — just the commands a student would type.
- */
-function extractCommands(solutionCode: string): string[] {
-  return solutionCode
-    .split("\n")
-    .map((l) => l.trim())
-    .filter((l) => l && !l.startsWith("!"));
-}
-
-/**
- * Same as extractCommands but converts full commands to IOS shorthand.
+ * Converts full commands to IOS shorthand.
  * This tests that the validator's expandCommand handles abbreviations.
  */
 function toShorthand(commands: string[]): string[] {

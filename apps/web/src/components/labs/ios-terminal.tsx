@@ -92,7 +92,6 @@ export function IOSTerminal({
       }));
       setDeviceSections(devs);
       setCurrentDevice(0);
-      allCommandsRef.current = devs.map(() => []);
       initialHostname = devs[0].hostname;
 
       initLines.push({
@@ -105,7 +104,6 @@ export function IOSTerminal({
       }
       setDeviceSections([]);
       setCurrentDevice(0);
-      allCommandsRef.current = [[]];
     }
 
     setLines(initLines);
@@ -114,8 +112,12 @@ export function IOSTerminal({
     setHistoryIndex(-1);
   }
 
-  // Notify parent on reset
+  // Reset ref and notify parent on init/reset
   useEffect(() => {
+    const sections = starterCode ? parseSections(starterCode) : [];
+    allCommandsRef.current = sections.length > 1
+      ? sections.map(() => [])
+      : [[]];
     onCommandsChange?.([]);
   }, [prevStarterCode, prevResetKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -175,7 +177,7 @@ export function IOSTerminal({
     setIosState(result.newState);
     setInput("");
     setHistoryIndex(-1);
-  }, [input, iosState, lines, expectedOutput, onCommandsChange, currentDevice]);
+  }, [input, iosState, lines, expectedOutput, onCommandsChange, currentDevice, deviceSections]);
 
   // ---- Switch device (multi-device labs) ----
   const switchDevice = useCallback(
