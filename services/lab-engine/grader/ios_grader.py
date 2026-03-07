@@ -81,28 +81,28 @@ def grade_ios_commands(code: str, expected: Dict) -> Dict:
 
     user_lines = [l.strip() for l in code.strip().split("\n") if l.strip() and not l.strip().startswith("!")]
 
-    matched = []
-    unmatched_expected = list(range(len(expected_commands)))
+    matched: List[int] = []
+    unmatched: set[int] = set(range(len(expected_commands)))
 
     if ordered:
         idx = 0
         for user_line in user_lines:
             if idx < len(expected_commands) and commands_match(user_line, expected_commands[idx]):
                 matched.append(idx)
-                unmatched_expected.remove(idx)
+                unmatched.discard(idx)
                 idx += 1
     else:
         for user_line in user_lines:
-            for i in unmatched_expected:
+            for i in sorted(unmatched):
                 if commands_match(user_line, expected_commands[i]):
                     matched.append(i)
-                    unmatched_expected.remove(i)
+                    unmatched.discard(i)
                     break
 
     score = len(matched) / len(expected_commands) if expected_commands else 0.0
-    passed = len(unmatched_expected) == 0
+    passed = len(unmatched) == 0
 
-    missing = [expected_commands[i] for i in unmatched_expected]
+    missing = [expected_commands[i] for i in sorted(unmatched)]
     output_lines = [f"Matched {len(matched)}/{len(expected_commands)} commands."]
     if missing:
         output_lines.append(f"Missing commands: {', '.join(missing)}")

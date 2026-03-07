@@ -4,7 +4,6 @@ Subnetting Grader
 Validates subnetting answers (network address, broadcast, hosts, masks).
 """
 
-import ipaddress
 from typing import Dict
 
 

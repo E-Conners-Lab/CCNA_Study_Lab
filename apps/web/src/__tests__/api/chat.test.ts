@@ -1,5 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
+// Mock auth helper to return a valid user
+vi.mock("@/lib/auth-helpers", () => ({
+  getCurrentUserId: vi.fn().mockResolvedValue("test-user-id"),
+}));
+
 // Mock the Anthropic SDK before importing the route
 vi.mock("@anthropic-ai/sdk", () => {
   const mockStream = {
@@ -27,6 +32,10 @@ async function importRoute() {
   vi.resetModules();
 
   // Re-mock after reset
+  vi.doMock("@/lib/auth-helpers", () => ({
+    getCurrentUserId: vi.fn().mockResolvedValue("test-user-id"),
+  }));
+
   vi.doMock("@anthropic-ai/sdk", () => {
     const mockStream = {
       [Symbol.asyncIterator]: async function* () {

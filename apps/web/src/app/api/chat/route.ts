@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
+import { getCurrentUserId } from "@/lib/auth-helpers";
 
 /**
  * Helper: create a streaming text Response so the chat UI renders the message
@@ -136,6 +137,12 @@ Teaching guidelines:
 
 export async function POST(request: NextRequest) {
   try {
+    // Require authentication to prevent unauthorized API usage
+    const userId = await getCurrentUserId();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const apiKey = process.env.TUTOR_ANTHROPIC_KEY;
 
     if (!apiKey || apiKey === "your-anthropic-api-key-here") {

@@ -29,80 +29,9 @@ export interface FlashcardProgress {
   quality: number; // last quality rating
 }
 
-export interface SM2Result {
-  repetitions: number;
-  ease: number;
-  interval: number;
-  nextReview: string; // ISO date string
-}
-
-// ---------------------------------------------------------------------------
-// SM-2 Algorithm
-// ---------------------------------------------------------------------------
-
-/**
- * SuperMemo SM-2 spaced repetition algorithm.
- *
- * @param quality     - Rating 0-5 (0=blackout, 1=wrong, 2=wrong but close,
- *                      3=correct with difficulty, 4=correct, 5=perfect)
- * @param repetitions - Number of consecutive correct repetitions so far
- * @param ease        - Easiness factor (>= 1.3, default 2.5)
- * @param interval    - Current interval in days
- * @returns Updated { repetitions, ease, interval, nextReview }
- */
-export function sm2(
-  quality: number,
-  repetitions: number,
-  ease: number,
-  interval: number
-): SM2Result {
-  // Clamp quality to 0-5
-  const q = Math.max(0, Math.min(5, Math.round(quality)));
-
-  let newRepetitions = repetitions;
-  let newEase = ease;
-  let newInterval = interval;
-
-  if (q >= 3) {
-    // Correct response
-    if (newRepetitions === 0) {
-      newInterval = 1;
-    } else if (newRepetitions === 1) {
-      newInterval = 6;
-    } else {
-      newInterval = Math.round(interval * ease);
-    }
-    newRepetitions += 1;
-  } else {
-    // Incorrect response — reset
-    newRepetitions = 0;
-    newInterval = 1;
-  }
-
-  // Adjust ease factor
-  // EF' = EF + (0.1 - (5-q) * (0.08 + (5-q) * 0.02))
-  newEase = ease + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02));
-
-  // Ease factor must not drop below 1.3
-  if (newEase < 1.3) {
-    newEase = 1.3;
-  }
-
-  // Round ease to 2 decimals
-  newEase = Math.round(newEase * 100) / 100;
-
-  // Calculate next review date
-  const now = new Date();
-  const nextReview = new Date(now);
-  nextReview.setDate(nextReview.getDate() + newInterval);
-
-  return {
-    repetitions: newRepetitions,
-    ease: newEase,
-    interval: newInterval,
-    nextReview: nextReview.toISOString(),
-  };
-}
+// Re-export SM-2 from shared module
+export { sm2 } from "@/lib/sm2";
+export type { SM2Result } from "@/lib/sm2";
 
 import { NUMBER_TO_SLUG } from "@/lib/domains";
 

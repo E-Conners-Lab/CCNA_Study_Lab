@@ -67,45 +67,7 @@ function saveAllProgress(progress: Record<string, FlashcardProgress>) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
 }
 
-// ---------------------------------------------------------------------------
-// SM-2 (client-side copy so the hook is self-contained)
-// ---------------------------------------------------------------------------
-
-function sm2Client(
-  quality: number,
-  repetitions: number,
-  ease: number,
-  interval: number
-) {
-  const q = Math.max(0, Math.min(5, Math.round(quality)));
-  let newReps = repetitions;
-  let newEase = ease;
-  let newInterval = interval;
-
-  if (q >= 3) {
-    if (newReps === 0) newInterval = 1;
-    else if (newReps === 1) newInterval = 6;
-    else newInterval = Math.round(interval * ease);
-    newReps += 1;
-  } else {
-    newReps = 0;
-    newInterval = 1;
-  }
-
-  newEase = ease + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02));
-  if (newEase < 1.3) newEase = 1.3;
-  newEase = Math.round(newEase * 100) / 100;
-
-  const nextReview = new Date();
-  nextReview.setDate(nextReview.getDate() + newInterval);
-
-  return {
-    repetitions: newReps,
-    ease: newEase,
-    interval: newInterval,
-    nextReview: nextReview.toISOString(),
-  };
-}
+import { sm2 } from "@/lib/sm2";
 
 // ---------------------------------------------------------------------------
 // Hook
@@ -263,7 +225,7 @@ export function useFlashcards() {
       const ease = p?.ease ?? 2.5;
       const interval = p?.interval ?? 0;
 
-      const result = sm2Client(quality, reps, ease, interval);
+      const result = sm2(quality, reps, ease, interval);
 
       const updatedProgress: FlashcardProgress = {
         flashcardId: id,

@@ -71,110 +71,109 @@ export async function getDashboardStats(
 
     if (allDomains.length === 0) return null;
 
-    // 2. Count objectives per domain
-    const objectiveCounts = await db
-      .select({
+    // Run independent queries in parallel
+    const [
+      objectiveCounts,
+      completedObjectives,
+      flashcardsDue,
+      totalFlashcardsPerDomain,
+      labsTotal,
+      labsDone,
+    ] = await Promise.all([
+      // 2. Count objectives per domain
+      db.select({
         domainId: schema.objectives.domainId,
         total: count(),
       })
-      .from(schema.objectives)
-      .groupBy(schema.objectives.domainId);
+        .from(schema.objectives)
+        .groupBy(schema.objectives.domainId),
 
-    const objCountMap = new Map(objectiveCounts.map((r) => [r.domainId, r.total]));
-
-    // 3. Get completed objectives for this user
-    const completedObjectives = await db
-      .select({
+      // 3. Get completed objectives for this user
+      db.select({
         domainId: schema.studyProgress.domainId,
         count: count(),
       })
-      .from(schema.studyProgress)
-      .where(eq(schema.studyProgress.userId, userId))
-      .groupBy(schema.studyProgress.domainId);
+        .from(schema.studyProgress)
+        .where(eq(schema.studyProgress.userId, userId))
+        .groupBy(schema.studyProgress.domainId),
 
-    const completedMap = new Map(completedObjectives.map((r) => [r.domainId, r.count]));
-
-    // 4. Flashcards due
-    const flashcardsDue = await db
-      .select({
+      // 4. Flashcard progress per domain
+      db.select({
         domainId: schema.domains.id,
         dueCount: count(),
       })
-      .from(schema.flashcardProgress)
-      .innerJoin(
-        schema.flashcards,
-        eq(schema.flashcardProgress.flashcardId, schema.flashcards.id),
-      )
-      .innerJoin(
-        schema.objectives,
-        eq(schema.flashcards.objectiveId, schema.objectives.id),
-      )
-      .innerJoin(
-        schema.domains,
-        eq(schema.objectives.domainId, schema.domains.id),
-      )
-      .where(eq(schema.flashcardProgress.userId, userId))
-      .groupBy(schema.domains.id);
+        .from(schema.flashcardProgress)
+        .innerJoin(
+          schema.flashcards,
+          eq(schema.flashcardProgress.flashcardId, schema.flashcards.id),
+        )
+        .innerJoin(
+          schema.objectives,
+          eq(schema.flashcards.objectiveId, schema.objectives.id),
+        )
+        .innerJoin(
+          schema.domains,
+          eq(schema.objectives.domainId, schema.domains.id),
+        )
+        .where(eq(schema.flashcardProgress.userId, userId))
+        .groupBy(schema.domains.id),
 
-    // This gives total flashcard progress rows per domain. For "due", we'd
-    // need to filter by nextReview, but raw SQL is needed for that.
-    // Simplify: count total flashcards per domain and subtract reviewed ones.
-    const totalFlashcardsPerDomain = await db
-      .select({
+      // Total flashcards per domain
+      db.select({
         domainId: schema.domains.id,
         total: count(),
       })
-      .from(schema.flashcards)
-      .innerJoin(
-        schema.objectives,
-        eq(schema.flashcards.objectiveId, schema.objectives.id),
-      )
-      .innerJoin(
-        schema.domains,
-        eq(schema.objectives.domainId, schema.domains.id),
-      )
-      .groupBy(schema.domains.id);
+        .from(schema.flashcards)
+        .innerJoin(
+          schema.objectives,
+          eq(schema.flashcards.objectiveId, schema.objectives.id),
+        )
+        .innerJoin(
+          schema.domains,
+          eq(schema.objectives.domainId, schema.domains.id),
+        )
+        .groupBy(schema.domains.id),
 
-    const totalFcMap = new Map(totalFlashcardsPerDomain.map((r) => [r.domainId, r.total]));
-    const reviewedFcMap = new Map(flashcardsDue.map((r) => [r.domainId, r.dueCount]));
-
-    // 5. Labs completed per domain
-    const labsTotal = await db
-      .select({
+      // 5. Total labs per domain
+      db.select({
         domainId: schema.domains.id,
         total: count(),
       })
-      .from(schema.labs)
-      .innerJoin(
-        schema.objectives,
-        eq(schema.labs.objectiveId, schema.objectives.id),
-      )
-      .innerJoin(
-        schema.domains,
-        eq(schema.objectives.domainId, schema.domains.id),
-      )
-      .groupBy(schema.domains.id);
+        .from(schema.labs)
+        .innerJoin(
+          schema.objectives,
+          eq(schema.labs.objectiveId, schema.objectives.id),
+        )
+        .innerJoin(
+          schema.domains,
+          eq(schema.objectives.domainId, schema.domains.id),
+        )
+        .groupBy(schema.domains.id),
 
-    const labsTotalMap = new Map(labsTotal.map((r) => [r.domainId, r.total]));
-
-    const labsDone = await db
-      .select({
+      // Labs completed by user
+      db.select({
         domainId: schema.domains.id,
         done: count(),
       })
-      .from(schema.labAttempts)
-      .innerJoin(schema.labs, eq(schema.labAttempts.labId, schema.labs.id))
-      .innerJoin(
-        schema.objectives,
-        eq(schema.labs.objectiveId, schema.objectives.id),
-      )
-      .innerJoin(
-        schema.domains,
-        eq(schema.objectives.domainId, schema.domains.id),
-      )
-      .where(eq(schema.labAttempts.userId, userId))
-      .groupBy(schema.domains.id);
+        .from(schema.labAttempts)
+        .innerJoin(schema.labs, eq(schema.labAttempts.labId, schema.labs.id))
+        .innerJoin(
+          schema.objectives,
+          eq(schema.labs.objectiveId, schema.objectives.id),
+        )
+        .innerJoin(
+          schema.domains,
+          eq(schema.objectives.domainId, schema.domains.id),
+        )
+        .where(eq(schema.labAttempts.userId, userId))
+        .groupBy(schema.domains.id),
+    ]);
 
+    const objCountMap = new Map(objectiveCounts.map((r) => [r.domainId, r.total]));
+    const completedMap = new Map(completedObjectives.map((r) => [r.domainId, r.count]));
+    const totalFcMap = new Map(totalFlashcardsPerDomain.map((r) => [r.domainId, r.total]));
+    const reviewedFcMap = new Map(flashcardsDue.map((r) => [r.domainId, r.dueCount]));
+    const labsTotalMap = new Map(labsTotal.map((r) => [r.domainId, r.total]));
     const labsDoneMap = new Map(labsDone.map((r) => [r.domainId, r.done]));
 
     // 6. Build domain stats
@@ -209,30 +208,27 @@ export async function getDashboardStats(
       domainStats.reduce((acc, d) => acc + d.progress * (d.weight / 100), 0),
     );
 
-    // 8. Best exam score
-    const bestScore = await db
-      .select({ best: max(schema.practiceAttempts.score) })
-      .from(schema.practiceAttempts)
-      .where(eq(schema.practiceAttempts.userId, userId));
+    // 8-10. Exam stats (parallel)
+    const [bestScore, attemptCount, recentExams] = await Promise.all([
+      db.select({ best: max(schema.practiceAttempts.score) })
+        .from(schema.practiceAttempts)
+        .where(eq(schema.practiceAttempts.userId, userId)),
 
-    const bestExamScore = Math.round(bestScore[0]?.best ?? 0);
+      db.select({ total: count() })
+        .from(schema.practiceAttempts)
+        .where(eq(schema.practiceAttempts.userId, userId)),
 
-    // 9. Total exam attempts
-    const attemptCount = await db
-      .select({ total: count() })
-      .from(schema.practiceAttempts)
-      .where(eq(schema.practiceAttempts.userId, userId));
-
-    // 10. Recent activity (last 5 exam attempts for now)
-    const recentExams = await db
-      .select({
+      db.select({
         score: schema.practiceAttempts.score,
         completedAt: schema.practiceAttempts.completedAt,
       })
-      .from(schema.practiceAttempts)
-      .where(eq(schema.practiceAttempts.userId, userId))
-      .orderBy(desc(schema.practiceAttempts.completedAt))
-      .limit(5);
+        .from(schema.practiceAttempts)
+        .where(eq(schema.practiceAttempts.userId, userId))
+        .orderBy(desc(schema.practiceAttempts.completedAt))
+        .limit(5),
+    ]);
+
+    const bestExamScore = Math.round(bestScore[0]?.best ?? 0);
 
     const recentActivity = recentExams.map((e) => ({
       type: "exam" as const,
@@ -257,15 +253,4 @@ export async function getDashboardStats(
 // Helpers
 // ---------------------------------------------------------------------------
 
-function formatTimeAgo(date: Date): string {
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
-  if (seconds < 60) return "Just now";
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes}m ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  if (days === 1) return "Yesterday";
-  if (days < 7) return `${days} days ago`;
-  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}
+import { formatTimeAgo } from "@/lib/format-time";

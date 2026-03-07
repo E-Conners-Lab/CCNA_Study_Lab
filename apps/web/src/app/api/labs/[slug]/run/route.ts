@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { execFile } from "child_process";
-import { writeFile, unlink } from "fs/promises";
+import { writeFile } from "fs/promises";
+import { unlinkSync } from "fs";
 import { tmpdir } from "os";
 import path from "path";
 import { randomUUID } from "crypto";
@@ -65,7 +66,7 @@ async function runPythonLocally(
       executionTime: elapsed,
     };
   } finally {
-    unlink(tmpFile).catch(() => {});
+    try { unlinkSync(tmpFile); } catch { /* already cleaned up */ }
   }
 }
 

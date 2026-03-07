@@ -58,8 +58,8 @@ def grade_acl(code: str, expected: Dict) -> Dict:
     user_entries = parse_acl_entries(code)
     expected_normalized = [normalize_acl_line(e) for e in expected_entries]
 
-    matched = []
-    unmatched = list(range(len(expected_normalized)))
+    matched: List[int] = []
+    unmatched: set[int] = set(range(len(expected_normalized)))
     total_checks = len(expected_normalized)
 
     if ordered:
@@ -67,14 +67,14 @@ def grade_acl(code: str, expected: Dict) -> Dict:
         for user_entry in user_entries:
             if idx < len(expected_normalized) and user_entry == expected_normalized[idx]:
                 matched.append(idx)
-                unmatched.remove(idx)
+                unmatched.discard(idx)
                 idx += 1
     else:
         for user_entry in user_entries:
-            for i in unmatched:
+            for i in sorted(unmatched):
                 if user_entry == expected_normalized[i]:
                     matched.append(i)
-                    unmatched.remove(i)
+                    unmatched.discard(i)
                     break
 
     # Check if ACL is applied to the interface
@@ -96,7 +96,7 @@ def grade_acl(code: str, expected: Dict) -> Dict:
     score = len(matched) / total_checks if total_checks > 0 else 0.0
     passed = len(unmatched) == 0 and apply_correct
 
-    missing = [expected_entries[i] for i in unmatched]
+    missing = [expected_entries[i] for i in sorted(unmatched)]
     output_lines = [f"Matched {len(matched)}/{total_checks} checks."]
     if missing:
         output_lines.append(f"\nMissing ACL entries:")

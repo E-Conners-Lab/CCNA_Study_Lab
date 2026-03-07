@@ -21,21 +21,7 @@ import {
 } from "lucide-react";
 import type { Conversation } from "./types";
 
-// ---------- Timestamp formatting ----------
-
-function formatTimestamp(date: Date): string {
-  const now = new Date();
-  const diff = now.getTime() - date.getTime();
-  const minutes = Math.floor(diff / 60_000);
-  const hours = Math.floor(diff / 3_600_000);
-  const days = Math.floor(diff / 86_400_000);
-
-  if (minutes < 1) return "Just now";
-  if (minutes < 60) return `${minutes}m ago`;
-  if (hours < 24) return `${hours}h ago`;
-  if (days < 7) return `${days}d ago`;
-  return date.toLocaleDateString([], { month: "short", day: "numeric" });
-}
+import { formatTimeAgo } from "@/lib/format-time";
 
 // ---------- Component ----------
 
@@ -177,7 +163,7 @@ export function TutorSidebar({
                       )}
                       <span className="flex items-center gap-1 text-[10px] text-zinc-600">
                         <Clock className="h-2.5 w-2.5" />
-                        {formatTimestamp(conv.timestamp)}
+                        {formatTimeAgo(conv.timestamp)}
                       </span>
                     </div>
                   </div>

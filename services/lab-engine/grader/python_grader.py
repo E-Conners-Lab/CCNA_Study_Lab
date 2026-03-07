@@ -9,14 +9,21 @@ import subprocess
 import sys
 import tempfile
 import os
-from typing import Optional
+from typing import Optional, TypedDict
+
+
+class GradeResult(TypedDict):
+    passed: bool
+    output: str
+    errors: str
+    score: float
 
 
 def grade_submission(
     code: str,
     expected_output_contains: str = "",
     timeout: int = 10,
-) -> dict:
+) -> GradeResult:
     """
     Grade a Python code submission.
 

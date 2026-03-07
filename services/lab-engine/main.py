@@ -5,7 +5,7 @@ FastAPI service providing exercise grading for CCNA certification study.
 
 from fastapi import FastAPI, APIRouter, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 from grader.python_grader import grade_submission
@@ -28,8 +28,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type"],
 )
 
 # ---------------------------------------------------------------------------
@@ -55,8 +55,8 @@ grade_router = APIRouter(prefix="/api/v1/grade", tags=["grading"])
 
 
 class GradeRequest(BaseModel):
-    exercise_id: str
-    code: str
+    exercise_id: str = Field(..., min_length=1, max_length=100)
+    code: str = Field(..., max_length=100_000)
     lab_type: str = "python"
     expected: Optional[dict] = None
 
@@ -131,9 +131,9 @@ sandbox_router = APIRouter(prefix="/api/v1/sandbox", tags=["sandbox"])
 
 
 class SandboxRunRequest(BaseModel):
-    code: str
+    code: str = Field(..., max_length=100_000)
     language: str = "python"
-    timeout: int = 10
+    timeout: int = Field(default=10, ge=1, le=30)
 
 
 class SandboxRunResponse(BaseModel):

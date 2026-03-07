@@ -62,15 +62,11 @@ def grade_config_review(code: str, expected: Dict) -> Dict:
     for section_header, section_lines in required_sections.items():
         section_norm = normalize_config_line(section_header)
         # Find the section in user config
-        section_found = False
-        section_start = -1
-        for i, uline in enumerate(user_normalized):
-            if uline == section_norm:
-                section_found = True
-                section_start = i
-                break
-
-        if not section_found:
+        try:
+            section_start = next(
+                i for i, uline in enumerate(user_normalized) if uline == section_norm
+            )
+        except StopIteration:
             checks += 1
             issues.append(f"Missing section: {section_header}")
             continue
