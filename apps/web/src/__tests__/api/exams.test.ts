@@ -362,10 +362,10 @@ describe("gradeExam", () => {
       };
       const result = gradeExam("test-exam", answers, 300)!;
 
-      const domain1 = result.domainBreakdown.find((d) => d.domain.includes("Software"))!;
-      const domain2 = result.domainBreakdown.find((d) => d.domain.includes("APIs"))!;
-      const domain3 = result.domainBreakdown.find((d) => d.domain.includes("Cisco"))!;
-      const domain6 = result.domainBreakdown.find((d) => d.domain.includes("Network"))!;
+      const domain1 = result.domainBreakdown.find((d) => d.domain.includes("Network Fundamentals"))!;
+      const domain2 = result.domainBreakdown.find((d) => d.domain.includes("Network Access"))!;
+      const domain3 = result.domainBreakdown.find((d) => d.domain.includes("IP Connectivity"))!;
+      const domain6 = result.domainBreakdown.find((d) => d.domain.includes("Automation"))!;
 
       expect(domain1.correct).toBe(2);
       expect(domain1.total).toBe(2);
@@ -388,13 +388,13 @@ describe("gradeExam", () => {
       const result = gradeExam("test-exam", { q1: "B" }, 60)!;
       const domainNames = result.domainBreakdown.map((d) => d.domain);
 
-      expect(domainNames).toContain("Software Development & Design");
+      expect(domainNames).toContain("Network Fundamentals");
     });
   });
 
   describe("domain filtering", () => {
     it("only grades questions for the specified domain", () => {
-      const result = gradeExam("test-exam", { q1: "B", q3: ["A", "C"] }, 60, "software-dev")!;
+      const result = gradeExam("test-exam", { q1: "B", q3: ["A", "C"] }, 60, "network-fundamentals")!;
 
       expect(result.totalQuestions).toBe(2);
       expect(result.totalCorrect).toBe(2);
@@ -406,7 +406,7 @@ describe("gradeExam", () => {
         "test-exam",
         { q1: "B", q2: "C", q3: ["A", "C"], q4: "diff", q5: ["A", "B"] },
         60,
-        "apis",
+        "network-access",
       )!;
 
       expect(result.totalQuestions).toBe(1);
@@ -415,7 +415,7 @@ describe("gradeExam", () => {
     });
 
     it("returns zero score when no answers match the domain", () => {
-      const result = gradeExam("test-exam", {}, 60, "network-fundamentals")!;
+      const result = gradeExam("test-exam", {}, 60, "ip-connectivity")!;
 
       expect(result.totalQuestions).toBe(1);
       expect(result.totalCorrect).toBe(0);
