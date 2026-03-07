@@ -1,6 +1,6 @@
 # CCNA StudyLab
 
-[![CI](https://github.com/elliotconner/ccna-studylab/actions/workflows/ci.yml/badge.svg)](https://github.com/elliotconner/ccna-studylab/actions/workflows/ci.yml)
+[![CI](https://github.com/E-Conners-Lab/CCNA_Study_Lab/actions/workflows/ci.yml/badge.svg)](https://github.com/E-Conners-Lab/CCNA_Study_Lab/actions/workflows/ci.yml)
 
 A full-stack study platform for the **Cisco CCNA (200-301)** certification exam. Built with Next.js, PostgreSQL, and an interactive IOS CLI simulator for hands-on networking labs.
 
@@ -20,9 +20,17 @@ A full-stack study platform for the **Cisco CCNA (200-301)** certification exam.
   - Automatic grading against solution configs
 - **AI Tutor** -- Claude-powered conversational tutor with domain-specific system prompts and persistent conversation history
 - **Progress Persistence** -- All study progress saved to PostgreSQL (flashcards, exams, labs, objectives)
+
+## Security
+
 - **Authentication** -- Auth.js v5 with credentials provider, JWT sessions, email verification, and password reset
-- **Rate Limiting** -- In-memory sliding-window rate limiting on signup, chat, and lab execution endpoints
-- **Sandbox Safety** -- Python lab submissions are screened for dangerous imports before execution
+- **API Protection** -- All API routes require authentication (middleware-enforced); auth routes are public
+- **Rate Limiting** -- In-memory sliding-window rate limiting on signup (5/min), chat (20/min), lab execution (30/min), and password reset (3/min)
+- **Security Headers** -- HSTS, X-Frame-Options DENY, X-Content-Type-Options nosniff, strict Referrer-Policy, Permissions-Policy
+- **Token Security** -- Verification and reset tokens are SHA-256 hashed before database storage
+- **Lab Engine Auth** -- FastAPI lab engine requires Bearer token authentication via `LAB_ENGINE_API_KEY`
+- **Code Execution** -- Python code execution is isolated to the Docker lab engine (no local subprocess execution)
+- **SMTP TLS** -- Enforced on all email connections
 
 ## Tech Stack
 
@@ -33,9 +41,9 @@ A full-stack study platform for the **Cisco CCNA (200-301)** certification exam.
 | Database | PostgreSQL 16 |
 | Auth | Auth.js v5 (NextAuth 5 beta) |
 | AI | Anthropic Claude API |
-| Lab Engine | FastAPI (Python) with sandboxed code execution and IOS/subnet/ACL graders |
-| Testing | Playwright (E2E), Vitest (unit + content validation) |
-| Infrastructure | Docker Compose |
+| Lab Engine | FastAPI (Python) with API key auth and IOS/subnet/ACL/config graders |
+| Testing | Playwright (87 E2E tests), Vitest (98 unit tests + content validation) |
+| Infrastructure | Docker Compose, GitHub Actions CI |
 
 ## Quick Start
 
@@ -43,7 +51,7 @@ A full-stack study platform for the **Cisco CCNA (200-301)** certification exam.
 
 ```bash
 # 1. Clone and install
-git clone <your-repo-url> ccna-studylab
+git clone https://github.com/E-Conners-Lab/CCNA_Study_Lab.git ccna-studylab
 cd ccna-studylab
 npm install
 cd apps/web && npm install && cd ../..
@@ -83,7 +91,9 @@ ccna-studylab/
         data/              Data access layer (exams, flashcards, labs, study, tutor)
         db/                Drizzle ORM schema and migrations
         auth.ts            Auth.js v5 configuration
-        flashcards.ts      SM-2 spaced repetition algorithm
+        email.ts           Email abstraction (console dev / SMTP prod)
+        rate-limit.ts      Sliding-window rate limiter
+        sm2.ts             SM-2 spaced repetition algorithm
       __tests__/           Unit and E2E tests
   content/                 JSON content files (seeded into PostgreSQL)
     flashcards/            201 flashcards across 6 domain decks
@@ -127,8 +137,10 @@ Configure in `apps/web/.env.local`:
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `DATABASE_URL` | Yes | PostgreSQL connection string (default: `postgresql://studylab:studylab_dev_2024@localhost:5433/ccna_studylab`) |
-| `AUTH_SECRET` | Yes | Random secret for Auth.js session encryption |
+| `AUTH_SECRET` | Yes | Random secret for Auth.js session encryption (`openssl rand -base64 32`) |
 | `TUTOR_ANTHROPIC_KEY` | No | Anthropic API key to enable the AI Tutor feature |
+| `LAB_ENGINE_URL` | No | Lab engine URL (default: not set; set to `http://localhost:8100/api/v1/grade` for Docker) |
+| `LAB_ENGINE_API_KEY` | No | Shared secret for lab engine authentication |
 | `SMTP_HOST` | No | SMTP server host for sending emails (e.g., `smtp.resend.com`) |
 | `SMTP_PORT` | No | SMTP port (default: 587) |
 | `SMTP_USER` | No | SMTP username/API key |
