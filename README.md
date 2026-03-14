@@ -6,20 +6,45 @@ A full-stack study platform for the **Cisco CCNA (200-301)** certification exam.
 
 ## Features
 
-- **Study Hub** -- Track progress across all 6 exam domains with 53 objectives and completion checkboxes
-- **Flashcards** -- SM-2 spaced repetition algorithm with 201 cards across all domains, synced to the database when authenticated
-- **Practice Exams** -- 2 full 40-question sample exams and 6 focused domain quizzes (140 questions total) with scoring and attempt history
-- **Study Guides** -- In-depth study guides for all 6 exam domains with objective-level progress tracking
-- **Hands-on Labs** -- 10 interactive labs across all 6 domains:
-  - 7 IOS CLI labs (VLAN, OSPF, static routing, NAT/PAT, ACLs, EtherChannel, SSH) with a built-in terminal simulator
-  - 1 subnetting lab with an interactive calculator
-  - 2 Python labs for Domain 6 (REST API/JSON parsing, configuration management)
-- **IOS CLI Simulator** -- Realistic Cisco IOS terminal with:
-  - Command abbreviation/shorthand support (`conf t`, `sh ip int br`, `int Gi0/0`)
-  - Simulated `show` command output for verification without revealing solutions
-  - Multi-device labs with device switcher (e.g., SW1/SW2, R1/R2)
-  - Automatic grading against solution configs
-- **AI Tutor** -- Claude-powered conversational tutor with domain-specific system prompts and persistent conversation history
+### Dashboard
+
+Track your CCNA 200-301 exam preparation progress with stats for overall completion, study streaks, best scores, and weighted exam readiness across all six domains.
+
+![Dashboard](docs/screenshots/dashboard.png)
+
+### Study Hub
+
+In-depth study guides for all 6 exam domains with 53 objectives, completion checkboxes, key points, and practice scenarios.
+
+![Study Hub](docs/screenshots/study-hub.png)
+
+### Hands-on Labs
+
+10 interactive labs across all 6 domains with filtering by type (Subnetting, IOS CLI, Python). Includes 7 IOS CLI labs with a built-in terminal simulator, 1 subnetting lab with an interactive calculator, and 2 Python labs for Domain 6.
+
+![Hands-on Labs](docs/screenshots/hands-on-labs.png)
+
+### Practice Exams
+
+2 full 40-question sample exams and 6 focused domain quizzes (140 questions total) with scoring, attempt history, and pass rate tracking.
+
+![Practice Exams](docs/screenshots/practice-exams.png)
+
+### Flashcards
+
+SM-2 spaced repetition algorithm with 201 cards across all domains. Rate each card's difficulty to optimize your review schedule.
+
+![Flashcards](docs/screenshots/flashcards.png)
+
+### AI Tutor
+
+Claude-powered conversational tutor with domain-specific system prompts, suggested questions, and persistent conversation history.
+
+![AI Tutor](docs/screenshots/ai-tutor.png)
+
+### Additional Features
+
+- **IOS CLI Simulator** -- Realistic Cisco IOS terminal with command abbreviation/shorthand support (`conf t`, `sh ip int br`, `int Gi0/0`), simulated `show` command output, multi-device labs with device switcher, and automatic grading against solution configs
 - **Progress Persistence** -- All study progress saved to PostgreSQL (flashcards, exams, labs, objectives)
 
 ## Security
