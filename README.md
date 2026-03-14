@@ -61,8 +61,8 @@ Make sure Docker Desktop is running before step 2.
 
 ```bash
 # 1. Clone and install dependencies
-git clone https://github.com/E-Conners-Lab/CCNA_Study_Lab.git ccna-studylab
-cd ccna-studylab/apps/web
+git clone https://github.com/E-Conners-Lab/CCNA_Study_Lab.git
+cd CCNA_Study_Lab/apps/web
 npm install
 
 # 2. Start PostgreSQL
