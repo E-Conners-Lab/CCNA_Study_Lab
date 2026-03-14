@@ -49,23 +49,35 @@ A full-stack study platform for the **Cisco CCNA (200-301)** certification exam.
 
 ## Quick Start
 
-> **macOS**: Install Docker Desktop first (`brew install --cask docker`) and make sure it's running before step 2.
+### Prerequisites
+
+- **Node.js 20+** -- [nodejs.org](https://nodejs.org/) or `brew install node` (macOS)
+- **Docker Desktop** -- [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop/) or `brew install --cask docker` (macOS)
+
+Make sure Docker Desktop is running before step 2.
+
+### Setup
 
 ```bash
-# 1. Clone and install
+# 1. Clone and install dependencies
 git clone https://github.com/E-Conners-Lab/CCNA_Study_Lab.git ccna-studylab
 cd ccna-studylab/apps/web
 npm install
 
-# 2. Start PostgreSQL (Docker Desktop must be running)
+# 2. Start PostgreSQL
 docker compose -f ../../docker/docker-compose.yml up -d postgres
 
 # 3. Configure environment
 cp .env.example .env.local
-# Edit .env.local: generate AUTH_SECRET and optionally add
-# TUTOR_ANTHROPIC_KEY with your API key to enable the AI Tutor
 
-# 4. Run migrations and seed data
+# Generate a secure AUTH_SECRET (required):
+openssl rand -base64 32
+# Paste the output as the AUTH_SECRET value in .env.local
+
+# (Optional) Add your Anthropic API key to enable the AI Tutor:
+# TUTOR_ANTHROPIC_KEY=sk-ant-...
+
+# 4. Set up database and seed content
 npx drizzle-kit push
 npm run db:seed
 
