@@ -24,6 +24,7 @@ import {
   XCircle,
   Copy,
   Check,
+  Lock,
 } from "lucide-react";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
@@ -298,8 +299,12 @@ export default function LabExecutionPage() {
     }
   }, [isIOSLab]);
 
-  // ---- Show solution ----
+  // ---- Show solution (only available after 100% score) ----
+  const labCompleted = validationResult?.score === 100 || runSuccess === true;
+
   const handleShowSolution = useCallback(async () => {
+    if (!labCompleted) return;
+
     if (showSolution) {
       setShowSolution(false);
       return;
@@ -318,7 +323,7 @@ export default function LabExecutionPage() {
     }
 
     setShowSolution(true);
-  }, [showSolution, solutionData, slug]);
+  }, [labCompleted, showSolution, solutionData, slug]);
 
   // ---- Reveal next hint ----
   const handleRevealHint = useCallback(() => {
@@ -599,16 +604,24 @@ export default function LabExecutionPage() {
                 </Button>
                 <Button
                   onClick={handleShowSolution}
+                  disabled={!labCompleted}
                   variant="outline"
                   size="sm"
+                  title={labCompleted ? undefined : "Complete the lab with 100% to unlock the solution"}
                   className={cn(
                     "text-xs ml-auto",
-                    showSolution
-                      ? "border-amber-500/50 text-amber-400 hover:bg-amber-500/10"
-                      : "border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100"
+                    !labCompleted
+                      ? "border-zinc-800 text-zinc-600 cursor-not-allowed"
+                      : showSolution
+                        ? "border-amber-500/50 text-amber-400 hover:bg-amber-500/10"
+                        : "border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100"
                   )}
                 >
-                  <Eye className="h-3.5 w-3.5 mr-1" />
+                  {labCompleted ? (
+                    <Eye className="h-3.5 w-3.5 mr-1" />
+                  ) : (
+                    <Lock className="h-3.5 w-3.5 mr-1" />
+                  )}
                   {showSolution ? "Hide Solution" : "Show Solution"}
                 </Button>
               </div>
@@ -767,16 +780,24 @@ export default function LabExecutionPage() {
                 </Button>
                 <Button
                   onClick={handleShowSolution}
+                  disabled={!labCompleted}
                   variant="outline"
                   size="sm"
+                  title={labCompleted ? undefined : "Complete the lab with 100% to unlock the solution"}
                   className={cn(
                     "text-xs ml-auto",
-                    showSolution
-                      ? "border-amber-500/50 text-amber-400 hover:bg-amber-500/10"
-                      : "border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100"
+                    !labCompleted
+                      ? "border-zinc-800 text-zinc-600 cursor-not-allowed"
+                      : showSolution
+                        ? "border-amber-500/50 text-amber-400 hover:bg-amber-500/10"
+                        : "border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100"
                   )}
                 >
-                  <Eye className="h-3.5 w-3.5 mr-1" />
+                  {labCompleted ? (
+                    <Eye className="h-3.5 w-3.5 mr-1" />
+                  ) : (
+                    <Lock className="h-3.5 w-3.5 mr-1" />
+                  )}
                   {showSolution ? "Hide Solution" : "Show Solution"}
                 </Button>
               </div>
