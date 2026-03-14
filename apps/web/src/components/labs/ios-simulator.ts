@@ -427,14 +427,6 @@ export function processCommand(
     return { output: result.output, newState: { ...newState } };
   }
 
-  // `show` commands from config mode → auto-route through privileged mode
-  // Real IOS allows show commands in config mode (implicit `do`)
-  if ((lower.startsWith("show ") || lower === "show") && isConfigMode(state.mode)) {
-    const result = processPrivilegedMode(cmd, lower, newState, expectedOutput);
-    // Stay in current config mode
-    return { output: result.output, newState: { ...newState } };
-  }
-
   // ---- Per-mode processing ----
   switch (state.mode) {
     case "user":
@@ -881,6 +873,26 @@ function lookupShowOutput(
     normalized = "show" + normalized.slice(2);
   }
 
+  // Try hostname-matched lookup first, then fall back to any-host lookup.
+  // This handles single-device labs where expectedOutput hostname may differ
+  // from the terminal's default hostname (e.g., "R1#" vs "Router#").
+  const result = lookupShowInBlob(normalized, expectedOutput, hostname);
+  if (result.length > 0) return result;
+
+  // Fallback: try without hostname filter
+  if (hostname) {
+    const fallback = lookupShowInBlob(normalized, expectedOutput, undefined);
+    if (fallback.length > 0) return fallback;
+  }
+
+  return [`% Simulation: no output available for '${cmd}'`];
+}
+
+function lookupShowInBlob(
+  normalized: string,
+  expectedOutput: string,
+  hostname?: string,
+): string[] {
   const lines = expectedOutput.split("\n");
   const results: string[] = [];
   let capturing = false;
@@ -911,6 +923,5 @@ function lookupShowOutput(
     }
   }
 
-  if (results.length > 0) return results;
-  return [`% Simulation: no output available for '${cmd}'`];
+  return results;
 }
