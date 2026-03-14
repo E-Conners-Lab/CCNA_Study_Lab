@@ -38,6 +38,7 @@ A full-stack study platform for the **Cisco CCNA (200-301)** certification exam.
 
 | Layer | Technology |
 |-------|-----------|
+| Runtime | Node.js 20+ |
 | Frontend | Next.js 16, React 19, TailwindCSS v4, shadcn/ui, CodeMirror 6, Lucide icons |
 | Backend | Next.js API Routes, Drizzle ORM |
 | Database | PostgreSQL 16 |
