@@ -14,7 +14,10 @@ export function jsonOk<T>(data: T, status = 200) {
  * Standard JSON error response.
  */
 export function jsonError(message: string, status = 500) {
-  return NextResponse.json({ error: message }, { status });
+  return NextResponse.json(
+    { error: message },
+    { status, headers: { "Cache-Control": "no-store" } },
+  );
 }
 
 export function jsonBadRequest(message: string) {

@@ -574,7 +574,7 @@ test.describe("Flashcards Page", () => {
       const ratingCount = await ratingButtons.count().catch(() => 0);
 
       // At least one of these indicators of review mode should be present
-      expect(hasExitButton || ratingCount > 0 || true).toBeTruthy();
+      expect(hasExitButton || ratingCount > 0).toBeTruthy();
     }
   });
 });

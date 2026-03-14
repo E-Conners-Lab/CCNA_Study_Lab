@@ -171,7 +171,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate message structure
+    // Validate message structure and content length
+    const MAX_MESSAGE_LENGTH = 10_000;
     for (const msg of messages) {
       if (!msg.role || !msg.content) {
         return NextResponse.json(
@@ -182,6 +183,12 @@ export async function POST(request: NextRequest) {
       if (msg.role !== "user" && msg.role !== "assistant") {
         return NextResponse.json(
           { error: "Message role must be 'user' or 'assistant'." },
+          { status: 400 }
+        );
+      }
+      if (typeof msg.content === "string" && msg.content.length > MAX_MESSAGE_LENGTH) {
+        return NextResponse.json(
+          { error: `Message content exceeds maximum length of ${MAX_MESSAGE_LENGTH} characters.` },
           { status: 400 }
         );
       }

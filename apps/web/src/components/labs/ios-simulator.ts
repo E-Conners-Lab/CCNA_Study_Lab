@@ -427,6 +427,14 @@ export function processCommand(
     return { output: result.output, newState: { ...newState } };
   }
 
+  // `show` commands from config mode → auto-route through privileged mode
+  // Real IOS allows show commands in config mode (implicit `do`)
+  if ((lower.startsWith("show ") || lower === "show") && isConfigMode(state.mode)) {
+    const result = processPrivilegedMode(cmd, lower, newState, expectedOutput);
+    // Stay in current config mode
+    return { output: result.output, newState: { ...newState } };
+  }
+
   // ---- Per-mode processing ----
   switch (state.mode) {
     case "user":
