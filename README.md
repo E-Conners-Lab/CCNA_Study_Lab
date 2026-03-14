@@ -184,4 +184,4 @@ Configure in `apps/web/.env.local`:
 
 ## License
 
-ISC
+[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) -- Free to use, modify, and share for non-commercial purposes with attribution.
