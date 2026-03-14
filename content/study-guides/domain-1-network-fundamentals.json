@@ -259,7 +259,7 @@
         "Understand that switches create separate collision domains per port but all ports in the same VLAN share one broadcast domain."
       ],
       "resources": [
-        {"title": "Cisco Catalyst Layer 2 Switching Overview", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-14/configuration_guide/lyr2/b_1714_lyr2_9300_cg/understanding_layer_2_switching.html"},
+        {"title": "Overview of Layer 2 Switched Networks and Communication", "url": "https://community.cisco.com/t5/networking-knowledge-base/overview-of-layer-2-switched-networks-and-communication/ta-p/3128423"},
         {"title": "Understanding MAC Address Tables", "url": "https://www.ciscopress.com/articles/article.asp?p=3089352&seqNum=6"}
       ]
     }
