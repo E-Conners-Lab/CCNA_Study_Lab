@@ -10,9 +10,10 @@ A full-stack study platform for the **Cisco CCNA (200-301)** certification exam.
 - **Flashcards** -- SM-2 spaced repetition algorithm with 201 cards across all domains, synced to the database when authenticated
 - **Practice Exams** -- 2 full 40-question sample exams and 6 focused domain quizzes (140 questions total) with scoring and attempt history
 - **Study Guides** -- In-depth study guides for all 6 exam domains with objective-level progress tracking
-- **Hands-on Labs** -- 8 interactive labs:
+- **Hands-on Labs** -- 10 interactive labs across all 6 domains:
   - 7 IOS CLI labs (VLAN, OSPF, static routing, NAT/PAT, ACLs, EtherChannel, SSH) with a built-in terminal simulator
   - 1 subnetting lab with an interactive calculator
+  - 2 Python labs for Domain 6 (REST API/JSON parsing, configuration management)
 - **IOS CLI Simulator** -- Realistic Cisco IOS terminal with:
   - Command abbreviation/shorthand support (`conf t`, `sh ip int br`, `int Gi0/0`)
   - Simulated `show` command output for verification without revealing solutions
@@ -25,9 +26,10 @@ A full-stack study platform for the **Cisco CCNA (200-301)** certification exam.
 
 - **Authentication** -- Auth.js v5 with credentials provider, JWT sessions, email verification, and password reset
 - **API Protection** -- All API routes require authentication (middleware-enforced); auth routes are public
-- **Rate Limiting** -- In-memory sliding-window rate limiting on signup (5/min), chat (20/min), lab execution (30/min), and password reset (3/min)
-- **Security Headers** -- HSTS, X-Frame-Options DENY, X-Content-Type-Options nosniff, strict Referrer-Policy, Permissions-Policy
-- **Token Security** -- Verification and reset tokens are SHA-256 hashed before database storage
+- **Rate Limiting** -- In-memory sliding-window rate limiting on login (5/min), signup (5/min), chat (20/min), lab execution (30/min), and password reset (3/min)
+- **Security Headers** -- HSTS, CSP, X-Frame-Options DENY, X-Content-Type-Options nosniff, strict Referrer-Policy, Permissions-Policy
+- **Audit Logging** -- Structured JSON audit logs for login (success/fail), signup, and password reset events
+- **Token Security** -- JWT sessions with 8-hour expiry; verification and reset tokens are SHA-256 hashed before database storage
 - **Lab Engine Auth** -- FastAPI lab engine requires Bearer token authentication via `LAB_ENGINE_API_KEY`
 - **Code Execution** -- Python code execution is isolated to the Docker lab engine (no local subprocess execution)
 - **SMTP TLS** -- Enforced on all email connections
@@ -42,7 +44,7 @@ A full-stack study platform for the **Cisco CCNA (200-301)** certification exam.
 | Auth | Auth.js v5 (NextAuth 5 beta) |
 | AI | Anthropic Claude API |
 | Lab Engine | FastAPI (Python) with API key auth and IOS/subnet/ACL/config graders |
-| Testing | Playwright (87 E2E tests), Vitest (98 unit tests + content validation) |
+| Testing | Playwright (E2E), Vitest (unit + content validation), pytest (grader unit tests) |
 | Infrastructure | Docker Compose, GitHub Actions CI |
 
 ## Quick Start
@@ -52,22 +54,19 @@ A full-stack study platform for the **Cisco CCNA (200-301)** certification exam.
 ```bash
 # 1. Clone and install
 git clone https://github.com/E-Conners-Lab/CCNA_Study_Lab.git ccna-studylab
-cd ccna-studylab
+cd ccna-studylab/apps/web
 npm install
-cd apps/web && npm install && cd ../..
 
 # 2. Start PostgreSQL (Docker Desktop must be running)
-docker compose -f docker/docker-compose.yml up -d postgres
+docker compose -f ../../docker/docker-compose.yml up -d postgres
 
 # 3. Configure environment
-cp apps/web/.env.example apps/web/.env.local
+cp .env.example .env.local
 # Edit .env.local: generate AUTH_SECRET and optionally add
 # TUTOR_ANTHROPIC_KEY with your API key to enable the AI Tutor
 
 # 4. Run migrations and seed data
-cd apps/web
-npm run db:generate
-npm run db:migrate
+npx drizzle-kit push
 npm run db:seed
 
 # 5. Start the dev server
@@ -98,11 +97,11 @@ ccna-studylab/
   content/                 JSON content files (seeded into PostgreSQL)
     flashcards/            201 flashcards across 6 domain decks
     practice-exams/        2 sample exams + 6 domain quizzes
-    labs/                  8 lab definitions with instructions, solutions, and expected output
+    labs/                  10 lab definitions with instructions, solutions, and expected output
     study-guides/          6 domain study guides
   docker/                  Docker Compose and database init scripts
   docs/                    Architecture, API reference, routes, schema docs
-  services/lab-engine/     FastAPI lab execution engine with networking graders
+  services/lab-engine/     FastAPI lab execution engine with networking graders (93 pytest unit tests)
   tests/                   Content validation tests
 ```
 
