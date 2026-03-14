@@ -3,6 +3,7 @@ CCNA StudyLab - Lab Engine
 FastAPI service providing exercise grading for CCNA certification study.
 """
 
+import hmac
 import os
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
@@ -50,7 +51,7 @@ async def verify_api_key(authorization: Optional[str] = Header(None)):
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Missing or invalid authorization header")
     token = authorization.removeprefix("Bearer ").strip()
-    if token != API_KEY:
+    if not hmac.compare_digest(token, API_KEY):
         raise HTTPException(status_code=403, detail="Invalid API key")
 
 

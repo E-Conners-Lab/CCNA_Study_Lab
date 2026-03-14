@@ -29,6 +29,41 @@ function getSessionToken(request: NextRequest): string | undefined {
   );
 }
 
+// ---------------------------------------------------------------------------
+// Rate limiter for login endpoint (5 attempts per minute per IP)
+// ---------------------------------------------------------------------------
+const loginAttempts = new Map<string, { timestamps: number[] }>();
+
+function checkLoginRateLimit(request: NextRequest): NextResponse | null {
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    request.headers.get("x-real-ip") ??
+    "unknown";
+
+  const now = Date.now();
+  const windowMs = 60_000;
+  const max = 5;
+  const cutoff = now - windowMs;
+
+  let entry = loginAttempts.get(ip);
+  if (!entry) {
+    entry = { timestamps: [] };
+    loginAttempts.set(ip, entry);
+  }
+
+  entry.timestamps = entry.timestamps.filter((t) => t > cutoff);
+
+  if (entry.timestamps.length >= max) {
+    return NextResponse.json(
+      { error: "Too many login attempts. Please try again later." },
+      { status: 429, headers: { "Retry-After": "60" } },
+    );
+  }
+
+  entry.timestamps.push(now);
+  return null;
+}
+
 export function middleware(request: NextRequest) {
   // Skip auth when testing or when the database is unavailable
   if (
@@ -39,6 +74,15 @@ export function middleware(request: NextRequest) {
   }
 
   const { pathname } = request.nextUrl;
+
+  // Rate limit login attempts (POST to credentials callback)
+  if (
+    pathname.startsWith("/api/auth/callback/credentials") &&
+    request.method === "POST"
+  ) {
+    const limited = checkLoginRateLimit(request);
+    if (limited) return limited;
+  }
 
   // Public auth routes — always allow
   if (isPublicApiRoute(pathname)) {

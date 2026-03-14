@@ -7,6 +7,7 @@ import * as schema from "@/lib/db/schema";
 import { jsonOk, jsonBadRequest, jsonError } from "@/lib/api-helpers";
 import { createRateLimiter } from "@/lib/rate-limit";
 import { generateToken, hashToken, sendVerificationEmail } from "@/lib/email";
+import { auditLog, getClientIp } from "@/lib/audit-log";
 
 // 5 signup attempts per minute per IP
 const signupLimiter = createRateLimiter({ windowMs: 60_000, max: 5 });
@@ -77,6 +78,7 @@ export async function POST(request: NextRequest) {
       .then(() => sendVerificationEmail(email.toLowerCase(), token))
       .catch((err) => console.error("Failed to send verification email:", err));
 
+    auditLog({ event: "SIGNUP", email: email.toLowerCase(), ip: getClientIp(request) });
     return jsonOk({ success: true }, 201);
   } catch (err) {
     console.error("Signup error:", err);

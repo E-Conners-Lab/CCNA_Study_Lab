@@ -4,7 +4,10 @@ import { NextResponse } from "next/server";
  * Standard JSON success response.
  */
 export function jsonOk<T>(data: T, status = 200) {
-  return NextResponse.json(data, { status });
+  return NextResponse.json(data, {
+    status,
+    headers: { "Cache-Control": "no-store" },
+  });
 }
 
 /**

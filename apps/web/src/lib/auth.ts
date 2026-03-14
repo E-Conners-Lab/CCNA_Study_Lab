@@ -12,6 +12,7 @@ import { eq } from "drizzle-orm";
 
 import { isDbConfigured, getDb } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
+import { auditLog } from "@/lib/audit-log";
 
 // AUTH_SECRET is required by NextAuth v5 — set it in your .env.local file.
 if (!process.env.AUTH_SECRET) {
@@ -43,8 +44,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           if (!user?.hashedPassword) return null;
 
           const valid = await bcrypt.compare(password, user.hashedPassword);
-          if (!valid) return null;
+          if (!valid) {
+            auditLog({ event: "LOGIN_FAILED", email, detail: "Invalid password" });
+            return null;
+          }
 
+          auditLog({ event: "LOGIN_SUCCESS", email });
           return {
             id: user.id,
             name: user.name,
@@ -59,7 +64,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
 
-  session: { strategy: "jwt" },
+  session: { strategy: "jwt", maxAge: 8 * 60 * 60 },
 
   pages: {
     signIn: "/login",

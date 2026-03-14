@@ -7,6 +7,7 @@ import * as schema from "@/lib/db/schema";
 import { jsonOk, jsonBadRequest, jsonError } from "@/lib/api-helpers";
 import { createRateLimiter } from "@/lib/rate-limit";
 import { hashToken } from "@/lib/email";
+import { auditLog, getClientIp } from "@/lib/audit-log";
 
 // 5 reset attempts per minute per IP
 const resetConsumeLimiter = createRateLimiter({ windowMs: 60_000, max: 5 });
@@ -80,6 +81,7 @@ export async function POST(request: NextRequest) {
         ),
       );
 
+    auditLog({ event: "PASSWORD_RESET", email: email.toLowerCase(), ip: getClientIp(request) });
     return jsonOk({ success: true });
   } catch (err) {
     console.error("Reset password error:", err);
