@@ -360,15 +360,10 @@ test.describe("All Labs Completeness", () => {
         ).toBeVisible();
       }
 
-      // 6. Show Solution button is visible
+      // 6. Show Solution button is visible but locked (disabled until 100% score)
       const solutionBtn = page.getByRole("button", { name: /Show Solution/i });
       await expect(solutionBtn).toBeVisible();
-
-      // 7. Click Show Solution — real solution code appears
-      await solutionBtn.click();
-      await page.waitForTimeout(1000);
-      const solutionPanel = page.locator("text=Solution").first();
-      await expect(solutionPanel).toBeVisible({ timeout: 5000 });
+      await expect(solutionBtn).toBeDisabled();
 
       // 8. Hints tab exists and has hints
       const hintsTab = page.getByRole("tab", { name: /Hints/i });
