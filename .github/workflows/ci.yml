@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    name: Lint
+    name: Lint & Audit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,6 +19,8 @@ jobs:
           cache-dependency-path: apps/web/package-lock.json
       - run: npm ci --prefix apps/web
       - run: npm run lint --prefix apps/web
+      - run: npm audit --audit-level=high --prefix apps/web
+        continue-on-error: true
 
   unit-tests:
     name: Unit Tests

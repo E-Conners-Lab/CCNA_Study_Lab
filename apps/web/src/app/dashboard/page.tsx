@@ -18,23 +18,22 @@ import {
   Target,
   Flame,
   Trophy,
-  Clock,
   BookOpen,
   FlaskConical,
   ClipboardCheck,
 } from "lucide-react";
 
 // ---------------------------------------------------------------------------
-// Hardcoded defaults (used when DB is unavailable & for E2E tests)
+// Zero-state defaults (shown before API responds or when DB is unavailable)
 // ---------------------------------------------------------------------------
 
 const DEFAULT_PROGRESS: Record<number, { progress: number; stats: DomainData["stats"] }> = {
-  1: { progress: 42, stats: { objectivesCompleted: 5, objectivesTotal: 12, flashcardsDue: 8, labsDone: 2, labsTotal: 4 } },
-  2: { progress: 65, stats: { objectivesCompleted: 9, objectivesTotal: 14, flashcardsDue: 5, labsDone: 4, labsTotal: 6 } },
-  3: { progress: 28, stats: { objectivesCompleted: 3, objectivesTotal: 11, flashcardsDue: 12, labsDone: 1, labsTotal: 5 } },
-  4: { progress: 55, stats: { objectivesCompleted: 6, objectivesTotal: 10, flashcardsDue: 3, labsDone: 3, labsTotal: 5 } },
-  5: { progress: 38, stats: { objectivesCompleted: 5, objectivesTotal: 13, flashcardsDue: 10, labsDone: 2, labsTotal: 6 } },
-  6: { progress: 72, stats: { objectivesCompleted: 8, objectivesTotal: 11, flashcardsDue: 2, labsDone: 3, labsTotal: 4 } },
+  1: { progress: 0, stats: { objectivesCompleted: 0, objectivesTotal: 13, flashcardsDue: 0, labsDone: 0, labsTotal: 1 } },
+  2: { progress: 0, stats: { objectivesCompleted: 0, objectivesTotal: 9, flashcardsDue: 0, labsDone: 0, labsTotal: 2 } },
+  3: { progress: 0, stats: { objectivesCompleted: 0, objectivesTotal: 5, flashcardsDue: 0, labsDone: 0, labsTotal: 2 } },
+  4: { progress: 0, stats: { objectivesCompleted: 0, objectivesTotal: 9, flashcardsDue: 0, labsDone: 0, labsTotal: 1 } },
+  5: { progress: 0, stats: { objectivesCompleted: 0, objectivesTotal: 10, flashcardsDue: 0, labsDone: 0, labsTotal: 2 } },
+  6: { progress: 0, stats: { objectivesCompleted: 0, objectivesTotal: 7, flashcardsDue: 0, labsDone: 0, labsTotal: 2 } },
 };
 
 const defaultDomains: DomainData[] = CCNA_DOMAINS.map((d) => ({
@@ -45,32 +44,12 @@ const defaultDomains: DomainData[] = CCNA_DOMAINS.map((d) => ({
   ...DEFAULT_PROGRESS[d.number],
 }));
 
-const defaultRecentActivity = [
-  {
-    type: "study",
-    text: 'Completed "REST API Fundamentals" objective',
-    time: "2 hours ago",
-    icon: BookOpen,
-  },
-  {
-    type: "lab",
-    text: 'Finished lab: "Python REST Client"',
-    time: "5 hours ago",
-    icon: FlaskConical,
-  },
-  {
-    type: "exam",
-    text: "Practice exam scored 78%",
-    time: "Yesterday",
-    icon: ClipboardCheck,
-  },
-  {
-    type: "study",
-    text: 'Reviewed "YANG Data Models" flashcards',
-    time: "Yesterday",
-    icon: BookOpen,
-  },
-];
+const defaultRecentActivity: {
+  type: string;
+  text: string;
+  time: string;
+  icon: typeof BookOpen;
+}[] = [];
 
 const ACTIVITY_ICON_MAP: Record<string, typeof BookOpen> = {
   study: BookOpen,
@@ -88,7 +67,9 @@ export default function DashboardPage() {
   const [overallProgress, setOverallProgress] = useState(() =>
     Math.round(defaultDomains.reduce((acc, d) => acc + d.progress * (d.weight / 100), 0)),
   );
-  const [bestScore, setBestScore] = useState("85%");
+  const [bestScore, setBestScore] = useState("--");
+  const [studyStreak, setStudyStreak] = useState(0);
+  const [examsTaken, setExamsTaken] = useState(0);
   const [recentActivity, setRecentActivity] = useState(defaultRecentActivity);
 
   // Fetch live stats from API (replaces defaults if DB has data)
@@ -104,8 +85,14 @@ export default function DashboardPage() {
           if (typeof s.overallProgress === "number") {
             setOverallProgress(s.overallProgress);
           }
-          if (s.bestExamScore > 0) {
+          if (typeof s.bestExamScore === "number" && s.bestExamScore > 0) {
             setBestScore(`${s.bestExamScore}%`);
+          }
+          if (typeof s.totalExamAttempts === "number") {
+            setExamsTaken(s.totalExamAttempts);
+          }
+          if (typeof s.studyStreak === "number") {
+            setStudyStreak(s.studyStreak);
           }
           if (s.recentActivity && s.recentActivity.length > 0) {
             setRecentActivity(
@@ -142,25 +129,21 @@ export default function DashboardPage() {
           icon={Target}
           label="Overall Progress"
           value={`${overallProgress}%`}
-          trend={{ value: "5%", positive: true }}
         />
         <StatsCard
           icon={Flame}
           label="Study Streak"
-          value="7 days"
-          trend={{ value: "3 days", positive: true }}
+          value={`${studyStreak} day${studyStreak !== 1 ? "s" : ""}`}
         />
         <StatsCard
           icon={Trophy}
           label="Best Score"
           value={bestScore}
-          trend={{ value: "12%", positive: true }}
         />
         <StatsCard
-          icon={Clock}
-          label="Study Time"
-          value="24h"
-          trend={{ value: "2h", positive: true }}
+          icon={ClipboardCheck}
+          label="Exams Taken"
+          value={String(examsTaken)}
         />
       </div>
 

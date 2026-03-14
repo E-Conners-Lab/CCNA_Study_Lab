@@ -6,7 +6,7 @@
  * can fall back to hardcoded defaults.
  */
 
-import { eq, desc, count, max, gt, and as dbAnd } from "drizzle-orm";
+import { eq, desc, count, max, gt, and as dbAnd, sql } from "drizzle-orm";
 import { isDbConfigured, getDb } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 
@@ -34,6 +34,7 @@ export interface DashboardStats {
   overallProgress: number;
   bestExamScore: number;
   totalExamAttempts: number;
+  studyStreak: number;
   recentActivity: Array<{
     type: "study" | "lab" | "exam" | "flashcard";
     text: string;
@@ -243,11 +244,15 @@ export async function getDashboardStats(
       time: e.completedAt ? formatTimeAgo(e.completedAt) : "Recently",
     }));
 
+    // 11. Study streak — count consecutive days with activity (going back from today)
+    const studyStreak = await calculateStudyStreak(db, userId);
+
     return {
       domains: domainStats,
       overallProgress,
       bestExamScore,
       totalExamAttempts: attemptCount[0]?.total ?? 0,
+      studyStreak,
       recentActivity,
     };
   } catch (err) {
@@ -261,3 +266,68 @@ export async function getDashboardStats(
 // ---------------------------------------------------------------------------
 
 import { formatTimeAgo } from "@/lib/format-time";
+
+/**
+ * Calculate consecutive-day study streak for a user.
+ * Counts distinct activity dates going backwards from today.
+ * Activity = any exam attempt, lab attempt, flashcard review, or study progress entry.
+ */
+async function calculateStudyStreak(
+  db: ReturnType<typeof getDb>,
+  userId: string,
+): Promise<number> {
+  try {
+    // Get distinct activity dates from all progress tables (last 90 days)
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 90);
+
+    const activityDates = await db.execute<{ activity_date: string }>(sql`
+      SELECT DISTINCT activity_date FROM (
+        SELECT DATE(started_at) AS activity_date FROM practice_attempts
+          WHERE user_id = ${userId} AND started_at >= ${cutoff}
+        UNION
+        SELECT DATE(started_at) AS activity_date FROM lab_attempts
+          WHERE user_id = ${userId} AND started_at >= ${cutoff}
+        UNION
+        SELECT DATE(last_review) AS activity_date FROM flashcard_progress
+          WHERE user_id = ${userId} AND last_review IS NOT NULL AND last_review >= ${cutoff}
+        UNION
+        SELECT DATE(completed_at) AS activity_date FROM study_progress
+          WHERE user_id = ${userId} AND completed_at IS NOT NULL AND completed_at >= ${cutoff}
+      ) dates
+      ORDER BY activity_date DESC
+    `);
+
+    if (!activityDates || activityDates.length === 0) return 0;
+
+    const dates = activityDates.map((r) => String(r.activity_date));
+
+    // Count consecutive days starting from today or yesterday
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayStr = today.toISOString().slice(0, 10);
+
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().slice(0, 10);
+
+    // Streak must include today or yesterday to be active
+    if (dates[0] !== todayStr && dates[0] !== yesterdayStr) return 0;
+
+    let streak = 1;
+    for (let i = 1; i < dates.length; i++) {
+      const prev = new Date(dates[i - 1] + "T00:00:00");
+      const curr = new Date(dates[i] + "T00:00:00");
+      const diffDays = (prev.getTime() - curr.getTime()) / (1000 * 60 * 60 * 24);
+      if (diffDays === 1) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+
+    return streak;
+  } catch {
+    return 0;
+  }
+}

@@ -246,10 +246,9 @@ export async function POST(request: NextRequest) {
           "The AI Tutor is temporarily rate-limited. Please wait a moment and try again."
         );
       }
+      console.error("Anthropic API error:", err.message);
       return streamTextResponse(
-        "Sorry, the AI Tutor encountered an error communicating with the Anthropic API. " +
-          "Please try again in a moment.\n\n" +
-          `Error: ${err.message || "Unknown API error"}`
+        "Sorry, the AI Tutor encountered an error. Please try again in a moment."
       );
     }
 
