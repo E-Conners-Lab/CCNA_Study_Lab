@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCNA StudyLab — The All-in-One CCNA 200-301 Study Platform</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090b;--bg-card:#18181b;--bg-card-hover:#1f1f23;
+  --border:#27272a;--border-hover:#3f3f46;
+  --text:#fafafa;--text-muted:#a1a1aa;--text-dim:#71717a;
+  --blue:#3b82f6;--blue-dim:#1d4ed8;--blue-glow:rgba(59,130,246,.15);
+  --green:#22c55e;--amber:#f59e0b;--purple:#a855f7;--cyan:#06b6d4;
+  --terminal-bg:#0c0c0e;--terminal-green:#4ade80;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:'SF Mono','Cascadia Code','Fira Code',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;overflow-x:hidden}
+a{color:var(--blue);text-decoration:none}
+
+/* Utility */
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+.section{padding:100px 0}
+.section-title{font-size:clamp(1.75rem,4vw,2.5rem);font-weight:700;text-align:center;margin-bottom:12px}
+.section-sub{text-align:center;color:var(--text-muted);font-size:1.05rem;max-width:600px;margin:0 auto 56px}
+.badge{display:inline-block;padding:4px 12px;border-radius:9999px;font-size:.75rem;font-weight:600;letter-spacing:.03em}
+
+/* Reveal animation */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
+.reveal-delay-5{transition-delay:.5s}
+
+/* ─── HERO ─── */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40%;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(59,130,246,.08) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border:1px solid var(--border);border-radius:9999px;font-size:.8rem;color:var(--text-muted);margin-bottom:24px;background:var(--bg-card)}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:clamp(2.5rem,7vw,4.5rem);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:20px}
+.hero h1 .gradient{background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:clamp(1rem,2vw,1.25rem);color:var(--text-muted);max-width:600px;margin:0 auto 40px}
+.hero-cta{display:inline-flex;align-items:center;gap:8px;padding:14px 36px;background:var(--blue);color:#fff;border-radius:12px;font-size:1.05rem;font-weight:600;transition:all .2s;border:none;cursor:pointer;text-decoration:none}
+.hero-cta:hover{background:var(--blue-dim);transform:translateY(-2px);box-shadow:0 8px 32px rgba(59,130,246,.3)}
+.hero-cta svg{width:18px;height:18px}
+.hero-sub{margin-top:16px;font-size:.85rem;color:var(--text-dim)}
+
+/* ─── STATS ─── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:20px}
+.stat-card{text-align:center;padding:28px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;transition:border-color .2s,transform .2s}
+.stat-card:hover{border-color:var(--blue);transform:translateY(-4px)}
+.stat-number{font-size:2.5rem;font-weight:800;background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-variant-numeric:tabular-nums}
+.stat-label{font-size:.85rem;color:var(--text-muted);margin-top:4px}
+
+/* ─── FEATURES ─── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
+.feature-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:32px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);opacity:0;transition:opacity .3s}
+.feature-card:hover{border-color:var(--border-hover);background:var(--bg-card-hover);transform:translateY(-4px)}
+.feature-card:hover::before{opacity:1}
+.feature-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:1.4rem}
+.feature-icon.blue{background:rgba(59,130,246,.12);color:var(--blue)}
+.feature-icon.green{background:rgba(34,197,94,.12);color:var(--green)}
+.feature-icon.amber{background:rgba(245,158,11,.12);color:var(--amber)}
+.feature-icon.purple{background:rgba(168,85,247,.12);color:var(--purple)}
+.feature-icon.cyan{background:rgba(6,182,212,.12);color:var(--cyan)}
+.feature-card h3{font-size:1.15rem;font-weight:600;margin-bottom:8px}
+.feature-card p{font-size:.9rem;color:var(--text-muted);line-height:1.5}
+.feature-detail{max-height:0;overflow:hidden;transition:max-height .4s ease,margin .3s ease,opacity .3s ease;opacity:0;margin-top:0}
+.feature-card.expanded .feature-detail{max-height:200px;opacity:1;margin-top:16px}
+.feature-detail ul{list-style:none;padding:0}
+.feature-detail li{font-size:.85rem;color:var(--text-dim);padding:4px 0;padding-left:18px;position:relative}
+.feature-detail li::before{content:'';position:absolute;left:0;top:11px;width:6px;height:6px;border-radius:50%;background:var(--blue)}
+.feature-expand{font-size:.75rem;color:var(--text-dim);margin-top:12px;display:flex;align-items:center;gap:4px}
+.feature-card.expanded .feature-expand .arrow{transform:rotate(180deg)}
+.feature-expand .arrow{transition:transform .3s;display:inline-block}
+
+/* ─── TERMINAL ─── */
+.terminal-section{background:linear-gradient(180deg,var(--bg) 0%,rgba(59,130,246,.03) 50%,var(--bg) 100%)}
+.terminal-wrapper{max-width:700px;margin:0 auto}
+.terminal{background:var(--terminal-bg);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.5)}
+.terminal-header{display:flex;align-items:center;gap:8px;padding:14px 18px;background:#111;border-bottom:1px solid var(--border)}
+.terminal-dot{width:10px;height:10px;border-radius:50%}
+.terminal-dot.red{background:#ef4444}
+.terminal-dot.yellow{background:#eab308}
+.terminal-dot.green{background:#22c55e}
+.terminal-title{flex:1;text-align:center;font-size:.8rem;color:var(--text-dim);font-family:var(--mono)}
+.terminal-body{padding:20px;font-family:var(--mono);font-size:.85rem;min-height:280px;line-height:1.8}
+.terminal-line{white-space:pre-wrap;word-break:break-all}
+.terminal-line .prompt{color:var(--terminal-green)}
+.terminal-line .cmd{color:#e2e8f0}
+.terminal-line .output{color:var(--text-dim)}
+.cursor{display:inline-block;width:8px;height:16px;background:var(--terminal-green);animation:blink 1s step-end infinite;vertical-align:text-bottom}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.terminal-label{text-align:center;margin-top:20px;font-size:.9rem;color:var(--text-dim)}
+
+/* ─── DOMAINS ─── */
+.domains-grid{display:grid;grid-template-columns:1fr;gap:14px;max-width:650px;margin:0 auto}
+.domain-row{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;transition:border-color .2s}
+.domain-row:hover{border-color:var(--blue)}
+.domain-num{font-size:1.5rem;font-weight:800;color:var(--blue);min-width:28px;text-align:center}
+.domain-info{flex:1}
+.domain-name{font-size:.95rem;font-weight:600}
+.domain-bar-track{height:6px;background:var(--border);border-radius:999px;margin-top:8px;overflow:hidden}
+.domain-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width 1.2s cubic-bezier(.22,1,.36,1)}
+.domain-weight{font-size:.9rem;font-weight:700;color:var(--blue);min-width:40px;text-align:right}
+
+/* ─── TECH STACK ─── */
+.tech-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.tech-badge{padding:8px 18px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;font-size:.85rem;font-weight:500;color:var(--text-muted);transition:all .2s}
+.tech-badge:hover{border-color:var(--blue);color:var(--text);transform:translateY(-2px)}
+
+/* ─── BOTTOM CTA ─── */
+.cta-section{text-align:center;padding:100px 24px;position:relative}
+.cta-section::before{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(circle,rgba(59,130,246,.06) 0%,transparent 70%);pointer-events:none}
+.cta-section h2{font-size:clamp(2rem,5vw,3rem);font-weight:800;margin-bottom:16px}
+.cta-section p{color:var(--text-muted);margin-bottom:36px;font-size:1.1rem}
+.cta-price{font-size:.95rem;color:var(--text-dim);margin-top:16px}
+
+/* Footer */
+footer{padding:32px 24px;text-align:center;color:var(--text-dim);font-size:.8rem;border-top:1px solid var(--border)}
+
+@media(max-width:640px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .features-grid{grid-template-columns:1fr}
+  .stat-number{font-size:2rem}
+  .section{padding:64px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge reveal"><span class="dot"></span> Self-hosted &middot; Full source code included</div>
+    <h1 class="reveal reveal-delay-1">
+      <span class="gradient">CCNA StudyLab</span>
+    </h1>
+    <p class="reveal reveal-delay-2">The all-in-one study platform for the Cisco CCNA 200-301 certification exam. Interactive labs, AI tutoring, spaced-repetition flashcards, and practice exams.</p>
+    <a href="https://www.thetech-e.com" class="hero-cta reveal reveal-delay-3">
+      Get CCNA StudyLab
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <div class="hero-sub reveal reveal-delay-4">Download &middot; Install &middot; Start studying in minutes</div>
+  </div>
+</section>
+
+<!-- ═══════════════ STATS ═══════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card reveal"><div class="stat-number" data-target="201">0</div><div class="stat-label">Flashcards</div></div>
+      <div class="stat-card reveal reveal-delay-1"><div class="stat-number" data-target="140">0</div><div class="stat-label">Practice Questions</div></div>
+      <div class="stat-card reveal reveal-delay-2"><div class="stat-number" data-target="10">0</div><div class="stat-label">Interactive Labs</div></div>
+      <div class="stat-card reveal reveal-delay-3"><div class="stat-number" data-target="53">0</div><div class="stat-label">Exam Objectives</div></div>
+      <div class="stat-card reveal reveal-delay-4"><div class="stat-number" data-target="6">0</div><div class="stat-label">Domains Covered</div></div>
+      <div class="stat-card reveal reveal-delay-5"><div class="stat-number" data-target="190">0</div><div class="stat-label">Automated Tests</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FEATURES ═══════════════ -->
+<section class="section" style="padding-top:40px">
+  <div class="container">
+    <h2 class="section-title reveal">Everything You Need to Pass</h2>
+    <p class="section-sub reveal">Six integrated study tools designed to work together. Track your progress, identify weak areas, and study smarter.</p>
+    <div class="features-grid">
+
+      <div class="feature-card reveal" onclick="toggleFeature(this)">
+        <div class="feature-icon blue">&#x1F4CA;</div>
+        <h3>Dashboard & Progress Tracking</h3>
+        <p>Real-time stats across all six domains with study streaks, exam readiness scores, and weighted progress.</p>
+        <div class="feature-detail">
+          <ul>
+            <li>Overall completion percentage</li>
+            <li>Study streak counter</li>
+            <li>Weighted exam readiness by domain</li>
+            <li>Recent activity feed</li>
+          </ul>
+        </div>
+        <div class="feature-expand">Details <span class="arrow">&#x25BC;</span></div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-1" onclick="toggleFeature(this)">
+        <div class="feature-icon green">&#x1F4BB;</div>
+        <h3>IOS CLI Terminal Simulator</h3>
+        <p>Practice Cisco IOS commands in a realistic terminal. Supports abbreviations, show commands, multi-device labs, and auto-grading.</p>
+        <div class="feature-detail">
+          <ul>
+            <li>Real command shorthand: conf t, sh ip int br</li>
+            <li>Simulated show command output</li>
+            <li>Multi-device labs with device switching</li>
+            <li>Automatic grading against solutions</li>
+          </ul>
+        </div>
+        <div class="feature-expand">Details <span class="arrow">&#x25BC;</span></div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-2" onclick="toggleFeature(this)">
+        <div class="feature-icon amber">&#x1F3B4;</div>
+        <h3>Spaced Repetition Flashcards</h3>
+        <p>201 cards powered by the SM-2 algorithm. Rate difficulty and the system schedules reviews for optimal retention.</p>
+        <div class="feature-detail">
+          <ul>
+            <li>SM-2 spaced repetition scheduling</li>
+            <li>6 domain decks with 201 total cards</li>
+            <li>Difficulty rating per card</li>
+            <li>Progress synced to database</li>
+          </ul>
+        </div>
+        <div class="feature-expand">Details <span class="arrow">&#x25BC;</span></div>
+      </div>
+
+      <div class="feature-card reveal" onclick="toggleFeature(this)">
+        <div class="feature-icon purple">&#x1F4DD;</div>
+        <h3>Practice Exams with Timer</h3>
+        <p>2 full-length exams and 6 domain quizzes. Timed mode, scoring, explanations, and attempt history.</p>
+        <div class="feature-detail">
+          <ul>
+            <li>140 questions across 8 exams</li>
+            <li>Timed exam mode with auto-submit</li>
+            <li>Detailed explanations per question</li>
+            <li>Pass rate tracking over time</li>
+          </ul>
+        </div>
+        <div class="feature-expand">Details <span class="arrow">&#x25BC;</span></div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-1" onclick="toggleFeature(this)">
+        <div class="feature-icon cyan">&#x1F916;</div>
+        <h3>AI Tutor (Powered by Claude)</h3>
+        <p>Conversational AI tutor with domain-specific expertise. Ask questions, walk through problems, or quiz yourself.</p>
+        <div class="feature-detail">
+          <ul>
+            <li>Domain-specific system prompts</li>
+            <li>CLI examples and subnetting walkthroughs</li>
+            <li>Suggested starter questions</li>
+            <li>Persistent conversation history</li>
+          </ul>
+        </div>
+        <div class="feature-expand">Details <span class="arrow">&#x25BC;</span></div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-2" onclick="toggleFeature(this)">
+        <div class="feature-icon blue">&#x1F4D6;</div>
+        <h3>Study Guides — All 6 Domains</h3>
+        <p>Comprehensive guides covering all 53 exam objectives with key points, scenarios, and completion tracking.</p>
+        <div class="feature-detail">
+          <ul>
+            <li>53 objectives mapped to exam blueprint</li>
+            <li>Check off objectives as you master them</li>
+            <li>Key points and practice scenarios</li>
+            <li>Domain-level progress tracking</li>
+          </ul>
+        </div>
+        <div class="feature-expand">Details <span class="arrow">&#x25BC;</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TERMINAL DEMO ═══════════════ -->
+<section class="section terminal-section">
+  <div class="container">
+    <h2 class="section-title reveal">Built-in IOS CLI Simulator</h2>
+    <p class="section-sub reveal">Practice real Cisco IOS commands without expensive hardware. Configure routers and switches right in your browser.</p>
+    <div class="terminal-wrapper reveal reveal-delay-1">
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+          <span class="terminal-title">CCNA StudyLab &mdash; IOS Terminal</span>
+        </div>
+        <div class="terminal-body" id="terminal-body">
+          <span class="cursor" id="cursor"></span>
+        </div>
+      </div>
+      <div class="terminal-label">Auto-playing demo &mdash; this runs live in the app</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ DOMAINS ═══════════════ -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title reveal">Complete Domain Coverage</h2>
+    <p class="section-sub reveal">Content mapped to the official Cisco CCNA 200-301 exam blueprint. Every domain, every weight, every objective.</p>
+    <div class="domains-grid" id="domains-grid">
+      <div class="domain-row reveal"><div class="domain-num">1</div><div class="domain-info"><div class="domain-name">Network Fundamentals</div><div class="domain-bar-track"><div class="domain-bar-fill" data-width="80"></div></div></div><div class="domain-weight">20%</div></div>
+      <div class="domain-row reveal reveal-delay-1"><div class="domain-num">2</div><div class="domain-info"><div class="domain-name">Network Access</div><div class="domain-bar-track"><div class="domain-bar-fill" data-width="80"></div></div></div><div class="domain-weight">20%</div></div>
+      <div class="domain-row reveal reveal-delay-2"><div class="domain-num">3</div><div class="domain-info"><div class="domain-name">IP Connectivity</div><div class="domain-bar-track"><div class="domain-bar-fill" data-width="100"></div></div></div><div class="domain-weight">25%</div></div>
+      <div class="domain-row reveal reveal-delay-3"><div class="domain-num">4</div><div class="domain-info"><div class="domain-name">IP Services</div><div class="domain-bar-track"><div class="domain-bar-fill" data-width="40"></div></div></div><div class="domain-weight">10%</div></div>
+      <div class="domain-row reveal reveal-delay-4"><div class="domain-num">5</div><div class="domain-info"><div class="domain-name">Security Fundamentals</div><div class="domain-bar-track"><div class="domain-bar-fill" data-width="60"></div></div></div><div class="domain-weight">15%</div></div>
+      <div class="domain-row reveal reveal-delay-5"><div class="domain-num">6</div><div class="domain-info"><div class="domain-name">Automation &amp; Programmability</div><div class="domain-bar-track"><div class="domain-bar-fill" data-width="40"></div></div></div><div class="domain-weight">10%</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TECH STACK ═══════════════ -->
+<section class="section" style="padding-top:20px">
+  <div class="container">
+    <h2 class="section-title reveal">Modern Tech Stack</h2>
+    <p class="section-sub reveal">Built with production-grade tools. Full source code included — customize and extend to fit your workflow.</p>
+    <div class="tech-grid reveal reveal-delay-1">
+      <span class="tech-badge">Next.js 16</span>
+      <span class="tech-badge">React 19</span>
+      <span class="tech-badge">TypeScript</span>
+      <span class="tech-badge">TailwindCSS v4</span>
+      <span class="tech-badge">PostgreSQL 16</span>
+      <span class="tech-badge">Drizzle ORM</span>
+      <span class="tech-badge">Auth.js v5</span>
+      <span class="tech-badge">Claude API</span>
+      <span class="tech-badge">FastAPI</span>
+      <span class="tech-badge">Docker</span>
+      <span class="tech-badge">Playwright</span>
+      <span class="tech-badge">Vitest</span>
+      <span class="tech-badge">shadcn/ui</span>
+      <span class="tech-badge">CodeMirror 6</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ BOTTOM CTA ═══════════════ -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="reveal">Ready to Pass the CCNA?</h2>
+    <p class="reveal reveal-delay-1">Download CCNA StudyLab and start studying today.</p>
+    <a href="https://www.thetech-e.com" class="hero-cta reveal reveal-delay-2">
+      Get CCNA StudyLab
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <div class="cta-price reveal reveal-delay-3">One-time purchase &middot; Full source code &middot; Free updates</div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    &copy; 2026 Elliot Conner. All rights reserved. &middot; <a href="https://www.thetech-e.com">thetech-e.com</a>
+  </div>
+</footer>
+
+<script>
+// ─── Scroll Reveal ───
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ─── Stat Counters ───
+let statsCounted = false;
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !statsCounted) {
+      statsCounted = true;
+      document.querySelectorAll('.stat-number[data-target]').forEach(el => {
+        const target = parseInt(el.dataset.target);
+        const duration = 1600;
+        const start = performance.now();
+        function tick(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(target * eased);
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+statsObserver.observe(document.getElementById('stats-grid'));
+
+// ─── Feature Card Toggle ───
+function toggleFeature(card) {
+  card.classList.toggle('expanded');
+}
+
+// ─── Domain Bars ───
+const domainsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.domain-bar-fill').forEach(bar => {
+        bar.style.width = bar.dataset.width + '%';
+      });
+    }
+  });
+}, { threshold: 0.3 });
+domainsObserver.observe(document.getElementById('domains-grid'));
+
+// ─── Terminal Auto-Typer ───
+const terminalCommands = [
+  { prompt: 'Router>', cmd: 'enable', delay: 600 },
+  { prompt: 'Router#', cmd: 'configure terminal', delay: 500 },
+  { output: 'Enter configuration commands, one per line.  End with CNTL/Z.' },
+  { prompt: 'Router(config)#', cmd: 'hostname R1', delay: 400 },
+  { prompt: 'R1(config)#', cmd: 'interface GigabitEthernet0/0', delay: 500 },
+  { prompt: 'R1(config-if)#', cmd: 'ip address 192.168.1.1 255.255.255.0', delay: 400 },
+  { prompt: 'R1(config-if)#', cmd: 'no shutdown', delay: 500 },
+  { output: '%LINK-3-UPDOWN: Interface GigabitEthernet0/0, changed state to up' },
+  { output: '%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up' },
+  { prompt: 'R1(config-if)#', cmd: 'exit', delay: 400 },
+  { prompt: 'R1(config)#', cmd: 'router ospf 1', delay: 500 },
+  { prompt: 'R1(config-router)#', cmd: 'network 192.168.1.0 0.0.0.255 area 0', delay: 400 },
+  { prompt: 'R1(config-router)#', cmd: 'end', delay: 500 },
+  { output: '%SYS-5-CONFIG_I: Configured from console by console' },
+  { prompt: 'R1#', cmd: 'show ip ospf neighbor', delay: 600 },
+  { output: '' },
+  { output: 'Neighbor ID  Pri  State       Dead Time  Address       Interface' },
+  { output: '2.2.2.2        1  FULL/DR     00:00:33   192.168.1.2   Gi0/0' },
+  { output: '' },
+  { prompt: 'R1#', cmd: 'write memory', delay: 500 },
+  { output: 'Building configuration...' },
+  { output: '[OK]' },
+  { prompt: 'R1#', cmd: '', delay: 2000, final: true },
+];
+
+let terminalStarted = false;
+const terminalObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !terminalStarted) {
+      terminalStarted = true;
+      runTerminal();
+    }
+  });
+}, { threshold: 0.3 });
+terminalObserver.observe(document.getElementById('terminal-body'));
+
+async function runTerminal() {
+  const body = document.getElementById('terminal-body');
+  const cursor = document.getElementById('cursor');
+
+  for (const item of terminalCommands) {
+    if (item.output !== undefined) {
+      const line = document.createElement('div');
+      line.className = 'terminal-line';
+      line.innerHTML = '<span class="output">' + escapeHtml(item.output) + '</span>';
+      body.insertBefore(line, cursor);
+      body.scrollTop = body.scrollHeight;
+      await sleep(80);
+      continue;
+    }
+
+    const line = document.createElement('div');
+    line.className = 'terminal-line';
+    line.innerHTML = '<span class="prompt">' + escapeHtml(item.prompt) + '</span><span class="cmd"></span>';
+    body.insertBefore(line, cursor);
+
+    const cmdSpan = line.querySelector('.cmd');
+    for (let i = 0; i < item.cmd.length; i++) {
+      cmdSpan.textContent += item.cmd[i];
+      body.scrollTop = body.scrollHeight;
+      await sleep(35 + Math.random() * 45);
+    }
+
+    if (item.final) {
+      // Keep cursor blinking at end
+      break;
+    }
+
+    await sleep(item.delay || 300);
+  }
+
+  // Loop after a pause
+  await sleep(4000);
+  body.innerHTML = '';
+  body.appendChild(cursor);
+  terminalStarted = false;
+  runTerminal();
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+</script>
+</body>
+</html>

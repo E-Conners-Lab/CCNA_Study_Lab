@@ -29,9 +29,9 @@ function makeChainable(resultFn: () => unknown) {
 
 let dbConfigured = true;
 
-vi.mock("@/lib/db", () => ({
-  isDbConfigured: () => dbConfigured,
-  getDb: () => ({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function makeMockDb(): any {
+  return {
     select: (...args: unknown[]) => {
       mockSelect(...args);
       return makeChainable(() => []);
@@ -48,7 +48,15 @@ vi.mock("@/lib/db", () => ({
       mockDelete(...args);
       return makeChainable(() => []);
     },
-  }),
+    transaction: async (fn: (tx: ReturnType<typeof makeMockDb>) => Promise<unknown>) => {
+      return fn(makeMockDb());
+    },
+  };
+}
+
+vi.mock("@/lib/db", () => ({
+  isDbConfigured: () => dbConfigured,
+  getDb: () => makeMockDb(),
 }));
 
 vi.mock("@/lib/db/schema", () => ({

@@ -641,14 +641,6 @@ function ExamContent() {
     };
   }, [examData, results]);
 
-  // ---- Auto-submit when timer hits 0 ----
-  useEffect(() => {
-    if (timeLeft === 0 && examData && !results && !submittedRef.current) {
-      handleSubmit();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeLeft]);
-
   // ---- Submit ----
   const handleSubmit = useCallback(async () => {
     if (!examData || submittedRef.current) return;
@@ -676,6 +668,19 @@ function ExamContent() {
       setSubmitting(false);
     }
   }, [examData, examId, domain, answers, timeLeft]);
+
+  // Keep a ref to the latest handleSubmit to avoid stale closures in timer effect
+  const handleSubmitRef = useRef(handleSubmit);
+  useEffect(() => {
+    handleSubmitRef.current = handleSubmit;
+  }, [handleSubmit]);
+
+  // ---- Auto-submit when timer hits 0 ----
+  useEffect(() => {
+    if (timeLeft === 0 && examData && !results && !submittedRef.current) {
+      handleSubmitRef.current();
+    }
+  }, [timeLeft, examData, results]);
 
   // ---- Answer handlers ----
   function setAnswer(questionId: string, value: string | string[]) {

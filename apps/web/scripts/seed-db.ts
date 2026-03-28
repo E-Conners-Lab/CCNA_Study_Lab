@@ -12,7 +12,7 @@ import path from "path";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { eq } from "drizzle-orm";
-import bcrypt from "bcryptjs";
+import { hash } from "@node-rs/argon2";
 
 import * as schema from "../src/lib/db/schema";
 
@@ -408,11 +408,20 @@ async function seedLabs(objectiveMap: Map<string, number>) {
 }
 
 async function seedDefaultUser() {
-  console.log("  Seeding default user...");
+  if (process.env.NODE_ENV === "production") {
+    console.log("  ⏭️  Skipping default user in production");
+    return;
+  }
+
+  console.log("  Seeding default user (development only)...");
 
   const email = "student@ccna.lab";
   const password = "ccna123";
-  const hashedPassword = await bcrypt.hash(password, 12);
+  const hashedPassword = await hash(password, {
+    memoryCost: 65536,
+    timeCost: 3,
+    parallelism: 4,
+  });
 
   // Upsert — don't fail if user already exists
   const existing = await db
@@ -432,7 +441,7 @@ async function seedDefaultUser() {
     hashedPassword,
   });
 
-  console.log(`    ✅ Created user: ${email} / ${password}`);
+  console.log("    ✅ Created default dev user");
 }
 
 // ---------------------------------------------------------------------------

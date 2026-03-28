@@ -1,12 +1,18 @@
 import { NextRequest } from "next/server";
 import { getLabSolution } from "@/lib/data";
 import { jsonOk, jsonNotFound, jsonError } from "@/lib/api-helpers";
+import { getCurrentUserId } from "@/lib/auth-helpers";
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
+    const userId = await getCurrentUserId();
+    if (!userId) {
+      return jsonError("Authentication required", 401);
+    }
+
     const { slug } = await params;
     const solution = getLabSolution(slug);
 

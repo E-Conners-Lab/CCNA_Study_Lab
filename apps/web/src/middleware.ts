@@ -66,10 +66,13 @@ function checkLoginRateLimit(request: NextRequest): NextResponse | null {
 
 export function middleware(request: NextRequest) {
   // Skip auth when testing or when the database is unavailable
-  if (
-    process.env.SKIP_AUTH === "true" ||
-    !process.env.DATABASE_URL
-  ) {
+  if (process.env.SKIP_AUTH === "true") {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("SKIP_AUTH cannot be enabled in production");
+    }
+    return NextResponse.next();
+  }
+  if (!process.env.DATABASE_URL) {
     return NextResponse.next();
   }
 

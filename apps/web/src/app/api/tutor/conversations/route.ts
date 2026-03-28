@@ -44,6 +44,10 @@ export async function POST(request: NextRequest) {
       return jsonBadRequest("title is required");
     }
 
+    if (title.length > 200) {
+      return jsonBadRequest("title must be 200 characters or fewer");
+    }
+
     const id = await createTutorConversation(userId, {
       title,
       domainId: domainId ?? null,

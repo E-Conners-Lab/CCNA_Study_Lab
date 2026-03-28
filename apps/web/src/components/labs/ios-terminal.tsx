@@ -51,14 +51,16 @@ export function IOSTerminal({
   const scrollRef = useRef<HTMLDivElement>(null);
   const allCommandsRef = useRef<string[][]>([]);
 
-  // ---- Initialize / Reset (render-time state adjustment) ----
-  // Start with undefined so the init block runs on first mount
-  const [prevStarterCode, setPrevStarterCode] = useState<string | undefined>(undefined);
-  const [prevResetKey, setPrevResetKey] = useState<number | undefined>(undefined);
+  // ---- Initialize / Reset via useEffect (not during render) ----
+  const prevStarterCodeRef = useRef<string | undefined>(undefined);
+  const prevResetKeyRef = useRef<number | undefined>(undefined);
 
-  if (starterCode !== prevStarterCode || resetKey !== prevResetKey) {
-    setPrevStarterCode(starterCode);
-    setPrevResetKey(resetKey);
+  useEffect(() => {
+    if (starterCode === prevStarterCodeRef.current && resetKey === prevResetKeyRef.current) {
+      return;
+    }
+    prevStarterCodeRef.current = starterCode;
+    prevResetKeyRef.current = resetKey;
 
     const sections = starterCode ? parseSections(starterCode) : [];
     const hasMultiDevice = sections.length > 1;
@@ -110,16 +112,13 @@ export function IOSTerminal({
     setIosState(createInitialState(initialHostname));
     setInput("");
     setHistoryIndex(-1);
-  }
 
-  // Reset ref and notify parent on init/reset
-  useEffect(() => {
-    const sections = starterCode ? parseSections(starterCode) : [];
+    // Reset command tracking ref and notify parent
     allCommandsRef.current = sections.length > 1
       ? sections.map(() => [])
       : [[]];
     onCommandsChange?.([]);
-  }, [prevStarterCode, prevResetKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [starterCode, resetKey, onCommandsChange]);
 
   // ---- Auto-scroll ----
   useEffect(() => {

@@ -11,14 +11,19 @@ import { AuthLayout, AuthInput, AuthError, AuthButton } from "@/components/auth"
 // Inner component (needs useSearchParams inside Suspense)
 // ---------------------------------------------------------------------------
 
+function isSafeRedirect(url: string): boolean {
+  return url.startsWith("/") && !url.startsWith("//") && !url.startsWith("/\\");
+}
+
 function LoginForm() {
-  const [email, setEmail] = useState("student@ccna.lab");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
+  const rawCallback = searchParams.get("callbackUrl") ?? "/dashboard";
+  const callbackUrl = isSafeRedirect(rawCallback) ? rawCallback : "/dashboard";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -79,13 +84,15 @@ function LoginForm() {
         </Link>
       </div>
 
-      <p className="text-center text-xs text-zinc-500">
-        Default dev credentials:{" "}
-        <span className="text-zinc-400">student@ccna.lab</span> /{" "}
-        <span className="text-zinc-400">ccna123</span>
-      </p>
+      {process.env.NODE_ENV === "development" && (
+        <p className="text-center text-xs text-zinc-500">
+          Default dev credentials:{" "}
+          <span className="text-zinc-400">student@ccna.lab</span> /{" "}
+          <span className="text-zinc-400">ccna123</span>
+        </p>
+      )}
 
-      <p className="text-center text-sm text-zinc-500">
+<p className="text-center text-sm text-zinc-500">
         Don&apos;t have an account?{" "}
         <Link
           href="/signup"

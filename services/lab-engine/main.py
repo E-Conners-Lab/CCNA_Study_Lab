@@ -42,12 +42,21 @@ app.add_middleware(
 # ---------------------------------------------------------------------------
 
 API_KEY = os.getenv("LAB_ENGINE_API_KEY", "")
+APP_ENV = os.getenv("APP_ENV", "production")
+
+if not API_KEY and APP_ENV != "development":
+    raise RuntimeError(
+        "LAB_ENGINE_API_KEY must be set in non-development environments. "
+        "Set APP_ENV=development to disable this check."
+    )
 
 
 async def verify_api_key(authorization: Optional[str] = Header(None)):
     """Require a valid Bearer token when LAB_ENGINE_API_KEY is set."""
     if not API_KEY:
-        return  # No key configured — allow (dev mode)
+        if APP_ENV != "development":
+            raise HTTPException(status_code=500, detail="Server misconfigured")
+        return  # No key configured — allow (dev mode only)
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Missing or invalid authorization header")
     token = authorization.removeprefix("Bearer ").strip()

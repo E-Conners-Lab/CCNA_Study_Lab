@@ -33,6 +33,10 @@ export async function POST(
       return jsonBadRequest("role must be 'user' or 'assistant'");
     }
 
+    if (typeof content !== "string" || content.length > 50_000) {
+      return jsonBadRequest("content must be a string of 50,000 characters or fewer");
+    }
+
     const messageId = await saveTutorMessage(userId, id, { role, content });
     return jsonOk({ id: messageId });
   } catch (error) {

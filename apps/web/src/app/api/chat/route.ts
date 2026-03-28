@@ -21,7 +21,7 @@ function streamTextResponse(text: string): Response {
   return new Response(readableStream, {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
-      "Cache-Control": "no-cache",
+      "Cache-Control": "no-store",
       "Transfer-Encoding": "chunked",
     },
   });
@@ -201,11 +201,15 @@ export async function POST(request: NextRequest) {
 
     const client = new Anthropic({ apiKey });
 
+    // Cap message history to control context window cost
+    const MAX_HISTORY_MESSAGES = 40;
+    const trimmedMessages = messages.slice(-MAX_HISTORY_MESSAGES);
+
     const stream = await client.messages.stream({
       model: "claude-sonnet-4-20250514",
       max_tokens: 4096,
       system: systemPrompt,
-      messages: messages.map((m: { role: string; content: string }) => ({
+      messages: trimmedMessages.map((m: { role: string; content: string }) => ({
         role: m.role as "user" | "assistant",
         content: m.content,
       })),
@@ -234,7 +238,7 @@ export async function POST(request: NextRequest) {
     return new Response(readableStream, {
       headers: {
         "Content-Type": "text/plain; charset=utf-8",
-        "Cache-Control": "no-cache",
+        "Cache-Control": "no-store",
         "Transfer-Encoding": "chunked",
       },
     });

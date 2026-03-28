@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import bcrypt from "bcryptjs";
+import { hash } from "@node-rs/argon2";
 import { eq, and } from "drizzle-orm";
 
 import { isDbConfigured, getDb } from "@/lib/db";
@@ -63,8 +63,12 @@ export async function POST(request: NextRequest) {
       return jsonError("Reset link has expired. Please request a new one.", 400);
     }
 
-    // Update the password
-    const hashedPassword = await bcrypt.hash(password, 12);
+    // Update the password with Argon2id
+    const hashedPassword = await hash(password, {
+      memoryCost: 65536,
+      timeCost: 3,
+      parallelism: 4,
+    });
 
     await db
       .update(schema.users)

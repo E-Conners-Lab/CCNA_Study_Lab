@@ -199,31 +199,36 @@ export async function saveExamAttempt(
     const now = new Date();
     const startedAt = new Date(now.getTime() - data.timeTakenSeconds * 1000);
 
-    const [attempt] = await db
-      .insert(schema.practiceAttempts)
-      .values({
-        userId,
-        score: data.score,
-        totalQuestions: data.totalQuestions,
-        domainFilter: data.domainFilter ?? null,
-        startedAt,
-        completedAt: now,
-      })
-      .returning({ id: schema.practiceAttempts.id });
+    // Wrap in a transaction to prevent partial writes (attempt without answers)
+    const attemptId = await db.transaction(async (tx) => {
+      const [attempt] = await tx
+        .insert(schema.practiceAttempts)
+        .values({
+          userId,
+          score: data.score,
+          totalQuestions: data.totalQuestions,
+          domainFilter: data.domainFilter ?? null,
+          startedAt,
+          completedAt: now,
+        })
+        .returning({ id: schema.practiceAttempts.id });
 
-    if (attempt && data.answers.length > 0) {
-      await db.insert(schema.practiceAnswers).values(
-        data.answers.map((a) => ({
-          attemptId: attempt.id,
-          questionId: a.questionId,
-          userAnswer: a.userAnswer,
-          isCorrect: a.isCorrect,
-          timeSpent: a.timeSpent ?? null,
-        })),
-      );
-    }
+      if (attempt && data.answers.length > 0) {
+        await tx.insert(schema.practiceAnswers).values(
+          data.answers.map((a) => ({
+            attemptId: attempt.id,
+            questionId: a.questionId,
+            userAnswer: a.userAnswer,
+            isCorrect: a.isCorrect,
+            timeSpent: a.timeSpent ?? null,
+          })),
+        );
+      }
 
-    return attempt?.id ?? null;
+      return attempt?.id ?? null;
+    });
+
+    return attemptId;
   } catch (err) {
     console.warn("Failed to save exam attempt:", err);
     return null;
@@ -377,26 +382,16 @@ export async function saveStudyObjective(
     if (!objective) return;
 
     if (completed) {
-      // Check if already exists
-      const existing = await db
-        .select({ id: schema.studyProgress.id })
-        .from(schema.studyProgress)
-        .where(
-          and(
-            eq(schema.studyProgress.userId, userId),
-            eq(schema.studyProgress.objectiveId, objective.id),
-          ),
-        )
-        .limit(1);
-
-      if (existing.length === 0) {
-        await db.insert(schema.studyProgress).values({
+      // Atomic upsert — avoids race condition with concurrent requests
+      await db
+        .insert(schema.studyProgress)
+        .values({
           userId,
           domainId: objective.domainId,
           objectiveId: objective.id,
           completedAt: new Date(),
-        });
-      }
+        })
+        .onConflictDoNothing();
     } else {
       // Delete the row
       await db

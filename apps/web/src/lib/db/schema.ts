@@ -336,6 +336,7 @@ export const studyProgress = pgTable(
     index("study_progress_user_id_idx").on(table.userId),
     index("study_progress_domain_id_idx").on(table.domainId),
     index("study_progress_objective_id_idx").on(table.objectiveId),
+    uniqueIndex("study_progress_user_objective_idx").on(table.userId, table.objectiveId),
   ],
 );
 

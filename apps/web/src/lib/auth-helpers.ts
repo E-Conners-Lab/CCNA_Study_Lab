@@ -14,7 +14,13 @@ import { auth } from "./auth";
  */
 export async function getCurrentUserId(): Promise<string | null> {
   // When auth is skipped (E2E tests, no DB), there's no session
-  if (process.env.SKIP_AUTH === "true" || !process.env.DATABASE_URL) {
+  if (process.env.SKIP_AUTH === "true") {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("SKIP_AUTH cannot be enabled in production");
+    }
+    return null;
+  }
+  if (!process.env.DATABASE_URL) {
     return null;
   }
 

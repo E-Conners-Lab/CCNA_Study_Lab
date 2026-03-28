@@ -7,6 +7,7 @@
 
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { verify } from "@node-rs/argon2";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 
@@ -43,7 +44,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
           if (!user?.hashedPassword) return null;
 
-          const valid = await bcrypt.compare(password, user.hashedPassword);
+          // Support both Argon2id (new) and bcrypt (legacy) hashes
+          let valid: boolean;
+          if (user.hashedPassword.startsWith("$argon2")) {
+            valid = await verify(user.hashedPassword, password);
+          } else {
+            valid = await bcrypt.compare(password, user.hashedPassword);
+          }
           if (!valid) {
             auditLog({ event: "LOGIN_FAILED", email, detail: "Invalid password" });
             return null;
@@ -64,7 +71,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
 
-  session: { strategy: "jwt", maxAge: 8 * 60 * 60 },
+  session: { strategy: "jwt", maxAge: 60 * 60, updateAge: 15 * 60 },
 
   pages: {
     signIn: "/login",

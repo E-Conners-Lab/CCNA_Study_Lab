@@ -82,38 +82,28 @@ Claude-powered conversational tutor with domain-specific system prompts, suggest
 
 Make sure Docker Desktop is running before step 2.
 
-### Setup
+### Automated Install
 
 ```bash
-# 1. Clone and install dependencies
-git clone https://github.com/E-Conners-Lab/CCNA_Study_Lab.git
-cd CCNA_Study_Lab/apps/web
-npm install
+# 1. Extract the zip and enter the directory
+cd CCNA_StudyLab
 
-# 2. Start PostgreSQL
-docker compose -f ../../docker/docker-compose.yml up -d postgres
-
-# 3. Configure environment
-cp .env.example .env.local
-
-# Generate a secure AUTH_SECRET (required):
-openssl rand -base64 32
-# Paste the output as the AUTH_SECRET value in .env.local
-
-# (Optional) Add your Anthropic API key to enable the AI Tutor:
-# TUTOR_ANTHROPIC_KEY=sk-ant-...
-
-# 4. Set up database and seed content
-npx drizzle-kit push
-npm run db:seed
-
-# 5. Start the dev server
-npm run dev
+# 2. Run the installer (checks prerequisites, installs deps, sets up DB)
+bash install.sh
 ```
+
+The installer will:
+- Verify Node.js 20+, Docker, and Docker Compose are installed
+- Install all dependencies
+- Start PostgreSQL via Docker
+- Auto-generate `AUTH_SECRET` and configure `.env.local`
+- Optionally prompt for your Anthropic API key (for the AI Tutor)
+- Create the database schema and seed all content
+- Start the development server
 
 Open [http://localhost:3000](http://localhost:3000) and log in with `student@ccna.lab` / `ccna123`.
 
-See [SETUP.md](./SETUP.md) for the full setup guide.
+See [SETUP.md](./SETUP.md) for the full manual setup guide.
 
 ## Project Structure
 
@@ -209,4 +199,4 @@ Configure in `apps/web/.env.local`:
 
 ## License
 
-[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) -- Free to use, modify, and share for non-commercial purposes with attribution.
+Proprietary Software License -- Copyright (c) 2026 Elliot Conner. All rights reserved. See [LICENSE](./LICENSE) for full terms. For licensing inquiries: [www.thetech-e.com](https://www.thetech-e.com)

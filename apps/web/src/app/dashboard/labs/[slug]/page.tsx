@@ -71,8 +71,18 @@ interface RunResult {
 // Simple markdown-to-HTML renderer
 // ---------------------------------------------------------------------------
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 function renderMarkdown(text: string): string {
-  let html = text
+  // Escape HTML entities first to prevent XSS, then apply markdown formatting
+  let html = escapeHtml(text)
     // Code blocks (triple backtick) - must come before inline code
     .replace(
       /```(?:\w*)\n([\s\S]*?)```/g,

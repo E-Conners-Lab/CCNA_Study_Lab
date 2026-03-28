@@ -33,10 +33,9 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { flashcardId, quality, currentProgress } = body as {
+    const { flashcardId, quality } = body as {
       flashcardId: string;
       quality: number;
-      currentProgress?: FlashcardProgress | null;
     };
 
     if (!flashcardId || quality === undefined || quality === null) {
@@ -47,10 +46,14 @@ export async function POST(request: NextRequest) {
       return jsonBadRequest("quality must be between 0 and 5");
     }
 
-    // Use existing progress or defaults for a new card
-    const repetitions = currentProgress?.repetitions ?? 0;
-    const ease = currentProgress?.ease ?? 2.5;
-    const interval = currentProgress?.interval ?? 0;
+    // Load authoritative SM-2 state from DB instead of trusting client values
+    const userId = await getCurrentUserId();
+    const dbProgress = userId ? await getFlashcardProgress(userId) : {};
+    const stored = dbProgress[flashcardId];
+
+    const repetitions = stored?.repetitions ?? 0;
+    const ease = stored?.ease ?? 2.5;
+    const interval = stored?.interval ?? 0;
 
     const result = sm2(quality, repetitions, ease, interval);
 
@@ -65,7 +68,6 @@ export async function POST(request: NextRequest) {
     };
 
     // Fire-and-forget: persist to DB if user is authenticated
-    const userId = await getCurrentUserId();
     if (userId) {
       upsertFlashcardProgress(userId, {
         flashcardId,

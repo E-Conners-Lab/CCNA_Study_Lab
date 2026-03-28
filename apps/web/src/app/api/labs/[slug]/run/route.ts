@@ -47,20 +47,42 @@ export async function POST(
       return jsonBadRequest(`Code exceeds maximum length of ${MAX_CODE_LENGTH} characters`);
     }
 
-    // IOS CLI labs validated client-side — record the attempt
-    // Note: iosValidation scores are informational; the client-side IOS
-    // simulator handles validation. Server records attempts for progress.
-    if (iosValidation && lab.type === "ios-cli") {
+    // IOS CLI labs — server-side validation using the lab's expected output.
+    // The client may send iosValidation for display purposes, but the server
+    // determines completion status independently using the solution data.
+    if (lab.type === "ios-cli") {
       const userId = await getCurrentUserId();
+
+      // Server-side validation: compare submitted commands against expected
+      let serverScore = 0;
+      if (lab.expectedOutput) {
+        // Simple line-by-line containment check: count how many expected
+        // non-comment, non-empty lines appear in the student's submission.
+        const expectedLines = lab.expectedOutput
+          .split("\n")
+          .map((l: string) => l.trim().toLowerCase())
+          .filter((l: string) => l && !l.startsWith("!"));
+        const studentLines = code
+          .split("\n")
+          .map((l: string) => l.trim().toLowerCase())
+          .filter((l: string) => l && !l.startsWith("!"));
+        const matched = expectedLines.filter((el: string) =>
+          studentLines.some((sl: string) => sl.includes(el) || el.includes(sl)),
+        );
+        serverScore = expectedLines.length > 0
+          ? Math.round((matched.length / expectedLines.length) * 100)
+          : 0;
+      }
+
+      const status = serverScore === 100 ? "completed" : "started";
       if (userId) {
-        const status = iosValidation.score === 100 ? "completed" : "started";
         saveLabAttempt(userId, slug, status, code).catch((err) =>
           console.warn("Background lab attempt save failed:", err),
         );
       }
       return jsonOk({
-        success: iosValidation.score === 100,
-        output: `IOS CLI validation: ${iosValidation.score}%`,
+        success: serverScore === 100,
+        output: `IOS CLI validation: ${serverScore}%`,
         executionTime: 0,
         engineAvailable: false,
       });

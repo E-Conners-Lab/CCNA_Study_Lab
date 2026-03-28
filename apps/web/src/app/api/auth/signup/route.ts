@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs";
+import { hash } from "@node-rs/argon2";
 import { eq } from "drizzle-orm";
 import { NextRequest } from "next/server";
 
@@ -56,8 +56,12 @@ export async function POST(request: NextRequest) {
       return jsonOk({ success: true }, 201);
     }
 
-    // Hash password and insert user
-    const hashedPassword = await bcrypt.hash(password, 12);
+    // Hash password with Argon2id
+    const hashedPassword = await hash(password, {
+      memoryCost: 65536,
+      timeCost: 3,
+      parallelism: 4,
+    });
 
     await db.insert(schema.users).values({
       name: name.trim(),
