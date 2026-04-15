@@ -20,7 +20,7 @@ src/
       auth/           Auth.js NextAuth handlers
       chat/           AI Tutor streaming endpoint
       dashboard/      Dashboard stats aggregation
-      exams/          Practice exam CRUD + grading
+      exams/          Practice exam CRUD + grading + attempt detail
       flashcards/     Flashcard listing + SM-2 progress
       labs/           Lab listing + execution
       study/          Study guide + objective progress
@@ -29,10 +29,13 @@ src/
       flashcards/     Spaced repetition flashcard system
       labs/           Hands-on lab catalog + workspace
       practice/       Practice exams + domain quizzes
+        exam/         Active exam session
+        review/       Post-exam attempt review
       settings/       User settings and preferences
       study/          Study hub with domain objectives
       tutor/          AI Tutor chat interface
     login/            Authentication login page
+    signup/           Account registration page
   components/
     dashboard/        Dashboard-specific components (sidebar, stats, domain cards)
     labs/             Lab workspace components (editor, output, grading)

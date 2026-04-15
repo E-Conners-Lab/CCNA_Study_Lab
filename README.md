@@ -26,7 +26,7 @@ In-depth study guides for all 6 exam domains with 53 objectives, completion chec
 
 ### Practice Exams
 
-2 full 40-question sample exams and 6 focused domain quizzes (140 questions total) with scoring, attempt history, and pass rate tracking.
+2 full 40-question sample exams and 6 focused domain quizzes (140 questions total) with multiple choice, multi-select, fill-in-the-blank, and drag-drop matching question types. Includes scoring, attempt history, post-exam review, and pass rate tracking.
 
 ![Practice Exams](docs/screenshots/practice-exams.png)
 
@@ -49,7 +49,7 @@ Claude-powered conversational tutor with domain-specific system prompts, suggest
 
 ## Security
 
-- **Authentication** -- Auth.js v5 with credentials provider, JWT sessions, email verification, and password reset
+- **Authentication** -- Auth.js v5 with credentials provider, JWT sessions, email verification, password reset, and account signup
 - **API Protection** -- All API routes require authentication (middleware-enforced); auth routes are public
 - **Rate Limiting** -- In-memory sliding-window rate limiting on login (5/min), signup (5/min), chat (20/min), lab execution (30/min), and password reset (3/min)
 - **Security Headers** -- HSTS, CSP, X-Frame-Options DENY, X-Content-Type-Options nosniff, strict Referrer-Policy, Permissions-Policy
@@ -64,7 +64,7 @@ Claude-powered conversational tutor with domain-specific system prompts, suggest
 | Layer | Technology |
 |-------|-----------|
 | Runtime | Node.js 20+ |
-| Frontend | Next.js 16, React 19, TailwindCSS v4, shadcn/ui, CodeMirror 6, Lucide icons |
+| Frontend | Next.js 16.2, React 19, TailwindCSS v4, shadcn/ui, CodeMirror 6, Lucide icons |
 | Backend | Next.js API Routes, Drizzle ORM |
 | Database | PostgreSQL 16 |
 | Auth | Auth.js v5 (NextAuth 5 beta) |
@@ -112,10 +112,14 @@ ccna-studylab/
   apps/web/                Next.js frontend + API routes
     src/
       app/                 App Router pages and API routes
+        dashboard/         Dashboard pages (flashcards, labs, practice, study, tutor, settings)
+          practice/        Practice exams, active exam session, post-exam review
+        login/             Authentication login page
+        signup/            Account registration page
       components/          React components (UI, labs, dashboard)
         labs/              IOS terminal simulator, validators, lab components
       lib/
-        data/              Data access layer (exams, flashcards, labs, study, tutor)
+        data/              Data access layer (exams, flashcards, labs, study, tutor, progress)
         db/                Drizzle ORM schema and migrations
         auth.ts            Auth.js v5 configuration
         email.ts           Email abstraction (console dev / SMTP prod)
