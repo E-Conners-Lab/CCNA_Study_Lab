@@ -34,6 +34,7 @@ export {
   getFlashcardProgress,
   upsertFlashcardProgress,
   getExamAttempts,
+  getExamAttemptDetail,
   saveExamAttempt,
   getLabAttempts,
   saveLabAttempt,

@@ -21,10 +21,10 @@ export interface ExamQuestion {
     | "multiple_choice"
     | "multiple_select"
     | "fill_in_the_blank"
-    | "drag_and_drop";
+    | "drag_drop";
   question: string;
   options: string[];
-  correctAnswer: string | string[];
+  correctAnswer: string | string[] | Record<string, string>;
   explanation: string;
   sourceUrl: string;
   difficulty: "easy" | "medium" | "hard";
@@ -52,8 +52,8 @@ export interface QuestionResult {
   questionId: string;
   text: string;
   correct: boolean;
-  userAnswer: string | string[] | null;
-  correctAnswer: string | string[];
+  userAnswer: string | string[] | Record<string, string> | null;
+  correctAnswer: string | string[] | Record<string, string>;
   explanation: string;
 }
 
@@ -225,11 +225,27 @@ export function getExam(
   if (options?.stripAnswers !== false) {
     const sanitized = questions.map(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      ({ correctAnswer, explanation, objectiveCode, question, ...rest }) => ({
-        ...rest,
-        text: question,
-        objective: objectiveCode,
-      }),
+      ({ correctAnswer, explanation, objectiveCode, question, ...rest }) => {
+        const base = { ...rest, text: question, objective: objectiveCode };
+
+        // For drag_drop matching questions, include shuffled descriptions
+        // so the client can render the matching UI
+        if (
+          rest.type === "drag_drop" &&
+          correctAnswer &&
+          typeof correctAnswer === "object" &&
+          !Array.isArray(correctAnswer)
+        ) {
+          const descriptions = Object.values(
+            correctAnswer as Record<string, string>,
+          );
+          // Shuffle descriptions so they don't match options order
+          const shuffled = [...descriptions].sort(() => Math.random() - 0.5);
+          return { ...base, descriptions: shuffled };
+        }
+
+        return base;
+      },
     );
     return {
       id: exam.examId,
@@ -258,7 +274,7 @@ export function getExam(
  */
 export function gradeExam(
   examId: string,
-  answers: Record<string, string | string[]>,
+  answers: Record<string, string | string[] | Record<string, string>>,
   timeTaken: number,
   domain?: string,
 ): GradeResult | null {
@@ -339,7 +355,7 @@ export function gradeExam(
 
 function gradeQuestion(
   question: ExamQuestion,
-  userAnswer: string | string[] | null,
+  userAnswer: string | string[] | Record<string, string> | null,
 ): boolean {
   if (userAnswer === null) return false;
 
@@ -377,7 +393,24 @@ function gradeQuestion(
           (question.correctAnswer as string).trim().toLowerCase()
       );
 
-    case "drag_and_drop": {
+    case "drag_drop": {
+      // Matching questions: correctAnswer is a dict {term: description}
+      // userAnswer is also a dict {term: description} from the matching UI
+      if (
+        typeof question.correctAnswer === "object" &&
+        !Array.isArray(question.correctAnswer) &&
+        typeof userAnswer === "object" &&
+        !Array.isArray(userAnswer)
+      ) {
+        const correct = question.correctAnswer as Record<string, string>;
+        const user = userAnswer as Record<string, string>;
+        return Object.keys(correct).every(
+          (key) =>
+            user[key]?.trim().toUpperCase() ===
+            correct[key]?.trim().toUpperCase(),
+        );
+      }
+      // Reorder questions: correctAnswer is an array
       if (
         !Array.isArray(userAnswer) ||
         !Array.isArray(question.correctAnswer)

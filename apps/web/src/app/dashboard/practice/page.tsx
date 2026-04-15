@@ -409,6 +409,7 @@ export default function PracticePage() {
                     variant="ghost"
                     size="sm"
                     className="text-zinc-500 hover:text-zinc-300 shrink-0"
+                    onClick={() => router.push(`/dashboard/practice/review?attemptId=${attempt.id}`)}
                   >
                     Review
                     <ArrowUpRight className="h-3 w-3 ml-1" />

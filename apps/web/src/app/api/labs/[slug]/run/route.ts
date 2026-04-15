@@ -30,14 +30,14 @@ export async function POST(
     }
 
     // Parse and validate request body
-    let body: { code: string; iosValidation?: { score: number; status: string } };
+    let body: { code: string };
     try {
       body = await request.json();
     } catch {
       return jsonBadRequest("Invalid JSON in request body");
     }
 
-    const { code, iosValidation } = body;
+    const { code } = body;
 
     if (!code || typeof code !== "string") {
       return jsonBadRequest('"code" string is required');

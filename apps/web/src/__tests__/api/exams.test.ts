@@ -57,7 +57,7 @@ const MOCK_QUESTIONS: ExamQuestion[] = [
   {
     id: "q5",
     objectiveCode: "6.1",
-    type: "drag_and_drop",
+    type: "drag_drop",
     question: "Order the OSI layers top to bottom: 1. Application 2. Transport",
     options: ["A) Layer 7", "B) Layer 4"],
     correctAnswer: ["A", "B"],

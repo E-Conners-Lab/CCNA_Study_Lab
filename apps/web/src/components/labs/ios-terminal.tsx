@@ -87,13 +87,12 @@ export function IOSTerminal({
     }
 
     let initialHostname = "Router";
+    let devs: { deviceName: string; hostname: string }[] = [];
     if (hasMultiDevice) {
-      const devs = sections.map((s) => ({
+      devs = sections.map((s) => ({
         deviceName: s.deviceName,
         hostname: s.hostname,
       }));
-      setDeviceSections(devs);
-      setCurrentDevice(0);
       initialHostname = devs[0].hostname;
 
       initLines.push({
@@ -104,20 +103,25 @@ export function IOSTerminal({
       if (sections.length === 1 && sections[0].hostname !== "Router") {
         initialHostname = sections[0].hostname;
       }
-      setDeviceSections([]);
-      setCurrentDevice(0);
     }
 
-    setLines(initLines);
-    setIosState(createInitialState(initialHostname));
-    setInput("");
-    setHistoryIndex(-1);
+    // Compute all new state values before applying
+    const newIosState = createInitialState(initialHostname);
+    const newCommands = sections.length > 1
+      ? sections.map(() => [] as string[])
+      : [[] as string[]];
 
-    // Reset command tracking ref and notify parent
-    allCommandsRef.current = sections.length > 1
-      ? sections.map(() => [])
-      : [[]];
-    onCommandsChange?.([]);
+    // Batch state updates in a microtask to avoid synchronous setState in effect
+    queueMicrotask(() => {
+      setDeviceSections(hasMultiDevice ? devs : []);
+      setCurrentDevice(0);
+      setLines(initLines);
+      setIosState(newIosState);
+      setInput("");
+      setHistoryIndex(-1);
+      allCommandsRef.current = newCommands;
+      onCommandsChange?.([]);
+    });
   }, [starterCode, resetKey, onCommandsChange]);
 
   // ---- Auto-scroll ----

@@ -235,6 +235,94 @@ export async function saveExamAttempt(
   }
 }
 
+/**
+ * Get full detail for a single exam attempt, including per-question results.
+ * Joins practiceAnswers → practiceQuestions to rebuild the review data.
+ */
+export async function getExamAttemptDetail(
+  userId: string,
+  attemptId: string,
+): Promise<{
+  attempt: ExamAttemptRecord;
+  questionResults: Array<{
+    questionId: string;
+    text: string;
+    userAnswer: unknown;
+    correctAnswer: unknown;
+    correct: boolean;
+    explanation: string | null;
+    domain: string | null;
+  }>;
+} | null> {
+  if (!dbAvailable()) return null;
+
+  try {
+    const db = getDb();
+
+    // Verify the attempt belongs to this user
+    const [attempt] = await db
+      .select({
+        id: schema.practiceAttempts.id,
+        score: schema.practiceAttempts.score,
+        totalQuestions: schema.practiceAttempts.totalQuestions,
+        domainFilter: schema.practiceAttempts.domainFilter,
+        startedAt: schema.practiceAttempts.startedAt,
+        completedAt: schema.practiceAttempts.completedAt,
+      })
+      .from(schema.practiceAttempts)
+      .where(
+        and(
+          eq(schema.practiceAttempts.id, attemptId),
+          eq(schema.practiceAttempts.userId, userId),
+        ),
+      )
+      .limit(1);
+
+    if (!attempt) return null;
+
+    // Fetch answers joined with questions and objectives/domains
+    const answers = await db
+      .select({
+        questionId: schema.practiceAnswers.questionId,
+        userAnswer: schema.practiceAnswers.userAnswer,
+        isCorrect: schema.practiceAnswers.isCorrect,
+        questionText: schema.practiceQuestions.question,
+        correctAnswer: schema.practiceQuestions.correctAnswer,
+        explanation: schema.practiceQuestions.explanation,
+        objectiveId: schema.practiceQuestions.objectiveId,
+      })
+      .from(schema.practiceAnswers)
+      .innerJoin(
+        schema.practiceQuestions,
+        eq(schema.practiceAnswers.questionId, schema.practiceQuestions.id),
+      )
+      .where(eq(schema.practiceAnswers.attemptId, attemptId));
+
+    return {
+      attempt: {
+        id: attempt.id,
+        score: attempt.score ?? 0,
+        totalQuestions: attempt.totalQuestions ?? 0,
+        domainFilter: attempt.domainFilter,
+        startedAt: attempt.startedAt.toISOString(),
+        completedAt: attempt.completedAt?.toISOString() ?? null,
+      },
+      questionResults: answers.map((a) => ({
+        questionId: a.questionId,
+        text: a.questionText,
+        userAnswer: a.userAnswer,
+        correctAnswer: a.correctAnswer,
+        correct: a.isCorrect,
+        explanation: a.explanation,
+        domain: null, // domain name resolution is optional
+      })),
+    };
+  } catch (err) {
+    console.warn("Failed to load exam attempt detail:", err);
+    return null;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Lab Attempts
 // ---------------------------------------------------------------------------

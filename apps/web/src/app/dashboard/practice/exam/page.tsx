@@ -32,11 +32,12 @@ import {
 
 interface ExamQuestion {
   id: string;
-  type: "multiple_choice" | "multiple_select" | "fill_in_the_blank" | "drag_and_drop";
+  type: "multiple_choice" | "multiple_select" | "fill_in_the_blank" | "drag_drop";
   objective: string;
   difficulty: "easy" | "medium" | "hard";
   text: string;
   options?: string[];
+  descriptions?: string[]; // For matching questions: shuffled descriptions to pair with options
 }
 
 interface ExamData {
@@ -131,7 +132,7 @@ function QuestionNav({
 }: {
   questions: ExamQuestion[];
   currentIndex: number;
-  answers: Record<string, string | string[]>;
+  answers: Record<string, string | string[] | Record<string, string>>;
   flagged: Set<string>;
   onSelect: (idx: number) => void;
 }) {
@@ -308,7 +309,7 @@ function FillBlankInput({
 }
 
 // ---------------------------------------------------------------------------
-// Drag and Drop (reorder with Up/Down buttons)
+// Drag and Drop — Matching (select description for each term)
 // ---------------------------------------------------------------------------
 
 function DragDropInput({
@@ -318,13 +319,65 @@ function DragDropInput({
   disabled,
 }: {
   question: ExamQuestion;
-  value: string[];
-  onChange: (val: string[]) => void;
+  value: string | string[] | Record<string, string>;
+  onChange: (val: string[] | Record<string, string>) => void;
   disabled?: boolean;
 }) {
-  // Initialize with the original options order if value is empty
-  const items =
-    value.length > 0 ? value : question.options ?? [];
+  const terms = question.options ?? [];
+  const descriptions = question.descriptions ?? [];
+  const isMatching = descriptions.length > 0;
+
+  if (isMatching) {
+    // Matching mode: user selects a description for each term
+    const selections =
+      typeof value === "object" && !Array.isArray(value)
+        ? (value as Record<string, string>)
+        : {};
+
+    const usedDescriptions = new Set(Object.values(selections));
+
+    function handleSelect(term: string, description: string) {
+      if (disabled) return;
+      const updated = { ...selections, [term]: description };
+      onChange(updated);
+    }
+
+    return (
+      <div className="space-y-3">
+        <p className="text-xs text-zinc-500 italic">
+          Select the correct description for each term
+        </p>
+        {terms.map((term) => (
+          <div
+            key={term}
+            className="rounded-lg border border-zinc-700 bg-zinc-800/30 p-3 space-y-2"
+          >
+            <span className="text-sm font-medium text-zinc-200">{term}</span>
+            <select
+              value={selections[term] ?? ""}
+              onChange={(e) => handleSelect(term, e.target.value)}
+              disabled={disabled}
+              className="w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-200 focus:border-blue-500 focus:outline-none"
+            >
+              <option value="">— Select a description —</option>
+              {descriptions.map((desc) => (
+                <option
+                  key={desc}
+                  value={desc}
+                  disabled={usedDescriptions.has(desc) && selections[term] !== desc}
+                >
+                  {desc}
+                </option>
+              ))}
+            </select>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // Reorder mode (array-based) — fallback
+  const items = Array.isArray(value) && value.length > 0 ? value : terms;
 
   function moveUp(idx: number) {
     if (disabled || idx === 0) return;
@@ -578,7 +631,7 @@ function ExamContent() {
 
   // ---- State ----
   const [examData, setExamData] = useState<ExamData | null>(null);
-  const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
+  const [answers, setAnswers] = useState<Record<string, string | string[] | Record<string, string>>>({});
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flagged, setFlagged] = useState<Set<string>>(new Set());
   const [timeLeft, setTimeLeft] = useState(0);
@@ -605,9 +658,9 @@ function ExamContent() {
         setTimeLeft(data.timeLimit * 60);
 
         // Pre-populate drag_and_drop answers with default order
-        const initial: Record<string, string | string[]> = {};
+        const initial: Record<string, string | string[] | Record<string, string>> = {};
         for (const q of data.questions) {
-          if (q.type === "drag_and_drop" && q.options) {
+          if (q.type === "drag_drop" && q.options) {
             initial[q.id] = [...q.options];
           }
         }
@@ -683,7 +736,7 @@ function ExamContent() {
   }, [timeLeft, examData, results]);
 
   // ---- Answer handlers ----
-  function setAnswer(questionId: string, value: string | string[]) {
+  function setAnswer(questionId: string, value: string | string[] | Record<string, string>) {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
   }
 
@@ -752,6 +805,7 @@ function ExamContent() {
   const totalQuestions = examData.questions.length;
   const answeredCount = Object.entries(answers).filter(([, v]) => {
     if (Array.isArray(v)) return v.length > 0;
+    if (typeof v === "object" && v !== null) return Object.values(v).some((val) => val !== "");
     return v !== undefined && v !== "";
   }).length;
 
@@ -890,14 +944,10 @@ function ExamContent() {
                   />
                 )}
 
-                {question.type === "drag_and_drop" && (
+                {question.type === "drag_drop" && (
                   <DragDropInput
                     question={question}
-                    value={
-                      Array.isArray(currentAnswer)
-                        ? (currentAnswer as string[])
-                        : []
-                    }
+                    value={currentAnswer ?? (question.descriptions?.length ? {} : [])}
                     onChange={(val) => setAnswer(question.id, val)}
                   />
                 )}
